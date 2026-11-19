@@ -99,3 +99,17 @@ test('dvojice kvintakordů: G + Am přes tóniku, F + G přes napětí, E + F p�
   assert.equal(lanesMap(am), 'Am:T Am:T Dm:N Am:T E7:V E7:V Am:T Am:T');
   assert.deepEqual(am.lanes.map((l) => l.source.label), ['G + Am', 'F + G', 'E + F']);
 });
+
+test('Martino: v ii–V–I linka od sexty a arpeggio od tercie, v poloze jako na papíře', async () => {
+  const { realizeLine } = await import('../js/teaching/line.js');
+  const { LICKS } = await import('../js/data/licks.js');
+  const res = resolveApproach('martino', buildSong({ progression: 'iiVIlong', key: 0 }));
+  const names = (i) => res.sourceAt(0, i).tones.map((t) => t.name).join(' ');
+  assert.equal(names(0), 'B C D E F A C');
+  assert.equal(names(2), 'E F G A B D F');
+  assert.equal(names(4), 'A B C D E G B');
+  const r = realizeLine(LICKS.mtCycle, { res, startSeg: 0, win: { lo: 7, hi: 10 }, each: true });
+  const tab = (from) => r.events.slice(from, from + 8).map((e) => `${e.notes[0].s}:${e.notes[0].f}`).join(' ');
+  assert.equal(tab(16), '5:7 5:8 5:10 4:7 4:9 3:7 3:10 2:10'); // G7: E F G A | H D F A
+  assert.equal(tab(32), '4:7 4:9 4:10 3:7 3:9 2:8 1:7 1:10'); // Cmaj7: A H C D | E G H D
+});

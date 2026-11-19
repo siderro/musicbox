@@ -128,6 +128,12 @@ export function followSource(follow, chord, scale) {
     const extra = [6, 9].map((n) => degreeTone(chord, n, scale)).filter((t) => !own.some((o) => o.pc === t.pc));
     return toneSource('follow', [...own, ...extra], `${chord.symbol} + ${extra.map((t) => pretty(intervalBetween(chord.root, t.note).replace(/^([b#]?)2$/, '$19'))).join(', ')}`, 'color');
   }
+  if (follow === 'martino') {
+    // Martinovo zmollovatění: 4 tóny stupnice od sexty (C → Am: A H C D), pak arpeggio od tercie (Em7: E G H D)
+    const tones = [6, 7, 1, 9, 3, 5, 7].map((n) => degreeTone(chord, n, scale));
+    const arp = nameTones(tones.slice(4)) ?? tones.slice(4).map((t) => t.name).join(' ');
+    return toneSource('follow', tones, `${tones[0].name}–${tones[3].name} + ${arp}${over}`, 'martino');
+  }
   const nums = follow === 'fifth' ? [5, 7, 9] : [3, 5, 7];
   const tones = nums.map((n) => degreeTone(chord, n, scale));
   const name = nameTones(tones) ?? tones.map((t) => t.name).join(' ');

@@ -5,7 +5,8 @@
 //   src     zdroj pruhu: 'scale:<id>@<stupeň>' nebo 'arp:<id>@<stupeň>' (stupeň od tóniky, jako v kolečkách),
 //           podle tóniny: { major, minor, blues }; stupně se v moll počítají od dur stupnice tóniny
 //           (a moll: 'v' = E, 'iv' = D, 'vii' = G♯)
-//   follow  pruh se mění s akordem: 'chord' = tóny akordu, 'third' = od tercie (3-5-7), 'fifth' = od kvinty
+//   follow  pruh se mění s akordem: 'chord' = tóny akordu, 'third' = od tercie (3-5-7), 'fifth' = od kvinty,
+//           'martino' = 6-7-1-9 a 3-5-7 (tóny 1–4 stupnice od sexty, 5–7 arpeggio od tercie)
 //   fn      funkce akordů, přes které pruh platí; '*' = všechny
 //   leading pruh jen pro akordy s vodicím tónem (V, V7, vii° v moll)
 //   bg      tlumená stupnice za arpeggiem
@@ -204,6 +205,15 @@ export const APPROACHES = {
     why: 'Dva kvintakordy o celý tón od sebe, dohromady šest tónů bez jediného půltónu navíc. Přes tóniku {lane:T}: nad tónikou zní 5-7-9 a 6-1-3, tedy maj9 se sextou – kořen kvarta tam není, nic nedrhne. Přes subdominantu a dominantu {lane:N}: nad dominantou 1-3-5 a ♭7-9-11, nad subdominantou lydická ♯11. Hraješ jen kvintakordy, které znáš z doprovodu, ale zní to jako barvy 6, 9 a 11. Na přechodu z napětí do tóniky sjede septima dominanty o půltón na tercii. V moll přibude přes dominantu s vodicím tónem dvojice {lane:V} – malá nona a ♭13, španělský zvuk.',
     try: ['Přes tóniku jeden kvintakord nahoru, druhý dolů – vždy tři osminy, šest tónů na dvě doby.', 'Zkus totéž v obratech: začni na tercii nebo kvintě, ať se kvintakordy proplétají a ruka zůstane v okně.', 'Při změně do tóniky hledej půltón mezi pruhy a dopadni na něj.'],
     licks: { T: ['tpAlt', 'landHome'], N: ['tpCascade'], V: ['tpSpanish'], cycle: ['tpCycle'] },
+  },
+  martino: {
+    name: 'Zmollovatění (Martino)',
+    level: 2,
+    lanes: [{ id: 'M', name: 'od sexty', follow: 'martino', fn: '*' }],
+    applies: { modes: ['major', 'minor'], blues: false },
+    why: 'Pat Martino: durový akord nahraď mollou o malou tercii níž (nad C Am, nad F Dm, nad G7 Em). Linka přes takt: čtyři tóny stupnice od sexty akordu a pak arpeggio od tercie s nonou – nad C A H C D, E G H D, tedy 6-7-1-9 a 3-5-7-9. Začínáš na barvě, ne na kořeni. Když akordy jdou po kvartách (ii–V–I), nona jednoho akordu je sexta dalšího, takže linky na sebe navazují bez skoku.',
+    try: ['Přes každý akord celá linka osminami nahoru, poslední tón (nonu) podrž.', 'V ii–V–I zahraj linky za sebou – poslouchej, že každá začíná tam, kde skončila předchozí.', 'Nad tónikou zkus místo stupnice od sexty jen arpeggio od tercie – druhá náhrada (nad C Em).'],
+    licks: { '*': ['mtChange'], cycle: ['mtCycle'] },
   },
 };
 

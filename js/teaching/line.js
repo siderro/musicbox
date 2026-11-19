@@ -12,7 +12,7 @@
 //   x+ x-    půltón nad / pod následujícím tónem (chromatický nájezd)
 //   w        chůze po zdroji k následujícímu tónu, vyplní délku osminami
 //   r        pauza
-//   oktáva   ' = nad předchozím tónem, , = pod ním (jinak nejbližší)
+//   oktáva   ' = nad předchozím tónem, , = pod ním, = = nejblíž okna ruky (jinak nejbližší)
 //   &3 &6    druhý hlas: tercie / sexta tóniny pod tónem
 //   technika ~ vibrato, b bend o celý tón, h p / \ k následujícímu tónu (před i za délkou: t:2~)
 //   |        taktová čára změny akordu: co je za ní, zní už přes další akord
@@ -22,7 +22,7 @@ import { mod } from '../theory/notes.js';
 import { degreeTone } from '../theory/harmony.js';
 import { MODE_CHAR } from './approach.js';
 
-const TOKEN = /^(t|L|k|c\d{1,2}|>>|<<|>|<|s[+-]|x[+-]|w|r|[1-9])(['’,]*)(&[36])?([~bhp/\\]?):(\d*\.?\d+)([~bhp/\\]?)$/;
+const TOKEN = /^(t|L|k|c\d{1,2}|>>|<<|>|<|s[+-]|x[+-]|w|r|[1-9])(['’,=]*)(&[36])?([~bhp/\\]?):(\d*\.?\d+)([~bhp/\\]?)$/;
 const DEFERRED = /^(s[+-]|x[+-]|w)$/;
 const LOW = 40;
 const HIGH = 88;
@@ -38,7 +38,7 @@ export function parseLine(str) {
     const m = TOKEN.exec(raw);
     if (!m) throw new Error(`neznámý token „${raw}“`);
     const [, pitch, oct, dyad, tech, d, techAfter] = m;
-    tokens.push({ pitch, up: (oct.match(/['’]/g) ?? []).length, down: (oct.match(/,/g) ?? []).length, dyad: dyad ? Number(dyad[1]) : 0, tech: tech || techAfter || null, d: Number(d) });
+    tokens.push({ pitch, up: (oct.match(/['’]/g) ?? []).length, down: (oct.match(/,/g) ?? []).length, home: oct.includes('='), dyad: dyad ? Number(dyad[1]) : 0, tech: tech || techAfter || null, d: Number(d) });
   }
   return { tokens, bar };
 }
@@ -74,12 +74,14 @@ const pitchesOf = (pcs) => {
 
 // registr: bez tahu ke středu by dlouhá linka pomalu ujela nahoru nebo dolů
 let pull = null;
+let home = 60;
 
 function nearest(pc, prev, tok) {
   const cands = [];
   for (let m = LOW; m <= HIGH; m++) if (mod(m, 12) === pc) cands.push(m);
   let best;
-  if (tok?.up) best = cands.filter((m) => m > prev)[tok.up - 1] ?? cands[cands.length - 1];
+  if (tok?.home) best = cands.reduce((a, m) => (Math.abs(m - home) < Math.abs(a - home) ? m : a));
+  else if (tok?.up) best = cands.filter((m) => m > prev)[tok.up - 1] ?? cands[cands.length - 1];
   else if (tok?.down) best = cands.filter((m) => m < prev).reverse()[tok.down - 1] ?? cands[0];
   else {
     const cost = (m) => Math.abs(m - prev) + (pull == null ? 0 : Math.abs(m - pull) * 0.25);
@@ -235,6 +237,7 @@ export function realizeLine(def, { res, startSeg, win, each = false }) {
   const sourceOf = (seg) => res.sourceAt(res.laneOf[seg], seg);
   const centre = TUNING[3] + Math.round((win.lo + win.hi) / 2);
   pull = centre + 3;
+  home = centre - 7; // linka od „=“ stoupá, tak začíná v dolní části okna
   let prev = centre;
   const midis = new Array(stream.length).fill(null);
   const pending = [];

@@ -212,8 +212,9 @@ export const PROGRESSION_WIKI = {
   },
   iiVIlong: {
     feel: 'Totéž ii–V–I, ale pomalu: dva takty {ii7}, dva takty {V7} a čtyři takty {Imaj7}. Na každý akord je čas, takže se dá cvičit dopad na změnu i to, co hrát, když harmonie stojí.',
-    approaches: ['guideLine', 'triadPair', 'chordTones', 'odTercie', 'enclosure', 'modes', 'dimDom', 'colors69', 'keyScale'],
+    approaches: ['guideLine', 'martino', 'triadPair', 'chordTones', 'odTercie', 'enclosure', 'modes', 'dimDom', 'colors69', 'keyScale'],
     notes: {
+      martino: 'Linka začíná na sextě akordu: přes {ii7} od {V7.3}, přes {V7} od {iii.r}, přes {Imaj7} od {vi.r}. Každá linka končí na noně, která je sextou dalšího akordu – celé ii–V–I je jedna melodie.',
       guideLine: 'Septima {ii7} sjede o půltón na {V7.3}, septima {V7} sjede na {Imaj7.3}. Mezi změnami máš dva takty – vodicí tón drž a teprve před změnou se pohni.',
       triadPair: 'Přes {ii7} a {V7} kvintakordy {IV} a {V}, přes {Imaj7} kvintakordy {V} a {vi}: nad {Imaj7} zní 5-7-9 a 6-1-3. Klasická jazzová dvojice.',
       colors69: 'Čtyři takty {Imaj7} jsou místo pro barvy: nona {ii.r} a sexta {vi.r}. Na tónice se neboj zůstat.',

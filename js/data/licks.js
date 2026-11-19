@@ -108,6 +108,16 @@ export const LICKS = {
     line: "1:.5 2:.5 3:.5 6':.5 5:.5 4:.5 w:1",
     tip: 'Přes každý akord dvojice jeho pruhu: první kvintakord nahoru, druhý dolů, a krok k dalšímu akordu.',
   },
+  mtCycle: {
+    name: 'Martino přes každý akord', short: 'Martino', level: 2, each: true,
+    line: "1=:.5 2':.5 3':.5 4':.5 5':.5 6':.5 7':.5 4':.5",
+    tip: 'Přes každý akord osm osmin nahoru: 6-7-1-9 po stupnici a 3-5-7-9 arpeggiem. V ii–V–I skončíš na noně, která je sextou dalšího akordu – další linka začne o oktávu níž na stejném tónu.',
+  },
+  mtChange: {
+    name: 'Martino a dopad na sextu', short: 'Martino → změna', level: 2, change: true,
+    line: "1=:.5 2':.5 3':.5 4':.5 5':.5 6':.5 7':1 | 1:2~ r:2",
+    tip: 'Linka od sexty přes poslední takt akordu a na změně dopad na sextu dalšího akordu – barvu, ze které začíná jeho vlastní linka.',
+  },
   tdDim: {
     name: 'Zmenšený akord do tóniky', short: 'zmenšený → domů', level: 2, change: true,
     line: '1:.5 2:.5 3:.5 4:.5 3:.5 2:.5 1:1 | L:2~ r:2',
