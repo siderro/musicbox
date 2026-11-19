@@ -5,7 +5,7 @@ import { APPROACHES, DEFAULT_ORDER } from '../data/approaches.js';
 import { SCALES } from '../data/scales.js';
 import { ARPEGGIOS } from '../data/arpeggios.js';
 import { spellIntervals } from '../theory/intervals.js';
-import { degreeRoot } from '../theory/chords.js';
+import { degreeRoot, chordInKey } from '../theory/chords.js';
 import { noteName, mod } from '../theory/notes.js';
 import { intervalBetween, keyScale, nameTones, degreeTone, chordFamily } from '../theory/harmony.js';
 import { analyzeSong } from '../theory/function.js';
@@ -36,8 +36,18 @@ function labelOf(kind, id, root) {
   return names[id] ?? `${r} ${SCALES[id].name.toLowerCase()}`;
 }
 
+// Dvojice kvintakordů 'pair:V+vi' → šest tónů: 1–3 první kvintakord, 4–6 druhý (G B D A C E v C).
+// Intervaly se počítají od kořene prvního kvintakordu.
+function pairSource(spec, song) {
+  const chords = spec.slice(5).split('+').map((d) => chordInKey(d, song.tonic));
+  const base = chords[0].root;
+  const tones = chords.flatMap((c) => c.tones.slice(0, 3)).map((t) => ({ ...t, interval: intervalBetween(base, t.note) }));
+  return { ref: spec, kind: 'pair', id: spec.slice(5), rootNote: base, rootPc: tones[0].pc, tones, pcs: new Set(tones.map((t) => t.pc)), label: chords.map((c) => c.symbol).join(' + ') };
+}
+
 // 'scale:minorPentatonic@iii' → zdroj v tónině
 export function resolveSource(spec, song) {
+  if (spec.startsWith('pair:')) return pairSource(spec, song);
   const [ref, deg] = spec.split('@');
   const [kind, id] = ref.split(':');
   const def = kind === 'arp' ? ARPEGGIOS[id] : SCALES[id];

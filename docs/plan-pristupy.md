@@ -1,6 +1,6 @@
 # Plán: přístupy, hmatníky pod sebou a wiki ke kolečku
 
-Stav: fáze 0–4 hotové (2026-11-17). Z fáze 4 zbývají dvojice kvintakordů. Připravil ho tým: kytarový lektor, jazzový teoretik, folk/blues lektor, UX designér a oponent.
+Stav: fáze 0–4 hotové (dvojice kvintakordů 2026-11-19). Připravil ho tým: kytarový lektor, jazzový teoretik, folk/blues lektor, UX designér a oponent.
 
 ## Proč dnešní Sólování není použitelné
 - O jeden hmatník se perou dva systémy, čipy a „nápady“. Není jasné, co tečky řídí.
@@ -102,6 +102,5 @@ Ovládacích prvků bude místo asi 39 zhruba 11.
    - pentatonika za akordem, pentatonika od kvinty, módy podle akordu (v blues mixolydická), linka vodicích tónů, barvy 6 a 9, obal, druhý hlas;
    - katalog stupnic;
    - wiki pro všechna kolečka;
-   - licky a linky ke každému pruhu (`js/teaching/line.js`, `lick-plan.js`). Hrají se přes akord svého pruhu a dopadají za změnou.
-
-   Zbývá: dvojice kvintakordů.
+   - licky a linky ke každému pruhu (`js/teaching/line.js`, `lick-plan.js`). Hrají se přes akord svého pruhu a dopadají za změnou;
+   - dvojice kvintakordů: v dur V + vi přes tóniku a IV + V přes napětí, v moll ♭VII + i, ♭VI + ♭VII a přes dominantu s vodicím tónem V + ♭VI.

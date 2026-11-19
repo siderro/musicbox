@@ -88,6 +88,26 @@ export const LICKS = {
     line: 't:2~ >:.5 <:.5 w:1',
     tip: 'Přes každý akord jeden cílový tón (z pruhu, který nad ním svítí), sousední tón a krok k dalšímu cíli. Ruka zůstává v okně.',
   },
+  tpAlt: {
+    name: 'Nahoru jeden, dolů druhý', short: 'střídání', level: 2,
+    line: "1:.5 2:.5 3:.5 6':.5 5:.5 4:.5 t:1~",
+    tip: 'Dvojice kvintakordů: první nahoru, druhý shora dolů, a dopad na tón akordu. V C přes tóniku G–H–D, E–C–A a domů – nad C to zní jako 5-7-9-3-1-6.',
+  },
+  tpCascade: {
+    name: 'Kaskáda do tóniky', short: 'kaskáda', level: 2, change: true,
+    line: "3':.5 2:.5 1:.5 6:.5 5:.5 4:.5 >:.5 1:.5 | L:2~ r:2",
+    tip: 'Oba kvintakordy napětí shora dolů (v C: C–A–F, D–H–G), krok nahoru a septima dominanty sjede o půltón na tercii tóniky.',
+  },
+  tpSpanish: {
+    name: 'Španělský sestup', short: 'španělsky', level: 2, change: true, when: ['minor'],
+    line: "6:.5 5:.5 4:.5 3:.5 2:.5 1:.5 2':1 | L:2~ r:2",
+    tip: 'Přes dominantu v moll kvintakord o půltón výš a pak její vlastní (v a moll: C–A–F, H–G♯–E), vodicí tón stoupne do tóniky.',
+  },
+  tpCycle: {
+    name: 'Dvojice přes celé kolečko', short: 'dvojice', level: 2, each: true,
+    line: "1:.5 2:.5 3:.5 6':.5 5:.5 4:.5 w:1",
+    tip: 'Přes každý akord dvojice jeho pruhu: první kvintakord nahoru, druhý dolů, a krok k dalšímu akordu.',
+  },
   tdDim: {
     name: 'Zmenšený akord do tóniky', short: 'zmenšený → domů', level: 2, change: true,
     line: '1:.5 2:.5 3:.5 4:.5 3:.5 2:.5 1:1 | L:2~ r:2',

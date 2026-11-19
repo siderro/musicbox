@@ -192,11 +192,24 @@ export const APPROACHES = {
     try: ['Hraj melodii z tercií akordů a přidej k ní tón o tercii níž.', 'Sexty: horní tón na struně H, spodní na struně D, prostřední tlum.'],
     licks: { cycle: ['sv3Cycle', 'sv6Cycle'] },
   },
+  triadPair: {
+    name: 'Dvojice kvintakordů',
+    level: 2,
+    lanes: [
+      { id: 'T', name: 'tónika', src: { major: 'pair:V+vi', minor: 'pair:bVII+i' }, fn: ['T'] },
+      { id: 'N', name: 'napětí', src: { major: 'pair:IV+V', minor: 'pair:bVI+bVII' }, fn: ['S', 'D'] },
+      { id: 'V', name: 'dominanta', src: { minor: 'pair:V+bVI' }, fn: ['D'], leading: true },
+    ],
+    applies: { modes: ['major', 'minor'], blues: false },
+    why: 'Dva kvintakordy o celý tón od sebe, dohromady šest tónů bez jediného půltónu navíc. Přes tóniku {lane:T}: nad tónikou zní 5-7-9 a 6-1-3, tedy maj9 se sextou – kořen kvarta tam není, nic nedrhne. Přes subdominantu a dominantu {lane:N}: nad dominantou 1-3-5 a ♭7-9-11, nad subdominantou lydická ♯11. Hraješ jen kvintakordy, které znáš z doprovodu, ale zní to jako barvy 6, 9 a 11. Na přechodu z napětí do tóniky sjede septima dominanty o půltón na tercii. V moll přibude přes dominantu s vodicím tónem dvojice {lane:V} – malá nona a ♭13, španělský zvuk.',
+    try: ['Přes tóniku jeden kvintakord nahoru, druhý dolů – vždy tři osminy, šest tónů na dvě doby.', 'Zkus totéž v obratech: začni na tercii nebo kvintě, ať se kvintakordy proplétají a ruka zůstane v okně.', 'Při změně do tóniky hledej půltón mezi pruhy a dopadni na něj.'],
+    licks: { T: ['tpAlt', 'landHome'], N: ['tpCascade'], V: ['tpSpanish'], cycle: ['tpCycle'] },
+  },
 };
 
 // Výchozí pořadí přístupů podle stylu kolečka (první = výchozí).
 export const DEFAULT_ORDER = {
-  folk: ['odTercie', 'tdPent', 'colors69', 'keyPent', 'guideLine', 'secondVoice', 'chordTones', 'keyScale', 'tsdPent'],
+  folk: ['odTercie', 'tdPent', 'colors69', 'triadPair', 'keyPent', 'guideLine', 'secondVoice', 'chordTones', 'keyScale', 'tsdPent'],
   blues: ['keyPent', 'bluesMix', 'modes', 'guideLine', 'chordTones', 'odTercie'],
-  default: ['keyPent', 'odTercie', 'tdPent', 'guideLine', 'chordTones', 'keyScale', 'tsdPent'],
+  default: ['keyPent', 'odTercie', 'tdPent', 'triadPair', 'guideLine', 'chordTones', 'keyScale', 'tsdPent'],
 };

@@ -121,6 +121,10 @@ export function createSoloPanel(root) {
       const names = r.lanes.filter((l) => l.kind === 'fixed' && !l.perChord).map((l) => l.source.label.split(' ')[0]);
       return names.join(id === 'tdPent' ? ' ↔ ' : ' · ');
     }
+    if (id === 'triadPair') {
+      const r = resolveApproach(id, song, analysis);
+      return r.lanes.filter((l) => l.kind === 'fixed').map((l) => l.source.label.replace(/ /g, '')).join(' ↔ ');
+    }
     if (id === 'keyPent' || id === 'keyScale') return resolveApproach(id, song, analysis).lanes[0].source.label;
     return APPROACHES[id].name;
   }

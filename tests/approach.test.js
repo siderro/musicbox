@@ -87,3 +87,15 @@ test('texty se přizpůsobí tónině', () => {
   assert.ok(fillTokens(APPROACHES.tdPent.why, song, res).includes('Bm pentatonika'));
   assert.ok(fillTokens('{ex:third}', song).startsWith('nad G Bm'));
 });
+
+test('dvojice kvintakordů: G + Am přes tóniku, F + G přes napětí, E + F přes E7', () => {
+  const c = resolveApproach('triadPair', buildSong({ progression: 'folk1645', key: 0 }));
+  assert.equal(lanesMap(c), 'C:T Am:T F:N G7:N');
+  assert.deepEqual(c.lanes.map((l) => l.source.label), ['G + Am', 'F + G']);
+  assert.deepEqual(c.lanes[0].source.tones.map((t) => t.name), ['G', 'B', 'D', 'A', 'C', 'E']);
+  // nad C bez kvarty: 5 7 9 6 1 3
+  assert.deepEqual([...chordView(c.lanes[0].source, c.segments[0].chord).values()], ['5', '7', '9', '6', '1', '3']);
+  const am = resolveApproach('triadPair', buildSong({ progression: 'trampMinor', key: 9 }));
+  assert.equal(lanesMap(am), 'Am:T Am:T Dm:N Am:T E7:V E7:V Am:T Am:T');
+  assert.deepEqual(am.lanes.map((l) => l.source.label), ['G + Am', 'F + G', 'E + F']);
+});

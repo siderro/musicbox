@@ -24,8 +24,9 @@ export const PROGRESSION_WIKI = {
   },
   folk1645: {
     feel: 'Táborák, lidovka, pop padesátek. Čtyři akordy, dvě „místa“ na hmatníku a jeden půltón mezi nimi.',
-    approaches: ['odTercie', 'tdPent', 'keyPent', 'chordTones', 'tsdPent', 'keyScale'],
+    approaches: ['odTercie', 'tdPent', 'triadPair', 'keyPent', 'chordTones', 'tsdPent', 'keyScale'],
     notes: {
+      triadPair: 'Přes {I} a {vi} kvintakordy {V} a {vi}, přes {IV} a {V7} kvintakordy {IV} a {V}. Hraješ jen akordy kolečka, ale nad {I} zní 6 a 9. Na {V7} → {I} sjede {IV.r} o půltón na {iii.r}.',
       odTercie: 'Linka z tercií akordů se sama zazpívá: {I.3} → {vi.3} → {IV.3} → {V7.3} a zpátky na {I.3}. Zkus ji jako melodii.',
       tdPent: '{I} a {vi} jsou tónika (jeden pruh), {IV} a {V7} napětí (druhý pruh). Na {V7} → {I} sjede {IV.r} o půltón na {iii.r}.',
       keyPent: 'Durová pentatonika z {I.r}: sedí všude, jen přes {V7} chybí jeho septima – zkus ji tam přidat.',
@@ -37,11 +38,12 @@ export const PROGRESSION_WIKI = {
   },
   trampMinor: {
     feel: 'Trampská moll: {i}, {iv} a dominanta {V7}. Melodie v moll, ale přes {V7} zazní zvýšená sedmička (vodicí tón) – to je ta „slza“.',
-    approaches: ['odTercie', 'tdPent', 'keyScale', 'keyPent', 'chordTones'],
+    approaches: ['odTercie', 'tdPent', 'triadPair', 'keyScale', 'keyPent', 'chordTones'],
     notes: {
       odTercie: 'Nad {i} je to {bIII}, nad {iv} {bVI}, nad {V7} zmenšený od {V7.3} – ten zvýšený tón táhne zpátky domů.',
       tdPent: 'Tři pruhy: {lane:T} přes {i}, {lane:N} přes {iv}, a přes {V7} zmenšený septakord {lane:V}. Ten je symetrický: stejný tvar posunutý o 3 pražce zní pořád stejně.',
       keyScale: 'Přirozená moll přes {i} a {iv}; přes {V7} si zvyš sedmý stupeň (vodicí tón {V7.3}).',
+      triadPair: 'Přes {i} kvintakordy {bVII} a {i}, přes {iv} {bVI} a {bVII}, přes {V7} jeho vlastní kvintakord a ten o půltón výš ({bVI}) – malá nona a ♭13, cikánský a španělský zvuk. Vodicí tón {V7.3} pak stoupne do {i.r}.',
     },
     try: {
       tdPent: ['Přes {V7} hraj jen čtyři tóny zmenšeného akordu a dopadni na tón {i.r} nebo {bIII.r} na „jedna“.', 'Zmenšený tvar posuň o 3 pražce nahoru a zahraj totéž – zní to stejně.'],
@@ -74,8 +76,9 @@ export const PROGRESSION_WIKI = {
   },
   romanticMinor: {
     feel: 'Mollová balada, ve které všechny čtyři akordy leží v přirozené moll: žádný vodicí tón, žádný tlak domů, jen kolébání. Jedna stupnice přes všechno, melodie může volně plout.',
-    approaches: ['odTercie', 'colors69', 'tdPent', 'keyScale', 'pentFifth', 'keyPent', 'chordTones', 'secondVoice'],
+    approaches: ['odTercie', 'colors69', 'triadPair', 'tdPent', 'keyScale', 'pentFifth', 'keyPent', 'chordTones', 'secondVoice'],
     notes: {
+      triadPair: 'Kolečko je samo ze dvou dvojic: přes {i} a {bIII} hraješ kvintakordy {bVII} a {i}, přes {bVI} a {bVII} právě tyhle dva akordy. Sóluješ tím, co máš pod prsty z doprovodu.',
       odTercie: 'Nad {i} vyjde od tercie {bIII}, nad {bVI} zase {i} – arpeggio se mezi akordy skoro nehne, jen sklouzne o krok. Celé kolečko: {ex:third}.',
       colors69: 'Nona {ii.r} nad {i} je nejměkčí barva kolečka. Nad {bIII} je sextou přímo kořen tóniny {i.r} – proto ten akord zní tak „domácky“.',
       tdPent: 'Přes {i} a {bIII} tónikový pruh {lane:T}, přes {bVI} a {bVII} pruh napětí {lane:N}. Bez dominanty s vodicím tónem zmenšený pruh nepotřebuješ.',

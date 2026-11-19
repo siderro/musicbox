@@ -27,7 +27,8 @@ Mikrofon (ladička) funguje jen na `localhost` nebo přes HTTPS.
   - jedna pentatonika;
   - tóny akordu;
   - zmenšená přes dominantu;
-  - harmonická moll přes V7.
+  - harmonická moll přes V7;
+  - dvojice kvintakordů (v C přes tóniku G + Am, přes napětí F + G).
 
   Vybírá se na liště nahoře nebo klávesou **A**. Aplikace si volbu pamatuje pro každé kolečko.
 - **Pruhy** jsou hmatníky pod sebou. Každý ukazuje jednu oblast, například Em pentatoniku. Svítí ten, který sedí na právě hraný akord. Před změnou pruhu se rozbliká další a odpočítá „za 2 → za 1“. Pod pruhy je pak spojka, třeba „F → E (3 v C)“.
@@ -70,7 +71,7 @@ Veškerý obsah je v `js/data/`. Popis formátu je vždy v komentáři na začá
   - Akordy se zapisují ve stupních (`I7`, `ii7`, `bVII`, `V7b9`, `vii°`, `I+`…) a transponují se do zvolené tóniny.
   - `style: 'blues'` označí blues, kde je každý akord dominantní septakord.
 - `approaches.js`: přístupy.
-  - Každý má 1–3 pruhy. Pruh je buď pevný zdroj (`'scale:minorPentatonic@iii'` = mollová pentatonika od 3. stupně tóniny), nebo zdroj podle akordu (`follow: 'third'` = od tercie, `'halfWhole'` = zmenšená od kořene).
+  - Každý má 1–3 pruhy. Pruh je buď pevný zdroj (`'scale:minorPentatonic@iii'` = mollová pentatonika od 3. stupně tóniny, `'pair:V+vi'` = dvojice kvintakordů, v linkách tóny 1–3 a 4–6), nebo zdroj podle akordu (`follow: 'third'` = od tercie, `'halfWhole'` = zmenšená od kořene).
   - Pruh platí přes akordy dané funkce (`fn: ['T']` tónika, `'S'` subdominanta, `'D'` dominanta).
   - `licks: { T: [...], N: [...], '*': [...], cycle: [...] }` určuje, které licky patří ke kterému pruhu. `'*'` platí pro každý pruh, `cycle` pro linku přes celé kolečko.
 - `wiki.js`: wiki ke kolečkům. Obsahuje pocit, pořadí přístupů, poznámky a cvičení.
