@@ -228,6 +228,21 @@ export const PROGRESSIONS = {
       { ref: 'lick:iiVIguide' },
     ],
   },
+  iiVIlong: {
+    name: 'Dlouhé ii–V–I (2 + 2 + 4 takty)',
+    mode: 'major',
+    meter: [4, 4],
+    defaults: { groove: 'jazzSwing', tempo: 120 },
+    bars: ['ii7', 'ii7', 'V7', 'V7', 'Imaj7', 'Imaj7', 'Imaj7', 'Imaj7'],
+    solo: [
+      { ref: 'scale:major', level: 1, tip: 'Jedna durová stupnice přes celý postup. Na každý akord máš dva takty, tak hledej jeho tercii a septimu.' },
+      { ref: 'arp:m7', root: 'chord', over: 'ii7', level: 2, tip: 'ii7 – mollový septakord, dva takty přípravy.' },
+      { ref: 'arp:dom7', root: 'chord', over: 'V7', level: 2, tip: 'V7 – dva takty napětí. Tercie a septima tvoří tritón.' },
+      { ref: 'arp:maj7', root: 'chord', over: 'Imaj7', level: 2, tip: 'Imaj7 – čtyři takty domova. Dopadni na tercii, pak si hraj s 6 a 9.' },
+      { ref: 'scale:mixolydian', root: 'V', over: 'V7', level: 3 },
+      { ref: 'lick:iiVIguide' },
+    ],
+  },
   minor145: {
     name: 'i–iv–v (moll)',
     mode: 'minor',

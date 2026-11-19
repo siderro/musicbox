@@ -210,6 +210,20 @@ export const PROGRESSION_WIKI = {
       enclosure: ['Poslední doby {V7}: {IV.r} – {ii.r} – a na „jedna“ {Imaj7.3}.'],
     },
   },
+  iiVIlong: {
+    feel: 'Totéž ii–V–I, ale pomalu: dva takty {ii7}, dva takty {V7} a čtyři takty {Imaj7}. Na každý akord je čas, takže se dá cvičit dopad na změnu i to, co hrát, když harmonie stojí.',
+    approaches: ['guideLine', 'triadPair', 'chordTones', 'odTercie', 'enclosure', 'modes', 'dimDom', 'colors69', 'keyScale'],
+    notes: {
+      guideLine: 'Septima {ii7} sjede o půltón na {V7.3}, septima {V7} sjede na {Imaj7.3}. Mezi změnami máš dva takty – vodicí tón drž a teprve před změnou se pohni.',
+      triadPair: 'Přes {ii7} a {V7} kvintakordy {IV} a {V}, přes {Imaj7} kvintakordy {V} a {vi}: nad {Imaj7} zní 5-7-9 a 6-1-3. Klasická jazzová dvojice.',
+      colors69: 'Čtyři takty {Imaj7} jsou místo pro barvy: nona {ii.r} a sexta {vi.r}. Na tónice se neboj zůstat.',
+      dimDom: 'Přes dva takty {V7} zmenšená od kořene: první takt jeden tvar, druhý o 3 pražce výš, a na {Imaj7} rozvod.',
+    },
+    try: {
+      guideLine: ['Celé noty: {ii7.3} – {ii7.3} – {V7.3}… a hledej, kde se vodicí tón posune o půltón.'],
+      triadPair: ['Přes {V7} lick „Kaskáda do tóniky“, pak čtyři takty {Imaj7} jen kvintakordy {V} a {vi} střídavě.'],
+    },
+  },
   minor145: {
     feel: 'Rocková moll bez vodicího tónu: {v} je mollová, takže nic netáhne domů a kolečko se jen točí. Temné, modální, jako stvořené pro pentatoniku.',
     approaches: ['keyPent', 'tdPent', 'pentChord', 'odTercie', 'keyScale', 'chordTones', 'colors69'],
