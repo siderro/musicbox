@@ -104,7 +104,7 @@ test('Martino: v ii–V–I linka od sexty a arpeggio od tercie, v poloze jako n
   const { realizeLine } = await import('../js/teaching/line.js');
   const { LICKS } = await import('../js/data/licks.js');
   const res = resolveApproach('martino', buildSong({ progression: 'iiVIlong', key: 0 }));
-  const names = (i) => res.sourceAt(0, i).tones.map((t) => t.name).join(' ');
+  const names = (i) => res.sourceAt(res.laneOf[i], i).tones.map((t) => t.name).join(' ');
   assert.equal(names(0), 'B C D E F A C');
   assert.equal(names(2), 'E F G A B D F');
   assert.equal(names(4), 'A B C D E G B');
