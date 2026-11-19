@@ -41,6 +41,7 @@ export function warmUp(midis) {
   midis.forEach(ksBuffer);
 }
 
+// bus = jméno sběrnice nebo přímo AudioNode (kytara si tak vkládá vlastní filtr).
 // Vrací ovladač tónu. Zdroj hraje celou délku bufferu, konec tónu řídí release().
 export function pluck(midi, t, { vel = 0.8, bus = 'lead' } = {}) {
   const ctx = getCtx();
@@ -51,7 +52,7 @@ export function pluck(midi, t, { vel = 0.8, bus = 'lead' } = {}) {
   const g = ctx.createGain();
   g.gain.setValueAtTime(0, t);
   g.gain.linearRampToValueAtTime(vel * 0.9, t + 0.002);
-  src.connect(g).connect(busInput(bus));
+  src.connect(g).connect(typeof bus === 'string' ? busInput(bus) : bus);
   src.start(t);
   g.gain.setTargetAtTime(0, t + LENGTH - 0.2, 0.04);
   src.stop(t + LENGTH);
