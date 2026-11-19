@@ -1,0 +1,132 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  min-width: 1100px;
+  background: var(--bg);
+  color: var(--text);
+  font: 15px/1.45 var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+select,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: default;
+  opacity: 0.4;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.app {
+  display: grid;
+  grid-template-columns: 392px minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  height: 100vh;
+}
+
+.app > * {
+  min-height: 0;
+}
+
+/* ---------- pravá plocha ---------- */
+.stage {
+  overflow: auto;
+  background-color: var(--bg);
+  /* jemná textura reproduktorové mřížky */
+  background-image:
+    radial-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1.4px),
+    radial-gradient(rgba(0, 0, 0, 0.35) 1px, transparent 1.4px);
+  background-size: 5px 5px, 5px 5px;
+  background-position: 0 0, 2.5px 2.5px;
+}
+
+.stage-head {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 14px 32px;
+  background: rgba(17, 19, 21, 0.92);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--line);
+}
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 16px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.tab kbd {
+  font: 600 11px var(--font-vfd);
+  padding: 1px 5px;
+  border-radius: 4px;
+  border: 1px solid var(--line);
+  color: var(--muted);
+}
+
+.tab[aria-selected='true'] {
+  background: var(--surface-2);
+  color: var(--text);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+
+.tab[aria-selected='true'] kbd {
+  color: var(--accent);
+  border-color: rgba(255, 179, 71, 0.4);
+}
+
+.shortcuts {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  text-align: right;
+}
+
+.view {
+  padding: 28px 32px 48px;
+}

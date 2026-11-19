@@ -1,0 +1,779 @@
+/* Sólování: lišta přístupů, mapa kolečka, pruhy (hmatníky pod sebou) a wiki vpravo. */
+
+.view-solo {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 22px;
+  align-items: start;
+  padding-top: 18px;
+}
+
+.view-solo.has-wiki {
+  grid-template-columns: minmax(0, 1fr) 360px;
+}
+
+.solo-main {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+
+/* ---------- hlavička ---------- */
+.solo-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.solo-header h1 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.solo-sub {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.solo-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ctl-group {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.ctl {
+  padding: 6px 11px;
+  border: 0;
+  border-right: 1px solid var(--line);
+  background: transparent;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.ctl:last-child {
+  border-right: 0;
+}
+
+.win-label {
+  padding: 0 10px;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  border-right: 1px solid var(--line);
+  white-space: nowrap;
+}
+
+.wiki-toggle {
+  padding: 6px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.wiki-toggle[aria-pressed='true'] {
+  color: var(--accent);
+  border-color: rgba(255, 179, 71, 0.45);
+}
+
+/* ---------- lišta přístupů ---------- */
+.approach-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.approach-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.approach-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.approach-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 13px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.approach-btn[aria-checked='true'] {
+  border-color: var(--accent);
+  background: rgba(255, 179, 71, 0.14);
+  color: #ffe2b8;
+}
+
+.approach-more {
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.lvl {
+  display: inline-flex;
+}
+
+.lvl::before {
+  content: '';
+  width: calc(var(--n) * 6px - 2px);
+  height: 4px;
+  background: radial-gradient(circle, var(--muted) 2px, transparent 2.2px) 0 0 / 6px 4px repeat-x;
+}
+
+.lvl-1 {
+  --n: 1;
+}
+
+.lvl-2 {
+  --n: 2;
+}
+
+.lvl-3 {
+  --n: 3;
+}
+
+/* ---------- mapa kolečka ---------- */
+.map-strip {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 4), minmax(0, 1fr));
+  gap: 4px;
+}
+
+.map-cell {
+  display: grid;
+  gap: 1px;
+  padding: 6px 8px 5px;
+  border: 1px solid var(--line);
+  border-bottom: 4px solid var(--lane);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+  text-align: left;
+  min-width: 0;
+}
+
+.map-cell b {
+  font-size: 16px;
+}
+
+.map-cell span {
+  font-size: 12px;
+  color: var(--lane);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.map-cell small {
+  font-size: 10.5px;
+  color: var(--muted);
+}
+
+.map-cell.is-current {
+  background: color-mix(in srgb, var(--lane) 20%, var(--surface));
+  border-color: var(--lane);
+}
+
+/* ---------- pruhy ---------- */
+.lanes {
+  display: grid;
+  gap: 8px;
+}
+
+.lane {
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--lane);
+  border-radius: 8px;
+  background: linear-gradient(180deg, #181b1f, #14171a);
+  padding: 4px 10px 2px;
+  transition: opacity 150ms, border-color 150ms, box-shadow 150ms;
+}
+
+.lane.is-idle {
+  opacity: 0.42;
+}
+
+.lane.is-active {
+  border-color: var(--lane);
+  box-shadow: 0 0 0 1px var(--lane), 0 0 18px color-mix(in srgb, var(--lane) 22%, transparent);
+}
+
+.lane.is-next {
+  opacity: 0.85;
+  border-color: var(--lane);
+  animation: lane-next 0.9s ease-in-out infinite alternate;
+}
+
+@keyframes lane-next {
+  from {
+    box-shadow: 0 0 0 0 transparent;
+  }
+
+  to {
+    box-shadow: 0 0 0 2px var(--lane);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lane.is-next {
+    animation: none;
+    box-shadow: 0 0 0 2px var(--lane);
+  }
+}
+
+.lane-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  min-height: 24px;
+}
+
+.lane-name {
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--lane);
+}
+
+.lane-src {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.lane-caption {
+  font-size: 13px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lane.is-active .lane-caption {
+  color: var(--text);
+}
+
+.lane-badge {
+  margin-left: auto;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--lane);
+}
+
+.lane-fb .fb {
+  max-height: 210px;
+}
+
+.lanes[data-count='2'] .lane-fb .fb,
+.lanes[data-count='3'] .lane-fb .fb,
+.lanes[data-count='4'] .lane-fb .fb {
+  max-height: 132px;
+}
+
+/* ---------- pod pruhy ---------- */
+.lane-hint {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 24px;
+}
+
+.lane-bridge {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-item i {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.legend-item.is-src i {
+  background: #e9e4da;
+}
+
+.legend-item.is-src-root i {
+  border-radius: 3px;
+  background: var(--accent);
+}
+
+.legend-item.is-chord i {
+  background: #e9e4da;
+  box-shadow: 0 0 0 2.5px var(--chord);
+}
+
+.legend-item.is-window i {
+  border-radius: 3px;
+  border: 1.5px dashed var(--accent);
+}
+
+/* ---------- wiki ---------- */
+.wiki {
+  position: sticky;
+  top: 76px;
+  max-height: calc(100vh - 96px);
+  overflow: auto;
+  padding: 14px 16px 24px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.wiki h2 {
+  margin: 0 0 10px;
+  font-size: 17px;
+}
+
+.wiki h3 {
+  margin: 16px 0 6px;
+  font-size: 15px;
+}
+
+.wiki h4 {
+  margin: 10px 0 2px;
+  font-size: 11.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.wiki p {
+  margin: 4px 0;
+}
+
+.wiki ul {
+  margin: 4px 0;
+  padding-left: 18px;
+}
+
+.wiki-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.wiki-table th {
+  text-align: left;
+  font-weight: 600;
+  color: var(--muted);
+  border-bottom: 1px solid var(--line);
+  padding: 3px 4px;
+}
+
+.wiki-table td {
+  padding: 4px;
+  border-bottom: 1px solid #262a30;
+  vertical-align: top;
+}
+
+.wiki-lane {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 5px;
+  border-radius: 2px;
+  background: var(--lane);
+}
+
+.wiki-card {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-2);
+}
+
+.wiki-card.is-active {
+  border-color: var(--accent);
+}
+
+.wiki-card header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.wiki-card h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+
+.wiki-try {
+  padding: 4px 10px;
+  border: 1px solid rgba(255, 179, 71, 0.5);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--accent);
+  font-size: 12.5px;
+  font-weight: 700;
+}
+
+.wiki-active {
+  font-size: 12px;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.wiki-lanes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 6px;
+}
+
+.wiki-chip {
+  padding: 1px 8px;
+  border-left: 3px solid var(--lane);
+  border-radius: 4px;
+  background: #1b1f24;
+  font-size: 12px;
+}
+
+.wiki-licks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.wiki-lick {
+  padding: 4px 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 13px;
+}
+
+.wiki-lick-area {
+  margin-top: 12px;
+}
+
+.lick-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.play-lick {
+  padding: 6px 12px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #1b1208;
+  font-weight: 700;
+}
+
+.tab-scroll {
+  overflow-x: auto;
+  padding: 8px 4px;
+  border-radius: var(--radius);
+  background: #f4efe4;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2);
+}
+
+/* ---------- zhutnění, aby se 3 pruhy vešly bez rolování ---------- */
+.view.view-solo {
+  padding-top: 14px;
+  padding-bottom: 16px;
+}
+
+.solo-header > div:first-child {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  min-width: 0;
+}
+
+.solo-header h1 {
+  font-size: 18px;
+  white-space: nowrap;
+}
+
+.solo-main {
+  gap: 9px;
+}
+
+.approach-btn {
+  padding: 5px 11px;
+  font-size: 13px;
+}
+
+.map-cell {
+  padding: 4px 7px 3px;
+}
+
+.map-cell b {
+  font-size: 15px;
+}
+
+.lanes[data-count='3'] .lane-fb .fb,
+.lanes[data-count='4'] .lane-fb .fb {
+  max-height: 108px;
+}
+
+.lane {
+  padding: 2px 10px 0;
+}
+
+.lane-head {
+  min-height: 22px;
+}
+
+.lick-shifts {
+  display: inline-flex;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.lick-shift {
+  padding: 3px 8px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.lick-shift.is-on {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.lick-tip {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* ---------- licky u pruhů, celé kolo, dok s tabulaturou ---------- */
+.lane-licks {
+  display: inline-flex;
+  gap: 4px;
+  margin-left: 6px;
+  flex-shrink: 0;
+}
+
+.lane-badge:empty + .lane-licks {
+  margin-left: auto;
+}
+
+.lick-chip {
+  padding: 1px 8px;
+  border: 1px solid color-mix(in srgb, var(--lane, var(--accent)) 55%, transparent);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--lane, var(--accent));
+  font-size: 11.5px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.lick-chip:hover,
+.lick-chip.is-on {
+  background: color-mix(in srgb, var(--lane, var(--accent)) 18%, transparent);
+}
+
+.lick-chip.is-playing {
+  background: var(--lane, var(--accent));
+  color: #111;
+}
+
+.cycle-licks {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.lick-dock {
+  padding: 8px 10px 10px;
+  border-left: 3px solid var(--lane, var(--accent));
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.lick-head {
+  flex-wrap: wrap;
+}
+
+.lick-where {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.lick-close {
+  margin-left: 4px;
+  padding: 0 8px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 20px;
+  line-height: 1;
+}
+
+.lick-shifts:empty {
+  display: none;
+}
+
+.lick-where + .lick-shifts:empty + .lick-close,
+.lick-where + .lick-shifts + .lick-close {
+  margin-left: auto;
+}
+
+.lick-dock .lick-tip {
+  margin: 0 0 6px;
+}
+
+.lick-dock .tab-scroll {
+  scroll-behavior: smooth;
+}
+
+.wiki-licks {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wiki-lick-row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2px 8px;
+  align-items: baseline;
+}
+
+.wiki-lick-row small {
+  grid-column: 1 / -1;
+  color: var(--muted);
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+
+.wiki-lick {
+  border-left: 3px solid var(--lane, var(--accent));
+}
+
+.wiki-lick-lane {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.wiki-catalog dl {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+}
+
+.wiki-catalog dt {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 8px;
+  align-items: baseline;
+  margin-top: 6px;
+}
+
+.wiki-catalog dt small {
+  color: var(--muted);
+}
+
+.wiki-catalog dd {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12.5px;
+}
+
+.wiki-sub {
+  margin-top: -4px;
+  color: var(--muted);
+  font-size: 12.5px;
+}
+
+/* hlavička pruhu se nesmí roztáhnout přes šířku sloupce (čipy licků) */
+.lanes,
+.lane {
+  min-width: 0;
+}
+
+.lane-head {
+  min-width: 0;
+}
+
+.lane-src {
+  white-space: nowrap;
+}
+
+.lane-caption {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.lane-licks {
+  flex-shrink: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* tabulatura licku roluje uvnitř doku, sloupec neroztahuje */
+.solo-main {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.lick-dock,
+.cycle-licks {
+  min-width: 0;
+}

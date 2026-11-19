@@ -1,0 +1,30 @@
+// Popisky ladičky (smyšlená značka HAYASE, model GT-770 – hi-fi konec 70. let).
+// Obecné texty (tunerIdle, tunerRef …) zůstávají v cs.js.
+
+export const TN = {
+  brand: 'HAYASE',
+  model: 'GT-770',
+  subtitle: 'Precision Tuning Meter',
+  series: 'Professional Series',
+  mic: 'Mikrofon',
+  on: 'Zap',
+  off: 'Vyp',
+  mode: 'Režim',
+  a4: 'Kalibrace A4',
+  low: 'Nízko',
+  tuned: 'Laděno',
+  high: 'Vysoko',
+  strings: 'Struny · referenční tón',
+  tone: 'Tón',
+  string: 'Struna',
+  meterTitle: 'Ladění',
+  flat: '♭',
+  sharp: '♯',
+  down: 'Kalibrace A4 o 1 Hz níž',
+  up: 'Kalibrace A4 o 1 Hz výš',
+  knobHint: 'Otoč kolečkem myši, šipkami nebo klikni vlevo / vpravo',
+  modeLabel: 'Režim ladičky',
+  chromShort: 'Chromat.',
+  idleOff: 'Zapni MIKROFON a zahraj strunu',
+  cents: 'c',
+};

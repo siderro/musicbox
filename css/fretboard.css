@@ -1,0 +1,360 @@
+.fretboard {
+  padding: 12px 14px 6px;
+  border-radius: var(--radius);
+  background: linear-gradient(180deg, #181b1f, #14171a);
+  border: 1px solid var(--line);
+}
+
+.fb {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.fb-neck {
+  fill: #2c1f17;
+  stroke: #120c08;
+}
+
+.fb-inlay {
+  fill: #e8e0cc;
+  opacity: 0.28;
+}
+
+.fb-fret {
+  stroke: #a9adb1;
+  stroke-width: 2.6;
+}
+
+.fb-nut {
+  fill: #e9e2cf;
+}
+
+.fb-string {
+  stroke: #cfc8b8;
+  opacity: 0.85;
+}
+
+.fb-fretnum {
+  fill: #5c636b;
+  font: 600 12px var(--font-ui);
+  text-anchor: middle;
+}
+
+.fb-fretnum.is-marked {
+  fill: #a3aab1;
+}
+
+.fb-window {
+  fill: rgba(255, 179, 71, 0.07);
+  stroke: rgba(255, 179, 71, 0.55);
+  stroke-width: 1.5;
+  stroke-dasharray: 6 4;
+}
+
+.fb-dot {
+  transition: opacity 120ms;
+}
+
+.fb-dot circle,
+.fb-dot rect {
+  fill: #e9e4da;
+  stroke: #0d0f11;
+  stroke-width: 1.5;
+}
+
+.fb-dot text {
+  fill: #15181b;
+  font: 700 11px var(--font-ui);
+  text-anchor: middle;
+  pointer-events: none;
+}
+
+.fb-dot.is-root rect {
+  fill: var(--accent);
+}
+
+.fb-dot.is-blue circle {
+  fill: var(--blue-note);
+}
+
+.fb-dot.is-lick circle,
+.fb-dot.is-lick rect {
+  fill: #fff;
+  stroke: var(--accent);
+  stroke-width: 3;
+}
+
+.fb-dot.is-outside circle {
+  fill: rgba(17, 19, 21, 0.85);
+  stroke: var(--chord);
+  stroke-width: 2.2;
+  stroke-dasharray: 4 3;
+}
+
+.fb-dot.is-outside text {
+  fill: var(--chord);
+}
+
+.fb-ring {
+  fill: none !important;
+  stroke: var(--chord) !important;
+  stroke-width: 3.2 !important;
+}
+
+.fb-dot.is-dim {
+  opacity: 0.22;
+}
+
+/* ---------- tabulatura (na papíře) ---------- */
+.tab {
+  display: block;
+}
+
+.tab-line {
+  stroke: #8b8478;
+  stroke-width: 1;
+}
+
+.tab-beat {
+  stroke: #d6cfc0;
+  stroke-width: 1;
+}
+
+.tab-bar {
+  stroke: #6f685d;
+  stroke-width: 1.6;
+}
+
+.tab-clef {
+  fill: #6f685d;
+  font: 700 12px var(--font-ui);
+  text-anchor: middle;
+}
+
+.tab-num-bg {
+  fill: #f4efe4;
+}
+
+.tab-num {
+  fill: #1d1a16;
+  font: 700 14px var(--font-ui);
+  text-anchor: middle;
+}
+
+.tab-tech {
+  fill: #a04a12;
+  font: 700 11px var(--font-ui);
+  text-anchor: middle;
+}
+
+.tab-bend,
+.tab-arc,
+.tab-vib,
+.tab-slide {
+  fill: none;
+  stroke: #a04a12;
+  stroke-width: 1.6;
+}
+
+.tab-stem,
+.tab-beam,
+.tab-flag {
+  stroke: #2a2620;
+  stroke-width: 1.6;
+  fill: none;
+}
+
+.tab-beam {
+  stroke-width: 3.2;
+}
+
+.tab-half {
+  fill: none;
+  stroke: #2a2620;
+  stroke-width: 1.4;
+}
+
+.tab-tuplet {
+  fill: #2a2620;
+  font: 700 12px var(--font-ui);
+  text-anchor: middle;
+}
+
+.tab-rest {
+  fill: #2a2620;
+}
+
+.tab-playhead {
+  stroke: var(--key-red);
+  stroke-width: 2.5;
+}
+
+/* ---------- výuka: nápad, barvy, cíle, šipky ---------- */
+.fb-dot.is-idea circle,
+.fb-dot.is-idea-root rect {
+  fill: var(--chord);
+}
+
+.fb-dot.is-idea-root rect {
+  stroke: #e9fffb;
+  stroke-width: 2;
+}
+
+.fb-dot.is-color circle {
+  fill: rgba(17, 19, 21, 0.9);
+  stroke: var(--blue-note);
+  stroke-width: 3;
+}
+
+.fb-dot.is-color text {
+  fill: var(--blue-note);
+}
+
+.fb-dot.is-target circle {
+  fill: var(--accent);
+  stroke: #fff3df;
+  stroke-width: 2.5;
+}
+
+.fb-dot.is-hold circle {
+  fill: var(--accent);
+  stroke: var(--chord);
+  stroke-width: 3;
+}
+
+.fb-dot.is-approach circle {
+  fill: rgba(17, 19, 21, 0.9);
+  stroke: var(--accent);
+  stroke-width: 2.2;
+  stroke-dasharray: 4 3;
+}
+
+.fb-dot.is-faded {
+  opacity: 0.35;
+}
+
+.fb-dot.is-hit circle,
+.fb-dot.is-hit rect {
+  stroke: #fff;
+  stroke-width: 4;
+  filter: drop-shadow(0 0 6px rgba(79, 216, 200, 0.9));
+}
+
+.fb-link {
+  stroke: var(--accent);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+}
+
+.fb-arrow-head {
+  fill: var(--accent);
+}
+
+.fb-link-hold {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2.5;
+  stroke-dasharray: 3 3;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fb-dot {
+    transition: none;
+  }
+}
+
+/* otázka–odpověď: tóny k zopakování jako očíslované obrysy */
+.fb-dot.is-ghost circle {
+  fill: rgba(17, 19, 21, 0.85);
+  stroke: #fff;
+  stroke-width: 2.5;
+}
+
+.fb-dot.is-ghost text {
+  fill: #fff;
+}
+
+/* ---------- fráze: START, cesta, CÍL, domov ---------- */
+.fb-dot.is-path circle {
+  fill: var(--chord);
+}
+
+.fb-dot.is-start circle {
+  fill: #7ee787;
+  stroke: #e8ffe9;
+  stroke-width: 2.5;
+}
+
+.fb-dot.is-land rect,
+.fb-dot.is-land circle {
+  fill: var(--accent);
+  stroke: #fff3df;
+  stroke-width: 2.5;
+}
+
+.fb-dot.is-home circle {
+  fill: rgba(17, 19, 21, 0.85);
+  stroke: #e9e4da;
+  stroke-width: 1.8;
+  stroke-dasharray: 3 2.5;
+}
+
+.fb-dot.is-home text {
+  fill: #e9e4da;
+}
+
+.fb-tag {
+  fill: #ffffff;
+  font: 800 9.5px var(--font-ui);
+  letter-spacing: 0.06em;
+  text-anchor: middle;
+  paint-order: stroke;
+  stroke: #111315;
+  stroke-width: 3px;
+}
+
+.fb-dot.is-start .fb-tag {
+  fill: #7ee787;
+}
+
+.fb-dot.is-land .fb-tag {
+  fill: var(--accent);
+}
+
+.fb-dot.is-home .fb-tag {
+  fill: #e9e4da;
+}
+
+.fb-link.is-path {
+  stroke: rgba(79, 216, 200, 0.75);
+  stroke-width: 2;
+  stroke-dasharray: 5 4;
+}
+
+.fb-link.is-land {
+  stroke: var(--accent);
+  stroke-width: 4;
+}
+
+/* ---------- pruhy přístupů: zdroj a jeho kořen ---------- */
+.fb-dot.is-src circle {
+  fill: #e9e4da;
+}
+
+.fb-dot.is-src-root rect {
+  fill: var(--accent);
+}
+
+.fb.is-compact .fb-dot text {
+  font-size: 10px;
+}
+
+.fb.is-compact .fb-fretnum {
+  font-size: 11px;
+}
+
+.tab-chord {
+  font: 700 13px var(--font-ui, sans-serif);
+  fill: #6b4a1c;
+}
