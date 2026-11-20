@@ -12,11 +12,12 @@ import { createGrooveProgram } from './programs/groove-program.js';
 import { createMetronomeProgram } from './programs/metronome-program.js';
 import { createDeck } from './ui/deck.js';
 import { createSoloPanel } from './ui/solo-panel.js';
+import { createCompPanel } from './ui/comp-panel.js';
 import { createTunerView } from './ui/tuner-view.js';
 import { createMetronomeView } from './ui/metronome-view.js';
 import { installShortcuts } from './ui/shortcuts.js';
 
-const TABS = [['solo', T.tabSolo], ['tuner', T.tabTuner], ['metro', T.tabMetro]];
+const TABS = [['solo', T.tabSolo], ['comp', T.tabComp], ['tuner', T.tabTuner], ['metro', T.tabMetro]];
 
 // Kontrola obsahu – chyby v nově přidaných předvolbách se ukážou v konzoli.
 const problems = validateAll();
@@ -85,9 +86,10 @@ const actions = {
 createDeck(deckEl, { groove, actions });
 solo = createSoloPanel(views.solo);
 solo.setSilence(silenceAll);
+const comp = createCompPanel(views.comp);
 tuner = createTunerView(views.tuner, { beforeStart: () => actions.stopAll() });
 const metronome = createMetronomeView(views.metro, { actions });
-installShortcuts({ actions, solo, metronome });
+installShortcuts({ actions, solo, comp, metronome });
 
 function showTab() {
   const { tab } = store.get();

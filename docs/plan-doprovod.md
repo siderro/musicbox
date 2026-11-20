@@ -1,6 +1,20 @@
 # Plán: škola doprovodu
 
-Stav: návrh (2026-11-19), nic se zatím neimplementuje.
+Stav (2026-11-20): fáze 0–4 hotové, fáze 5 částečně (drop 2 je sazba, walking bass ne).
+
+## Co je hotové
+- Engine hmatů (`js/comp/voicing-engine.js`) a sazby (`js/data/voicings.js`): open, barré, shell, trojzvuky, barvy 6 a 9, bas + akord, boogie, drop 2.
+- Rytmy (`js/data/rhythms.js`, `js/comp/strum.js`) a zvuk kytary (`js/audio/guitar.js`).
+- Záložka **Doprovod** (`js/ui/comp-panel.js`, `css/comp.css`): konzole v duchu decku (lišty sazeb A a rytmů R, VFD, klávesy režimů), mapa kolečka s diagramy a odpočtem, velký diagram + hmatník, mřížka rytmu nad tabulaturou, wiki (W).
+- Groovebox (`js/programs/groove-program.js`) hraje na záložce Doprovod (a v Sólování s přepínačem *Doprovod: kytara*) místo kláves kytaru: události segmentu se spočítají při změně akordu (`js/comp/comp-plan.js`) a v každém kroku se zahrají ty, které padnou do kroku.
+- Režimy Ukázka / Hraju sám / Střídání; doporučený groove k rytmu se jen nabízí.
+- Wiki doprovodu (`js/data/comp-wiki.js`) pro folk1645, trampMinor, romanticMinor, waltzMajor, polka, blues12, iiVI, iiVIlong; kontrola ve `validateAll`.
+
+## Zbývá
+- Boogie: horní tón chůze 5–6–♭7 (`shape.walk`) zatím rytmy nehrají – zní jen dvojhmat 1-5.
+- Basové přechody před změnou akordu (bas + akord), walking bass.
+- Wiki doprovodu pro ostatní kolečka (bez ní platí pořadí podle stylu).
+- Prsty v diagramu (zatím intervaly nebo názvy tónů).
 
 ## Cíl
 Vedle Sólování nová záložka **Doprovod**: k vybranému kolečku učí, jak ho hrát jako doprovodná kytara. Dvě nezávislé volby, které se dají libovolně kombinovat:

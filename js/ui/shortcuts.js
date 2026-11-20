@@ -2,7 +2,7 @@
 
 import { store } from '../state/store.js';
 
-const TABS = ['solo', 'tuner', 'metro'];
+const TABS = ['solo', 'comp', 'tuner', 'metro'];
 const LABELS = ['chord', 'names', 'source'];
 const cycle = (list, cur) => list[(list.indexOf(cur) + 1) % list.length];
 
@@ -18,7 +18,7 @@ function tapper(onBpm) {
   };
 }
 
-export function installShortcuts({ actions, solo, metronome }) {
+export function installShortcuts({ actions, solo, comp, metronome }) {
   const tapGroove = tapper((bpm) => store.set({ tempo: Math.max(40, Math.min(220, bpm)) }));
 
   const changeTempo = (d) => {
@@ -46,11 +46,13 @@ export function installShortcuts({ actions, solo, metronome }) {
     else if (key === 'ArrowRight' && st.tab === 'solo') solo.stepPosition(1);
     else if (key === 'l' || key === 'L') store.set({ labelMode: cycle(LABELS, st.labelMode) });
     else if ((key === 'a' || key === 'A') && st.tab === 'solo') solo.cycleApproach(e.shiftKey ? -1 : 1);
+    else if ((key === 'a' || key === 'A') && st.tab === 'comp') comp.cycleSazba(e.shiftKey ? -1 : 1);
+    else if ((key === 'r' || key === 'R') && st.tab === 'comp') comp.cycleRhythm(e.shiftKey ? -1 : 1);
     else if (key === 'w' || key === 'W') store.set({ wikiOpen: !st.wikiOpen });
     else if (key === 'f' || key === 'F') store.set({ freeze: !st.freeze });
     else if ((key === 'p' || key === 'P') && solo.isLickSelected()) solo.toggleLick();
     else if (key === 't' || key === 'T') (st.tab === 'metro' ? metronome.tap() : tapGroove());
-    else if (['1', '2', '3'].includes(key)) store.set({ tab: TABS[Number(key) - 1] });
+    else if (['1', '2', '3', '4'].includes(key)) store.set({ tab: TABS[Number(key) - 1] });
     else handled = false;
 
     if (handled) e.preventDefault();

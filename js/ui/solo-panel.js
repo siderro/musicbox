@@ -36,6 +36,15 @@ export function createSoloPanel(root) {
   const hint = h('div', { class: 'lane-hint' });
   const winLabel = h('output', { class: 'win-label' });
   const labelBtn = h('button', { type: 'button', class: 'ctl', onclick: () => cycleLabels() });
+  // doprovod pod sólem: klávesy grooveboxu, nebo kytara v sazbě a rytmu ze záložky Doprovod
+  const compKeysBtn = h('button', { type: 'button', class: 'ctl', 'aria-pressed': 'false', onclick: () => store.set({ soloGuitar: false }) }, T.soloCompKeys);
+  const compGuitarBtn = h('button', { type: 'button', class: 'ctl', 'aria-pressed': 'false', onclick: () => store.set({ soloGuitar: true }) }, T.soloCompGuitar);
+  const compSwitch = h('div', { class: 'ctl-group ctl-switch', title: T.soloCompTip },
+    h('span', { class: 'ctl-label' }, T.soloComp), compKeysBtn, compGuitarBtn);
+  const markCompSwitch = () => {
+    compKeysBtn.setAttribute('aria-pressed', store.get().soloGuitar ? 'false' : 'true');
+    compGuitarBtn.setAttribute('aria-pressed', store.get().soloGuitar ? 'true' : 'false');
+  };
   const wikiBox = h('aside', { class: 'wiki', 'aria-label': T.wikiTitle });
   const cycleBox = h('div', { class: 'cycle-licks' });
 
@@ -58,6 +67,7 @@ export function createSoloPanel(root) {
           h('button', { type: 'button', class: 'ctl', title: T.prevPos, onclick: () => stepPosition(-1) }, '←'),
           winLabel,
           h('button', { type: 'button', class: 'ctl', title: T.nextPos, onclick: () => stepPosition(1) }, '→')),
+        compSwitch,
         h('div', { class: 'ctl-group' }, labelBtn),
         wikiBtn)),
     h('div', { class: 'approach-row' }, h('span', { class: 'approach-label' }, T.approach), approachBar),
@@ -544,6 +554,7 @@ export function createSoloPanel(root) {
   });
 
   store.subscribe((s, changed) => {
+    if (changed.includes('soloGuitar')) markCompSwitch();
     if (changed.some((k) => ['progression', 'key', 'approachByProgression', 'groove'].includes(k))) {
       rebuild();
       return;
@@ -565,6 +576,7 @@ export function createSoloPanel(root) {
   });
 
   rebuild();
+  markCompSwitch();
 
   return {
     stepPosition,

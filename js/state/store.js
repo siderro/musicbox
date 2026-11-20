@@ -5,6 +5,7 @@ const STORAGE_KEY = 'musicbox.v1';
 const PERSISTED = [
   'tab', 'key', 'progression', 'groove', 'tempo', 'chordSound', 'mix', 'countIn', 'humanize',
   'labelMode', 'posCenter', 'a4', 'tunerMode', 'metro', 'approachByProgression', 'wikiOpen',
+  'sazbaByProgression', 'rhythmByProgression', 'compMode', 'soloGuitar',
 ];
 
 const DEFAULTS = {
@@ -19,6 +20,11 @@ const DEFAULTS = {
   humanize: true,
   labelMode: 'chord', // chord = intervaly vůči hranému akordu, names = názvy tónů, source = intervaly vůči zdroji
   approachByProgression: {},
+  // doprovod: sazba a rytmus pro každé kolečko, režim (demo = kytara hraje, self = hraju sám, alt = střídání po taktech)
+  sazbaByProgression: {},
+  rhythmByProgression: {},
+  compMode: 'demo',
+  soloGuitar: false, // v Sólování doprovází kytara místo kláves
   wikiOpen: true,
   posCenter: 6.5,
   a4: 440,
@@ -37,6 +43,7 @@ function load() {
     if (out.mix) out.mix = { ...DEFAULTS.mix, ...out.mix };
     if (out.metro) out.metro = { ...DEFAULTS.metro, ...out.metro };
     if (!['chord', 'names', 'source'].includes(out.labelMode)) delete out.labelMode;
+    if (!['demo', 'self', 'alt'].includes(out.compMode)) delete out.compMode;
     return out;
   } catch {
     return {};

@@ -4,6 +4,7 @@ Webová stránka na cvičení kytary:
 
 - **Groovebox**: bicí groove, harmonické kolečko v libovolné tónině a basa.
 - **Sólování**: přístupy k improvizaci, hmatníky pod sebou podle funkce akordu, wiki ke každému kolečku.
+- **Doprovod**: jak kolečko hrát jako doprovodná kytara – sazba (hmaty) × rytmus (pravá ruka), kytara hraje s grooveboxem.
 - **Ladička**: přes mikrofon.
 - **Metronom**: klik, woodblock nebo bicí.
 
@@ -46,13 +47,26 @@ Mikrofon (ladička) funguje jen na `localhost` nebo přes HTTPS.
   - licky každého přístupu po pruzích. Symetrické licky jde posouvat tlačítky +3/+6/+9;
   - katalog všech stupnic od tóniky s tím, kdy kterou použít.
 
+## Doprovod: sazby, rytmy a režimy
+
+- **Sazba** = jakými hmaty kolečko zahraješ: otevřené akordy, barré E/A, shell chords, trojzvuky nahoře, barvy 6 a 9, bas + akord, dvojhmaty a shuffle, drop 2. Vybírá se na konzoli nahoře nebo klávesou **A** (Shift+A zpět).
+- **Rytmus** = co dělá pravá ruka: úhozy (↓ ↑ ×), boom-chick, valčík, polka, Travis, arpeggio p-i-m-a, Freddie Green, charleston, bossa, reggae, funk, shuffle. Nabízí se jen rytmy, které sedí do taktu kolečka. Klávesa **R** (Shift+R zpět).
+- Obě volby si aplikace pamatuje pro každé kolečko. Tlačítko **groove k rytmu** nabídne bicí a basu, které k rytmu patří (nic se nepřepne samo).
+- **Mapa kolečka**: diagram hmatu pro každý akord. Aktuální svítí, další se před změnou rozbliká a odpočítá „za 2 → za 1“. U dalšího hmatu jsou tyrkysově označené tóny, které zůstávají.
+- **Velký diagram a hmatník**: aktuální hmat s intervaly (klávesou **L** názvy tónů), při odpočtu i tóny dalšího hmatu (bílý kroužek).
+- **Mřížka rytmu** nad tabulaturou: doby, ↓ ↑ × B A p i m a, přízvuky červeně; během hraní ukazatel kroku.
+- **Režimy**: Ukázka (kytara hraje), Hraju sám (kytara ztlumená, bicí a basa hrají), Střídání (takt ukázka, takt ty – na displeji UKÁZKA / TY).
+- **Wiki** (W): hmaty v kolečku, u každé sazby proč funguje a cvičení, u rytmů rada a doporučený groove. U shell chords odkaz do Sólování na „Linku vodicích tónů“ – horní hlasy shellů jsou tytéž tóny 3 a 7.
+- **Doprovod kytarou v Sólování**: v hlavičce Sólování přepínač *Doprovod: klávesy / kytara*. Kytara pak hraje sazbu a rytmus vybrané pro kolečko v Doprovodu. Hlasitost kytary řídí knoflík *Akordy*.
+
 ## Ovládání
 
 | Klávesa | Akce |
 |---|---|
 | Mezerník | přehrát / zastavit (groovebox, na záložce Metronom metronom) |
 | Esc | zastavit vše |
-| A / Shift+A | další / předchozí přístup |
+| A / Shift+A | další / předchozí přístup (v Doprovodu sazba) |
+| R / Shift+R | další / předchozí rytmus (Doprovod) |
 | P | přehrát / zastavit lick |
 | W | wiki ke kolečku |
 | ← → | posunout okno ruky (ve všech pruzích) |
@@ -61,7 +75,7 @@ Mikrofon (ladička) funguje jen na `localhost` nebo přes HTTPS.
 | [ ] | tónina o půltón dolů / nahoru |
 | F | držet aktuální akord (cvičení nad jedním akordem) |
 | T | tap tempo |
-| 1 2 3 | záložky Sólování / Ladička / Metronom |
+| 1 2 3 4 | záložky Sólování / Doprovod / Ladička / Metronom |
 
 ## Přidávání obsahu
 
@@ -91,6 +105,11 @@ Veškerý obsah je v `js/data/`. Popis formátu je vždy v komentáři na začá
 
     Úplný popis je v `js/teaching/line.js`. `each: true` = buňka se hraje přes každý akord, `change: true` = lick dopadá za změnou.
 - `grooves.js`: bicí, rytmus akordů a basová linka jako řetězce kroků.
+- `voicings.js`: sazby doprovodu – jak se hmat staví (`build`), tvary jako `'x 1 5 7 3 x'` (struna 6 → 1, čísla = tóny akordu), váhy pohybu ruky a hlasů, `why` a `try` s tokeny. Tabulka otevřených hmatů `OPEN` a barevných akordů `COLOR_TYPES`.
+- `rhythms.js`: rytmy pravé ruky jako řetězce kroků (`'^D. DU .U DU'`): `D U` úhozy, `X` tlumený, `B A` bas a střídavý bas, `p i m a` prsty, `^` přízvuk, `[pa]` naráz. Každý rytmus má takt, feel (straight/swing/shuffle), styly a doporučený `groove`.
+- `comp-wiki.js`: wiki doprovodu ke kolečkům – `feel`, pořadí `sazby` a `rhythms` (první = výchozí), `notes` a `try` k sazbám, `rhythmNotes` k rytmům.
+
+Logika doprovodu je v `js/comp/`: `voicing-engine.js` (hmaty a výběr s nejmenším pohybem ruky), `strum.js` (rytmus → události s časem a strunami), `comp-plan.js` (volba sazby a rytmu, časování v grooveboxu, režimy, odpočet). Zvuk kytary je v `js/audio/guitar.js`.
 
 Po úpravě obnov stránku. Chyby v datech se vypíšou do konzole prohlížeče a kontrolu dat spouští i testy.
 
@@ -105,7 +124,8 @@ Testy pokrývají:
 - hudební teorii: pravopis akordů ve všech tóninách, voicing;
 - výpočet poloh na hmatníku a ukotvení licků;
 - detekci výšky tónu pro ladičku (±1 cent);
-- kontrolu obsahu.
+- kontrolu obsahu;
+- doprovod: hmaty sazeb, rytmy, plánování událostí přes takt / půltakt / 3/4 / 2/4, režimy a pamatování volby.
 
 ## Nasazení na GitHub Pages
 

@@ -1,0 +1,638 @@
+/* Doprovod: konzole ve stylu decku (černý eloxovaný panel, zlatý lem, gravírované popisky,
+   soft-touch klávesy s LED, VFD), mapa kolečka s diagramy, velký hmat, mřížka rytmu nad tabulaturou.
+   Obsahová plocha zůstává tmavá jako Sólování. */
+
+.view-comp {
+  --cc-legend: #e6e2d8;
+  --cc-legend-dim: #8d8a83;
+  --cc-gold-hi: #f4e6bd;
+  --cc-gold: #c9ad72;
+  --cc-gold-lo: #7c6538;
+  --cc-amber: #ffb648;
+  --cc-amber-glow: 0 0 3px rgba(255, 190, 90, 0.95), 0 0 10px rgba(255, 150, 40, 0.45);
+  --cc-cyan: #79fbef;
+  --cc-cyan-glow: 0 0 3px rgba(120, 255, 240, 0.95), 0 0 10px rgba(50, 235, 215, 0.5);
+  --cc-font: 'Barlow Condensed', 'Archivo Narrow', 'Arial Narrow', sans-serif;
+  --cc-dots: 'Doto', 'Share Tech Mono', ui-monospace, monospace;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 22px;
+  align-items: start;
+}
+
+.view.view-comp {
+  padding-top: 14px;
+  padding-bottom: 16px;
+}
+
+.view-comp.has-wiki {
+  grid-template-columns: minmax(0, 1fr) 360px;
+}
+
+.comp-main {
+  gap: 9px;
+}
+
+/* ---------- přepínač doprovodu v Sólování ---------- */
+.ctl-switch .ctl-label {
+  padding: 0 8px 0 10px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-right: 1px solid var(--line);
+}
+
+.ctl[aria-pressed='true'] {
+  color: var(--accent);
+  background: rgba(255, 179, 71, 0.12);
+}
+
+/* ---------- konzole ---------- */
+.cc-console {
+  position: relative;
+  display: grid;
+  grid-template-columns: 136px minmax(0, 1fr);
+  gap: 12px;
+  padding: 9px 10px 8px;
+  border-radius: 6px;
+  color: var(--cc-legend);
+  font-family: var(--cc-font);
+  background:
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.022) 0 1px, transparent 1px 2px, rgba(0, 0, 0, 0.2) 2px 3px, transparent 3px 4px),
+    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.03) 28%, transparent 55%, rgba(255, 255, 255, 0.018) 80%, transparent),
+    linear-gradient(180deg, #1e1e21, #161618 45%, #111113);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 0 0 1px #050505,
+    2px 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.cc-console::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 2px;
+  border-radius: 6px 6px 0 0;
+  background: linear-gradient(90deg, var(--cc-gold-lo), var(--cc-gold-hi) 22%, var(--cc-gold) 50%, var(--cc-gold-hi) 78%, var(--cc-gold-lo));
+}
+
+.cc-rows {
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+}
+
+.cc-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.cc-row .cc-keys {
+  flex: 1 1 auto;
+}
+
+.cc-legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: 66px;
+  flex-shrink: 0;
+  font: 600 10px/1 var(--cc-font);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--cc-legend);
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.6);
+}
+
+.cc-legend kbd {
+  padding: 1px 4px;
+  border: 1px solid #3a3a3e;
+  border-radius: 3px;
+  font: 600 10px var(--font-vfd);
+  letter-spacing: 0;
+  color: var(--cc-gold);
+}
+
+.cc-keys {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+}
+
+/* soft-touch klávesa s LED (jako transport decku) */
+.cc-key,
+.cc-mode,
+.cc-groove {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 27px;
+  padding: 0 10px 0 9px;
+  border: 0;
+  border-radius: 3px;
+  color: #ebe7dd;
+  font: 600 12.5px/1 var(--cc-font);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  background:
+    radial-gradient(90% 70% at 50% 20%, rgba(255, 255, 255, 0.06), transparent 70%),
+    linear-gradient(180deg, #3b3b3f, #2b2b2e 10%, #222225 62%, #1a1a1c);
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.15),
+    inset -1px -2px 0 rgba(0, 0, 0, 0.45),
+    0 0 0 1px #050505,
+    1px 2px 0 #060607,
+    2px 4px 6px rgba(0, 0, 0, 0.5);
+  transition: transform 70ms ease-out, box-shadow 70ms ease-out;
+}
+
+.cc-key:hover,
+.cc-mode:hover,
+.cc-groove:hover:not(:disabled) {
+  background:
+    radial-gradient(90% 70% at 50% 20%, rgba(255, 255, 255, 0.09), transparent 70%),
+    linear-gradient(180deg, #424246, #303034 10%, #252528 62%, #1c1c1e);
+}
+
+.cc-key[aria-checked='true'],
+.cc-mode[aria-pressed='true'],
+.cc-key:active,
+.cc-mode:active {
+  transform: translateY(2px);
+  color: var(--cc-gold-hi);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 1px 2px 4px rgba(0, 0, 0, 0.35),
+    0 0 0 1px #050505,
+    0 1px 0 #060607;
+}
+
+.cc-led {
+  width: 7px;
+  height: 3px;
+  border-radius: 1px;
+  background: #3a2a0e;
+  box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.6);
+  flex-shrink: 0;
+}
+
+.cc-key[aria-checked='true'] .cc-led,
+.cc-mode[aria-pressed='true'] .cc-led {
+  background: #ffb13a;
+  box-shadow: 0 0 4px #ffaa30, 0 0 9px rgba(255, 170, 40, 0.55);
+}
+
+.cc-key span {
+  max-width: 132px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cc-key .lvl::before {
+  background: radial-gradient(circle, var(--cc-legend-dim) 2px, transparent 2.2px) 0 0 / 6px 4px repeat-x;
+}
+
+.cc-more {
+  height: 27px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 3px;
+  background: #0c0c0d;
+  color: var(--cc-legend-dim);
+  font: 600 12px var(--cc-font);
+  letter-spacing: 0.06em;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.9), 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.cc-groove {
+  margin-left: auto;
+  color: var(--cc-cyan);
+  font-size: 11.5px;
+}
+
+.cc-groove.is-match {
+  color: var(--cc-legend-dim);
+  background: transparent;
+  box-shadow: none;
+}
+
+.cc-groove:disabled {
+  opacity: 1;
+}
+
+
+/* VFD okénko */
+.cc-vfd {
+  display: grid;
+  align-content: center;
+  gap: 2px;
+  min-width: 0;
+  padding: 5px 9px 6px;
+  border-radius: 3px;
+  background: radial-gradient(120% 120% at 50% 0%, #10161a, #06090b 70%);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.95), 0 0 0 1px #000, 0 1px 0 rgba(255, 255, 255, 0.07);
+  font-family: var(--font-vfd);
+}
+
+.cc-vfd-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+}
+
+.cc-vfd-state {
+  color: var(--cc-cyan);
+  text-shadow: var(--cc-cyan-glow);
+}
+
+.comp-main.is-you .cc-vfd-state {
+  color: #ff6a55;
+  text-shadow: 0 0 3px rgba(255, 110, 90, 0.95), 0 0 10px rgba(255, 50, 30, 0.5);
+}
+
+.cc-vfd-next {
+  color: var(--cc-amber);
+  text-shadow: var(--cc-amber-glow);
+}
+
+.cc-vfd-main {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--cc-amber);
+  text-shadow: var(--cc-amber-glow);
+}
+
+.cc-vfd-chord {
+  font: 900 22px/1.05 var(--cc-dots);
+}
+
+.cc-vfd-frets {
+  font-size: 15px;
+  letter-spacing: 0.08em;
+}
+
+.cc-modes {
+  display: flex;
+  gap: 5px;
+  padding: 4px 5px;
+  border-radius: 5px;
+  background: linear-gradient(180deg, #0a0a0b, #141416);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.95), 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+.cc-mode {
+  justify-content: center;
+  height: 25px;
+  padding: 0 6px;
+  font-size: 11.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.cc-mode[data-mode='self'][aria-pressed='true'] .cc-led {
+  background: #ff4734;
+  box-shadow: 0 0 4px #ff4734, 0 0 9px rgba(255, 70, 50, 0.6);
+}
+
+/* ---------- mapa kolečka s diagramy ---------- */
+.cmap {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 4), minmax(0, 1fr));
+  gap: 4px;
+}
+
+.cmap-cell {
+  display: grid;
+  justify-items: center;
+  gap: 1px;
+  padding: 3px 4px 3px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+  min-width: 0;
+  transition: opacity 150ms, border-color 150ms, box-shadow 150ms;
+}
+
+.cmap-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px;
+  width: 100%;
+  min-width: 0;
+}
+
+.cmap-head b {
+  font-size: 13.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cmap-badge {
+  font-style: normal;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.cmap-box {
+  width: 100%;
+}
+
+.cmap-box svg {
+  display: block;
+  width: 100%;
+  height: 62px;
+}
+
+.cmap.is-two-rows .cmap-box svg {
+  height: 42px;
+}
+
+.cmap-cell small {
+  font: 11px var(--font-vfd);
+  color: var(--muted);
+}
+
+.cmap-cell.is-current {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 14%, var(--surface));
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+.cmap-cell.is-next {
+  border-color: var(--chord);
+  animation: cmap-next 0.9s ease-in-out infinite alternate;
+}
+
+@keyframes cmap-next {
+  from {
+    box-shadow: 0 0 0 0 transparent;
+  }
+
+  to {
+    box-shadow: 0 0 0 2px var(--chord);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cmap-cell.is-next {
+    animation: none;
+    box-shadow: 0 0 0 2px var(--chord);
+  }
+}
+
+/* ---------- diagram akordu ---------- */
+.cb .cb-fret {
+  stroke: #8c9298;
+  stroke-width: 1.4;
+}
+
+.cb .cb-fret.is-nut {
+  stroke: #e9e2cf;
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+
+.cb .cb-string {
+  stroke: #cfc8b8;
+  stroke-width: 1.2;
+}
+
+.cb .cb-fretno {
+  fill: var(--muted);
+  font: 700 15px var(--font-ui);
+  text-anchor: middle;
+}
+
+.cb .cb-fretno.is-mini {
+  font-size: 8px;
+  text-anchor: start;
+}
+
+.cb .cb-mute {
+  stroke: #9aa1a8;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+
+.cb .cb-open {
+  fill: none;
+  stroke: #e9e4da;
+  stroke-width: 1.8;
+}
+
+.cb .cb-open.is-root {
+  stroke: var(--accent);
+}
+
+.cb .cb-open.is-keep {
+  stroke: var(--chord);
+  stroke-width: 2.6;
+}
+
+.cb .cb-barre {
+  fill: rgba(233, 228, 218, 0.28);
+  stroke: rgba(233, 228, 218, 0.55);
+}
+
+.cb .cb-dot circle {
+  fill: #e9e4da;
+}
+
+.cb .cb-dot.is-root circle {
+  fill: var(--accent);
+}
+
+.cb .cb-dot .cb-ring {
+  fill: none;
+  stroke: var(--chord);
+  stroke-width: 2.6;
+}
+
+.cb.is-mini .cb-dot .cb-ring {
+  stroke-width: 1.4;
+}
+
+.cb .cb-dot text {
+  fill: #15181b;
+  font: 700 12px var(--font-ui);
+  text-anchor: middle;
+}
+
+.cb .cb-under {
+  fill: #e9e4da;
+  font: 700 12px var(--font-ui);
+  text-anchor: middle;
+}
+
+.cb .cb-under.is-root {
+  fill: var(--accent);
+}
+
+/* ---------- velký hmat + hmatník ---------- */
+.cbig {
+  display: grid;
+  grid-template-columns: 228px minmax(0, 1fr);
+  gap: 10px;
+  min-width: 0;
+}
+
+.cbig-card {
+  display: grid;
+  align-content: start;
+  justify-items: center;
+  gap: 2px;
+  padding: 6px 10px 6px;
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  background: linear-gradient(180deg, #181b1f, #14171a);
+  box-shadow: 0 0 18px rgba(255, 179, 71, 0.12);
+}
+
+.cbig-card header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+}
+
+.cbig-name {
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cbig-badge {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: var(--chord);
+  white-space: nowrap;
+}
+
+.cbig-box svg {
+  display: block;
+  height: 176px;
+  width: auto;
+}
+
+.cbig-meta {
+  font: 12.5px var(--font-vfd);
+  color: var(--muted);
+  text-align: center;
+}
+
+.cbig-right {
+  display: grid;
+  align-content: center;
+  gap: 6px;
+  min-width: 0;
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: linear-gradient(180deg, #181b1f, #14171a);
+}
+
+.cbig-fb .fb {
+  max-height: 190px;
+}
+
+.legend-item.is-ghost i {
+  background: rgba(17, 19, 21, 0.85);
+  box-shadow: inset 0 0 0 2px #fff;
+}
+
+/* ---------- mřížka rytmu nad tabulaturou ---------- */
+.crh {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.crh-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  min-width: 0;
+}
+
+.crh-name {
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.crh-tip {
+  color: var(--muted);
+  font-size: 12.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.crh-scroll {
+  padding: 4px 4px 0;
+}
+
+.crh-grid {
+  display: flex;
+  width: max-content;
+}
+
+/* krok mřížky má šířku kroku tabulatury (92 px na dobu), ať ↓↑ stojí nad čísly */
+.crh-step {
+  display: grid;
+  justify-items: center;
+  width: var(--step);
+  padding: 1px 0 2px;
+  border-left: 1px solid rgba(60, 40, 20, 0.12);
+  color: #3b2a16;
+  transform: translateX(calc(14px - var(--step) / 2));
+}
+
+.crh-step.is-beat {
+  border-left-color: rgba(60, 40, 20, 0.4);
+}
+
+.crh-step small {
+  font: 700 10px var(--font-ui);
+  color: #8a6a3c;
+  line-height: 1.1;
+}
+
+.crh-step b {
+  font: 700 17px/1.1 var(--font-ui);
+}
+
+.crh-step.is-accent b {
+  color: #b5371f;
+}
+
+.crh-step.is-hold b {
+  color: #a99677;
+}
+
+.crh-step.is-now {
+  background: rgba(255, 160, 40, 0.38);
+  border-radius: 4px;
+}
+
+.crh-tab .tab {
+  display: block;
+}

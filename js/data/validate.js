@@ -6,6 +6,9 @@ import { SCALES } from './scales.js';
 import { ARPEGGIOS } from './arpeggios.js';
 import { LICKS } from './licks.js';
 import { APPROACHES } from './approaches.js';
+import { SAZBY } from './voicings.js';
+import { RHYTHMS } from './rhythms.js';
+import { COMP_WIKI } from './comp-wiki.js';
 import { parseLine } from '../teaching/line.js';
 import { parseDegree } from '../theory/chords.js';
 import { parseInterval } from '../theory/intervals.js';
@@ -94,6 +97,26 @@ export function validateAll() {
       if (lane !== '*' && lane !== 'cycle' && !laneIds.has(lane)) errors.push(`přístup ${id}: licky pro neznámý pruh „${lane}“`);
       ids.forEach((l) => { if (!LICKS[l]) errors.push(`přístup ${id}: neznámý lick „${l}“`); });
     }
+  }
+
+  for (const [id, r] of Object.entries(RHYTHMS)) {
+    if (r.groove && !GROOVES[r.groove]) errors.push(`rytmus ${id}: neznámý groove „${r.groove}“`);
+    else if (r.groove && GROOVES[r.groove].meter.join('/') !== r.meter.join('/')) errors.push(`rytmus ${id}: groove „${r.groove}“ má jiný takt`);
+  }
+
+  for (const [id, w] of Object.entries(COMP_WIKI)) {
+    const at = `wiki doprovodu ${id}`;
+    const p = PROGRESSIONS[id];
+    if (!p) {
+      errors.push(`${at}: neznámé kolečko`);
+      continue;
+    }
+    (w.sazby ?? []).forEach((s) => { if (!SAZBY[s]) errors.push(`${at}: neznámá sazba „${s}“`); });
+    Object.keys(w.notes ?? {}).concat(Object.keys(w.try ?? {})).forEach((s) => { if (!SAZBY[s]) errors.push(`${at}: poznámka k neznámé sazbě „${s}“`); });
+    (w.rhythms ?? []).concat(Object.keys(w.rhythmNotes ?? {})).forEach((r) => {
+      if (!RHYTHMS[r]) errors.push(`${at}: neznámý rytmus „${r}“`);
+      else if (RHYTHMS[r].meter.join('/') !== p.meter.join('/')) errors.push(`${at}: rytmus „${r}“ nesedí do taktu ${p.meter.join('/')}`);
+    });
   }
 
   return errors;

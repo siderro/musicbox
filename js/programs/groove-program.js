@@ -12,6 +12,12 @@ import { playBass } from '../audio/bass.js';
 import { click } from '../audio/clicks.js';
 import { getCtx } from '../audio/engine.js';
 import { getLead } from './lead-bus.js';
+import { playEvent, warmUpGuitar } from '../audio/guitar.js';
+import { analyzeSong } from '../theory/function.js';
+import { compChoice, voicedFor, segmentEvents, dueEvents, guitarPlays } from '../comp/comp-plan.js';
+
+// Kytarový doprovod místo kláves: na záložce Doprovod vždy, v Sólování s volbou „Doprovod: kytara“.
+export const guitarComp = (st) => st.tab === 'comp' || (st.tab === 'solo' && !!st.soloGuitar);
 
 const VELOCITY = { X: 1, x: 0.72, g: 0.3 };
 const HITS = /[Xxg]/;
@@ -53,6 +59,13 @@ export function createGrooveProgram() {
   let crStep = 0;
   let wasCall = false;
   const callMode = () => store.get().teach?.idea === 'call';
+  // kytara: hmaty kolečka, události aktuálního segmentu a jestli v tomto taktu hraje (režim střídání)
+  let guitar = null; // { rhythmId, voiced, analysis, mode }
+  let warmed = null;
+  let segEvents = [];
+  let segStart = 0;
+  let barCount = 0;
+  let guitarBar = true;
 
   function load() {
     const st = store.get();
@@ -71,6 +84,17 @@ export function createGrooveProgram() {
       sound: st.chordSound,
       humanize: st.humanize,
     };
+    guitar = null;
+    if (guitarComp(st)) {
+      const analysis = analyzeSong(song, beats);
+      const choice = compChoice(st, song, analysis);
+      const voiced = voicedFor(choice.sazbaId, song, analysis);
+      guitar = { rhythmId: choice.rhythmId, voiced, analysis, mode: st.tab === 'comp' ? st.compMode : 'demo' };
+      if (warmed !== voiced && getCtx()) {
+        warmUpGuitar(voiced.shapes);
+        warmed = voiced;
+      }
+    }
   }
 
   const program = {
@@ -87,6 +111,8 @@ export function createGrooveProgram() {
       crChunk = bar;
       crStep = 0;
       wasCall = callMode();
+      segEvents = [];
+      barCount = 0;
     },
 
     jumpTo(i) {
@@ -133,6 +159,10 @@ export function createGrooveProgram() {
           crStep = 0;
         }
         wasCall = callMode();
+        if (countInLeft === 0) {
+          guitarBar = guitar ? guitarPlays(guitar.mode, barCount) : false;
+          if (guitar) emit(time, 'comp', { bar, play: guitarBar, mode: guitar.mode, barCount });
+        }
       }
       stepDur = 60 / store.get().tempo / s.sp;
       const dur = stepDur;
@@ -160,6 +190,12 @@ export function createGrooveProgram() {
       if (chordStart) {
         chord = chords[seg];
         voicing = voiceChord(chord.tones, voicing);
+        segEvents = [];
+        if (guitar) {
+          const shape = guitar.voiced.shapes[guitar.analysis.byBar[bar]?.[seg] ?? 0];
+          segEvents = segmentEvents(guitar.rhythmId, shape, { meterBeats: s.beats, chordsInBar: chords.length, bar, seg });
+          segStart = time;
+        }
         emit(time, 'chord', { bar, seg, chord, next: nextChordAfter(s.bars, bar, seg), total: s.bars.length, role, crChunk, crStep });
       }
       if (isBeat) emit(time, 'beat', { beat: stepInBar / s.sp, beats: s.beats, bar, role });
@@ -176,7 +212,13 @@ export function createGrooveProgram() {
         }
 
         const c = s.comp[i];
-        if (c && (HITS.test(c) || (c === '-' && chordStart))) {
+        if (guitar) {
+          // stejné tempo celý segment; při změně tempa uprostřed se zbytek posune jen nepatrně
+          if (guitarBar) {
+            const spb = stepDur * s.sp;
+            for (const { ev, time: t } of dueEvents(segEvents, segStart, spb, time, time + dur)) playEvent(ev, t + jitter(), spb);
+          }
+        } else if (c && (HITS.test(c) || (c === '-' && chordStart))) {
           const steps = holdLength(s.comp, i, stepsLeftInChord);
           playChord(voicing, time + jitter(), steps * dur * 0.92, vel(VELOCITY[c] ?? 0.72), s.sound);
         }
@@ -193,6 +235,7 @@ export function createGrooveProgram() {
 
       if (++stepInBar >= s.stepsPerBar) {
         stepInBar = 0;
+        barCount++;
         grooveBar = (grooveBar + 1) % s.groove.bars;
         if (store.get().freeze) {
           // drží se aktuální takt
