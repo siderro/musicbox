@@ -14,7 +14,7 @@ import { getCtx } from '../audio/engine.js';
 import { getLead } from './lead-bus.js';
 import { playEvent, warmUpGuitar } from '../audio/guitar.js';
 import { analyzeSong } from '../theory/function.js';
-import { compChoice, voicedFor, segmentEvents, dueEvents, guitarPlays } from '../comp/comp-plan.js';
+import { compChoice, voicedFor, segmentEvents, eventsInBeats, guitarPlays, walkFor } from '../comp/comp-plan.js';
 
 // Kytarový doprovod místo kláves: na záložce Doprovod vždy, v Sólování s volbou „Doprovod: kytara“.
 export const guitarComp = (st) => st.tab === 'comp' || (st.tab === 'solo' && !!st.soloGuitar);
@@ -63,7 +63,6 @@ export function createGrooveProgram() {
   let guitar = null; // { rhythmId, voiced, analysis, mode }
   let warmed = null;
   let segEvents = [];
-  let segStart = 0;
   let barCount = 0;
   let guitarBar = true;
 
@@ -192,9 +191,12 @@ export function createGrooveProgram() {
         voicing = voiceChord(chord.tones, voicing);
         segEvents = [];
         if (guitar) {
-          const shape = guitar.voiced.shapes[guitar.analysis.byBar[bar]?.[seg] ?? 0];
-          segEvents = segmentEvents(guitar.rhythmId, shape, { meterBeats: s.beats, chordsInBar: chords.length, bar, seg });
-          segStart = time;
+          const idx = guitar.analysis.byBar[bar]?.[seg] ?? 0;
+          const shape = guitar.voiced.shapes[idx];
+          // basový přechod jen tam, kde je jisté, který akord přijde (ne při „drž akord“, otázce–odpovědi a skoku)
+          const sure = !store.get().freeze && !wasCall && pendingJump == null;
+          const walkTo = sure ? walkFor(guitar.voiced, guitar.analysis, idx) : null;
+          segEvents = segmentEvents(guitar.rhythmId, shape, { meterBeats: s.beats, chordsInBar: chords.length, bar, seg }, { walkTo });
         }
         emit(time, 'chord', { bar, seg, chord, next: nextChordAfter(s.bars, bar, seg), total: s.bars.length, role, crChunk, crStep });
       }
@@ -213,10 +215,11 @@ export function createGrooveProgram() {
 
         const c = s.comp[i];
         if (guitar) {
-          // stejné tempo celý segment; při změně tempa uprostřed se zbytek posune jen nepatrně
+          // okno kroku v dobách segmentu: každá událost právě jednou i při změně tempa uprostřed
           if (guitarBar) {
             const spb = stepDur * s.sp;
-            for (const { ev, time: t } of dueEvents(segEvents, segStart, spb, time, time + dur)) playEvent(ev, t + jitter(), spb);
+            const b0 = (stepInBar % segLen) / s.sp;
+            for (const ev of eventsInBeats(segEvents, b0, b0 + 1 / s.sp)) playEvent(ev, time + (ev.beat - b0) * spb + jitter(), spb);
           }
         } else if (c && (HITS.test(c) || (c === '-' && chordStart))) {
           const steps = holdLength(s.comp, i, stepsLeftInChord);

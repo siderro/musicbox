@@ -7,9 +7,10 @@ import { PROGRESSIONS } from '../js/data/progressions.js';
 import { buildSong } from '../js/programs/song.js';
 import { analyzeSong } from '../js/theory/function.js';
 import { rhythmEvents } from '../js/comp/strum.js';
+import { fretString as fretStringOf } from '../js/comp/voicing-engine.js';
 import {
   sazbaList, rhythmList, pickRemembered, remember, compChoice, cycleIn, voicedFor,
-  segmentTiming, segmentEvents, dueEvents, guitarPlays, changeAhead, tabOf,
+  segmentTiming, segmentEvents, dueEvents, eventsInBeats, guitarPlays, changeAhead, tabOf, walkFor,
 } from '../js/comp/comp-plan.js';
 import { chordBoxSvg, boxWindow } from '../js/fretboard/render-chordbox.js';
 import { validateAll } from '../js/data/validate.js';
@@ -140,4 +141,64 @@ test('tabulatura z rytmu a diagram akordu', () => {
   const barre = voicedFor('barre', s).shapes.find((x) => x.barre);
   assert.ok(barre);
   assert.match(chordBoxSvg(barre), /cb-barre/);
+});
+
+test('plánování: změna tempa uprostřed segmentu – každá událost právě jednou a v pořadí', () => {
+  const sh = voicedFor('open', song('folk1645')).shapes[0];
+  for (const [id, beats, sp] of [['folkPop', 4, 4], ['shuffle', 4, 3], ['freddieGreen', 4, 3], ['funk16', 4, 4], ['waltz', 3, 4]]) {
+    const ev = segmentEvents(id, sh, { meterBeats: beats, bar: 0 });
+    for (const tempos of [[120, 60], [60, 140], [90, 200, 50]]) {
+      const played = [];
+      let t = 0;
+      for (let k = 0; k < beats * sp; k++) {
+        const tempo = tempos[Math.min(tempos.length - 1, Math.floor((k / (beats * sp)) * tempos.length))];
+        const spb = 60 / tempo;
+        const b0 = k / sp;
+        for (const e of eventsInBeats(ev, b0, b0 + 1 / sp)) played.push({ e, time: t + (e.beat - b0) * spb });
+        t += spb / sp;
+      }
+      assert.equal(played.length, ev.length, `${id} ${tempos}`);
+      assert.deepEqual(played.map((p) => p.e), ev, `${id} ${tempos}`);
+      played.forEach((p, i) => i && assert.ok(p.time >= played[i - 1].time - 1e-9, `${id} ${tempos}: pořadí`));
+    }
+  }
+});
+
+test('boogie: horní tón dvojhmatu chodí po dobách 5 – 6 – ♭7 – 6', () => {
+  const v = voicedFor('boogie', song('blues12', 9));
+  const a5 = v.shapes[0];
+  assert.equal(fretStringOf(a5), 'x02xxx');
+  for (const id of ['shuffle', 'rockPalm', 'eighths']) {
+    const ev = rhythmEvents(id, a5, { beats: 4 });
+    const perBeat = [0, 1, 2, 3].map((b) => ev.find((e) => Math.floor(e.beat) === b).notes.find((n) => n.s === 4).f);
+    assert.deepEqual(perBeat, [2, 4, 5, 4], id);
+  }
+  // půltakt začínající na 3. době pokračuje ve fázi taktu (♭7, 6)
+  const half = rhythmEvents('rockPalm', a5, { beats: 2, startBeat: 2 });
+  assert.deepEqual([0, 1].map((b) => half.find((e) => Math.floor(e.beat) === b).notes.find((n) => n.s === 4).f), [5, 4]);
+});
+
+test('bas + akord: basový přechod na poslední osminu před změnou akordu', () => {
+  const cases = [
+    ['folk1645', 0, ['5:2', '6:3', '6:2', '5:2']], // C→Am H, Am→F G, F→G7 F♯, G7→C H
+    ['trampMinor', 9, [null, '5:3', '5:2', '6:1', null, '6:4', null, null]], // … E7→Am G♯
+  ];
+  for (const [prog, key, want] of cases) {
+    const s = song(prog, key);
+    const a = analyzeSong(s);
+    const v = voicedFor('bassChord', s, a);
+    assert.deepEqual(a.segments.map((_, i) => { const w = walkFor(v, a, i); return w && `${w.s}:${w.f}`; }), want, prog);
+  }
+  const s = song('folk1645');
+  const a = analyzeSong(s);
+  const v = voicedFor('bassChord', s, a);
+  const walkTo = walkFor(v, a, 0);
+  const ev = segmentEvents('tramp', v.shapes[0], { meterBeats: 4, bar: 0 }, { walkTo });
+  const w = ev.at(-1);
+  assert.equal(w.token, 'w');
+  assert.equal(w.beat, 3.5);
+  assert.equal(w.kind, 'bass');
+  // rytmy bez pauzy na konci a jiné sazby přechod nehrají
+  assert.ok(!segmentEvents('trampCU', v.shapes[0], { meterBeats: 4, bar: 0 }, { walkTo }).some((e) => e.token === 'w'));
+  assert.equal(walkFor(voicedFor('open', s, a), a, 0), null);
 });

@@ -113,3 +113,29 @@ test('Martino: v ii–V–I linka od sexty a arpeggio od tercie, v poloze jako n
   assert.equal(tab(16), '5:7 5:8 5:10 4:7 4:9 3:7 3:10 2:10'); // G7: E F G A | H D F A
   assert.equal(tab(32), '4:7 4:9 4:10 3:7 3:9 2:8 1:7 1:10'); // Cmaj7: A H C D | E G H D
 });
+
+test('Martino nad mollovou tónikou začíná velkou sextou (Am6), nad V7 v moll ♭13', () => {
+  const res = resolveApproach('martino', buildSong({ progression: 'trampMinor', key: 9 }));
+  const first = (i) => res.sourceAt(res.laneOf[i], i).tones[0];
+  assert.equal(first(0).name, 'F♯'); // Am: velká sexta
+  assert.equal(first(2).pc, 11); // Dm: H – velká sexta je v tónině
+  assert.equal(first(4).name, 'C'); // E7: ♭13
+  // v dur zůstává sexta z tóniny (nad Am v C F)
+  const c = resolveApproach('martino', buildSong({ progression: 'folk1645', key: 0 }));
+  assert.equal(c.sourceAt(c.laneOf[1], 1).tones[0].name, 'F');
+});
+
+test('kaskáda dvojice kvintakordů: kvarta nad dominantou jen na lehké osmině', async () => {
+  const { realizeLick, startOptions } = await import('../js/teaching/lick-plan.js');
+  for (const key of [0, 7, 9]) {
+    const res = resolveApproach('triadPair', buildSong({ progression: 'folk1645', key }));
+    const [opt] = startOptions('tpCascade', res, 1, 0);
+    const r = realizeLick('tpCascade', res, 1, opt.seg, { lo: 4, hi: 9 });
+    for (const e of r.events.filter((x) => !x.rest)) {
+      const ch = res.segments[e.seg].chord;
+      if (!/7$/.test(ch.symbol)) continue;
+      const iv = ((e.notes[0].midi - ch.rootPc) % 12 + 12) % 12;
+      if (iv === 5) assert.ok(Math.abs(e.start - Math.round(e.start)) > 0.1, `11 na době v ${ch.symbol}`);
+    }
+  }
+});

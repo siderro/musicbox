@@ -17,7 +17,7 @@ import { keyLabel } from '../theory/notes.js';
 import { fillTokens } from '../teaching/approach.js';
 import { fretString } from '../comp/voicing-engine.js';
 import { rhythmEvents, rhythmGrid, cycleBeats } from '../comp/strum.js';
-import { compChoice, voicedFor, remember, cycleIn, changeAhead, tabOf, COMP_MODES } from '../comp/comp-plan.js';
+import { compChoice, voicedFor, remember, cycleIn, changeAhead, tabOf, walkFor, COMP_MODES } from '../comp/comp-plan.js';
 import { chordBoxSvg } from '../fretboard/render-chordbox.js';
 import { createFretboard } from '../fretboard/render-fretboard.js';
 import { renderTab } from '../fretboard/render-tab.js';
@@ -279,7 +279,8 @@ export function createCompPanel(root) {
         h('small', {}, g.onBeat ? beatNo : sub),
         h('b', {}, tokens.length ? tokens.map((t) => t.label).join('') : hold ? '–' : '·'));
     }));
-    const events = rhythmEvents(choice.rhythmId, sh, { beats, startBeat: 0 });
+    // u bas + akord ukáže i basový přechod k dalšímu hmatu (na konci cyklu rytmu)
+    const events = rhythmEvents(choice.rhythmId, sh, { beats, startBeat: 0, walkTo: walkFor(voiced, analysis, cur) });
     tab = renderTab(tabEl, tabOf(events, beats), { beatsPerBar: r.meter[0], marks: [{ beat: 0, label: shortName(sh) }] });
     gridStep = -1;
   }

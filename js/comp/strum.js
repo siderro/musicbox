@@ -1,6 +1,9 @@
 // Realizace rytmu na hmatu: z řetězce kroků (rhythms.js) a hmatu (voicing engine)
 // udělá seznam událostí s přesným časem v dobách a tóny, které zní. Čisté funkce, bez zvuku.
 //
+// Basový přechod (walkTo): na poslední osminu před změnou akordu tón o krok od dalšího kořene (token 'w').
+// Boogie (hmat s `walk`): tón na struně chůze se v každé době vymění za 5 – 6 – ♭7 – 6.
+//
 // Událost: { beat, step, notes: [{ s, f, midi }], dir: 'down'|'up'|null, vel, dur, mute,
 //            palm, accent, kind: 'strum'|'bass'|'pick', token }
 //   beat, dur v dobách od začátku segmentu (swing už započten), notes v pořadí, jak je ruka
@@ -129,7 +132,9 @@ export function rhythmsFor(meter, style) {
 // cyklu rytmu (cyklus = bars × doby; větší startBeat se zabalí). Kratší segment se ořízne,
 // delší zopakuje cyklus. Když segment nezačíná začátkem cyklu a první krok nemá úder
 // (nový akord na „.“), zahraje se tam úder z prvního kroku rytmu, ať akord nezačne tichem.
-export function rhythmEvents(rhythmId, shape, { beats, startBeat = 0, swing = SWING_RATIO } = {}) {
+// walkTo = basový přechodový tón { s, f, midi } k dalšímu akordu (bas + akord): u rytmů s `walkBass`
+// zazní na poslední osminu segmentu, když je tam v rytmu pauza.
+export function rhythmEvents(rhythmId, shape, { beats, startBeat = 0, swing = SWING_RATIO, walkTo = null } = {}) {
   const r = RHYTHMS[rhythmId];
   if (!r) throw new Error(`neznámý rytmus ${rhythmId}`);
   const steps = parsePattern(r.pattern);
@@ -142,6 +147,14 @@ export function rhythmEvents(rhythmId, shape, { beats, startBeat = 0, swing = SW
   const t0 = stepBeat(r, first, swing);
   const beatOf = (k) => Math.min(beats, stepBeat(r, k, swing) - t0);
 
+  // boogie (shape.walk): horní tón dvojhmatu chodí po dobách 5 – 6 – ♭7 – 6 (Chuck Berry)
+  const WALK = [0, 1, 2, 1];
+  const walkAt = (k, notes) => {
+    if (!shape.walk?.length) return notes;
+    const w = shape.walk[WALK[Math.floor(k / spb) % r.meter[0] % WALK.length]];
+    return notes.map((x) => (x.s === w.s ? { s: w.s, f: w.f, midi: w.midi } : x));
+  };
+
   const events = [];
   for (let k = first; k < last; k++) {
     let step = at(k);
@@ -149,7 +162,7 @@ export function rhythmEvents(rhythmId, shape, { beats, startBeat = 0, swing = SW
     for (const { t, accent } of step) {
       if (!(t in TOKENS)) continue;
       const info = TOKENS[t];
-      const notes = tokenNotes(t, shape);
+      const notes = walkAt(k, tokenNotes(t, shape));
       if (!notes.length) continue;
       // délka v režimu hold: 1 krok + následující '-'
       let end = k + 1;
@@ -169,6 +182,15 @@ export function rhythmEvents(rhythmId, shape, { beats, startBeat = 0, swing = SW
         _end: end,
       });
     }
+  }
+
+  const lastStep = last - 1;
+  if (walkTo && r.walkBass && last - first >= 2 && at(lastStep).length === 1 && at(lastStep)[0].t === REST) {
+    events.push({
+      step: lastStep - first, beat: beatOf(lastStep), notes: [{ s: walkTo.s, f: walkTo.f, midi: walkTo.midi }],
+      dir: null, vel: TOKENS.A.vel * 0.85, mute: false, palm: !!r.palm, accent: false, kind: 'bass', token: 'w',
+      _k: lastStep, _end: last,
+    });
   }
 
   // doba trvání: ring = do dalšího úderu na nejhlubší strunu události, jinak 1 krok + držení

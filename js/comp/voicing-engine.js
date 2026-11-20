@@ -137,11 +137,24 @@ function genericCands(chord) {
 
 // ---------- stavitelé kandidátů podle sazby ----------
 
+// Tón, který sazba přidá ke kvintakordu (jen z tóniny): '6' k durovému i mollovému,
+// '7' jen k mollovému (Am → Am7: v jazzu je mollový akord vždy m7); mollová subdominanta iv
+// dostane radši sextu (Dm6 v a moll – romantická klasika), když sexta do tóniny patří.
 const extraFor = (sazba, chord, allowed) => (role) => {
-  if (!sazba.extras?.includes(role) || role !== '6') return null;
-  if (chord.tones.length !== 3 || !['maj', 'min'].includes(chordFamily(chord))) return null;
-  const [t] = spellIntervals(chord.root, ['6']);
-  return allowed.has(t.pc) ? { ...t, added: true } : null;
+  if (!sazba.extras?.includes(role)) return null;
+  if (chord.tones.length !== 3) return null;
+  const fam = chordFamily(chord);
+  const ok = (iv) => {
+    const [t] = spellIntervals(chord.root, [iv]);
+    return allowed.has(t.pc) ? { ...t, added: true } : null;
+  };
+  if (role === '6') return ['maj', 'min'].includes(fam) ? ok('6') : null;
+  if (role === '7') {
+    if (fam !== 'min') return null;
+    if (/^iv$/.test(chord.degree) && ok('6')) return null;
+    return ok('b7');
+  }
+  return null;
 };
 
 const fromGrips = (grips, type) => {
@@ -159,9 +172,13 @@ function digits(notes) {
   }).join('-');
 }
 
-const withSix = (chord, notes) => (notes.some((n) => n.added)
-  ? noteName(chord.root) + (chordFamily(chord) === 'min' ? 'm6' : '6')
-  : chord.symbol);
+// jméno akordu s přidaným tónem: C → C6, Am → Am6 / Am7
+function withSix(chord, notes) {
+  const add = notes.find((n) => n.added);
+  if (!add) return chord.symbol;
+  const m = chordFamily(chord) === 'min' ? 'm' : '';
+  return noteName(chord.root) + m + (add.interval === 'b7' ? '7' : '6');
+}
 
 function gripCands(sazba, ch, noOpen = sazba.noOpen) {
   const extra = extraFor(sazba, ch.chord, ch.allowed);
@@ -221,7 +238,10 @@ function closeCands(sazba, ch) {
 
 function colorCands(sazba, ch) {
   const rule = sazba.choose[ch.type];
-  const ids = rule ? rule[ch.fn] ?? rule['*'] ?? [] : [];
+  // dominantní barvy (13, 9, 7♭9) u kvintakordu jen na skutečné dominantě V; ♭VII nebo ♭VI s funkcí D
+  // (romantická moll, andaluská kadence) by septimou zněly jako cizí dominanta
+  const fn = ch.fn === 'D' && ch.type === '' && !/^V$/.test(ch.chord.degree) ? '*' : ch.fn;
+  const ids = rule ? rule[fn] ?? rule['*'] ?? [] : [];
   const own = new Set(ch.chord.tones.map((t) => t.pc));
   for (const id of ids) {
     const def = COLOR_TYPES[id];
@@ -319,10 +339,14 @@ function voiceDist(a, b) {
   const x = a.notes.slice(rooted ? 1 : 0).map((n) => n.midi);
   const y = b.notes.slice(rooted ? 1 : 0).map((n) => n.midi);
   let sum = rooted ? 0.2 * Math.abs(a.bass.midi - b.bass.midi) : 0;
-  for (let i = 0; i < Math.max(x.length, y.length); i++) {
-    sum += Math.abs(x[Math.max(0, x.length - 1 - i)] - y[Math.max(0, y.length - 1 - i)]);
+  if (x.length === y.length) {
+    for (let i = 0; i < x.length; i++) sum += Math.abs(x[i] - y[i]);
+    return sum;
   }
-  return sum;
+  // různý počet hlasů: každý hlas k nejbližšímu hlasu druhého hmatu (oběma směry, půlka každého),
+  // aby se při 3 → 4 hlasech neporovnával horní tón s nonou a spodní hlasy s horními
+  const near = (p, q) => p.reduce((acc, m) => acc + Math.min(...q.map((o) => Math.abs(m - o))), 0);
+  return sum + (near(x, y) + near(y, x)) / 2;
 }
 
 const shapeKey = (sh) => sh.notes.map((n) => `${n.s}:${n.f}`).join(' ');

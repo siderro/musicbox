@@ -14,7 +14,8 @@
 //            '7|6|1' = když akord septimu nemá, sexta (jen z `extras`), jinak oktáva
 //            types: jen pro tyto druhy akordu ('', 'm', '7', 'maj7', 'm7', 'm7b5', 'dim7', '7b9' …), bez types = ostatní
 //   noOpen   bez prázdných strun (barré se cvičí i tam, kde by šel otevřený tvar)
-//   extras   tóny, které sazba smí přidat (jen když patří do tóniny): '6' = sexta ke kvintakordu
+//   extras   tóny, které sazba smí přidat (jen když patří do tóniny): '6' = sexta ke kvintakordu,
+//            '7' = malá septima k mollovému kvintakordu (Am → Am7; mollová iv radši sextu)
 //   move     váhy výběru: hand = posun ruky (pražce), voice = pohyb hlasů (půltóny), center = oblíbená poloha,
 //            pos = jak silně ji držet, setChange = přechod na jinou sadu strun
 //   applies  meters: počty dob v taktu, kde se sazba nabízí (bez = všude)
@@ -25,7 +26,7 @@ export const SAZBY = {
     name: 'Otevřené akordy',
     level: 1,
     build: 'open',
-    move: { hand: 1, voice: 0.05, center: 1 },
+    move: { hand: 1, voice: 0.05, center: 1, pos: 0.6 },
     why: 'Táborákové hmaty u nultého pražce: prázdné struny zní dlouho a plně, basový tón je kořen. Kde otevřený tvar není, nastoupí barré. V tóninách C, G, D, A, E a jejich mollových paralelách je skoro všechno otevřené; v jiných pomůže kapodastr.',
     try: ['Přehoď mezi dvěma akordy, aniž by pravá ruka přestala hrát – levá ruka přechází na poslední dobu.', 'Najdi prst, který při změně zůstává na místě (v C → Am ukazovák na C), a nech ho tam.'],
   },
@@ -58,7 +59,7 @@ export const SAZBY = {
     name: 'Shell chords',
     level: 2,
     build: 'grips',
-    extras: ['6'],
+    extras: ['7', '6'],
     move: { hand: 0.4, voice: 1, center: 5 },
     grips: [
       { label: 'shell', shape: '1 x 7|6|1 3 x x' },
@@ -70,14 +71,14 @@ export const SAZBY = {
       { label: 'shell', shape: '1 5 1 3 x x', types: ['dim'] },
       { label: 'shell', shape: 'x 1 5 1 3 x', types: ['dim'] },
     ],
-    why: 'Jen tři tóny: kořen v basu, tercie a septima (1-7-3 s kořenem na 6. struně, 1-3-7 na 5.). Tercie a septima rozhodují, jaký akord zní – kvinta je zbytečná. Mezi akordy se tvary střídají a hlasy se hýbou o půltón nebo stojí: septima druhého stupně sjede na tercii {V.r}, septima {V.r} na tercii {I.r}. Kvintakord bez septimy dostane sextu (C6), pokud patří do tóniny, jinak oktávu. Je to přesně „linka vodicích tónů“ ze Sólování, jen ve hmatu.',
+    why: 'Jen tři tóny: kořen v basu, tercie a septima (1-7-3 s kořenem na 6. struně, 1-3-7 na 5.). Tercie a septima rozhodují, jaký akord zní – kvinta je zbytečná. Mezi akordy se tvary střídají a hlasy se hýbou o půltón nebo stojí: septima druhého stupně sjede na tercii {V.r}, septima {V.r} na tercii {I.r}. Durový kvintakord bez septimy dostane sextu (C6), mollový malou septimu (Am7) a mollová subdominanta sextu (Dm6 v a moll) – vždy jen tón z tóniny, jinak oktávu. Je to přesně „linka vodicích tónů“ ze Sólování, jen ve hmatu.',
     try: ['Hraj po čtvrtích krátce a tiše (Freddie Green) – kořen se slyší jako basa.', 'Sleduj horní tón hmatu: zazpívej ho přes celé kolečko, je to linka vodicích tónů.'],
   },
   triads: {
     name: 'Trojzvuky nahoře',
     level: 2,
     build: 'close',
-    tones: { '*': [['1', '3', '5'], ['3', '5', '7']] },
+    tones: { '*': [['1', '3', '5'], ['3', '5', '7']], '7b9': [['3', '5', '9'], ['3', '5', '7']] },
     sets: [[3, 2, 1], [4, 3, 2]],
     setPenalty: 1.5,
     move: { hand: 0.3, voice: 1, center: 7, setChange: 1 },
@@ -111,9 +112,9 @@ export const SAZBY = {
     name: 'Bas + akord',
     level: 2,
     build: 'bassChord',
-    move: { hand: 1, voice: 0.05, center: 1 },
+    move: { hand: 1, voice: 0.05, center: 1, pos: 0.6 },
     why: 'Palec střídá kořen a kvintu na basových strunách, prsty brnknou akord na horních strunách: bum–čin, bum–čin (Carter style, polka, valčík). Basa tak sama chodí po kořenech a kvintách – {I.r} a {V.r} se střídají i uvnitř jednoho akordu.',
-    try: ['Nejdřív jen palec: kořen na 1, kvinta na 3 (ve valčíku kořen na 1, akord na 2 a 3).', 'Před změnou akordu zahraj místo kvinty basový přechod k dalšímu kořeni.'],
+    try: ['Nejdřív jen palec: kořen na 1, kvinta na 3 (ve valčíku kořen na 1, akord na 2 a 3).', 'Poslouchej poslední osminu před změnou akordu: v trampu, valčíku a polce tam basa zahraje přechodový tón o krok od dalšího kořene (v C z C do Am H, z F do G7 F♯). Pak zkus přechod delší – dvě nebo tři basové osminy po stupnici.'],
   },
   boogie: {
     name: 'Dvojhmaty a shuffle',
@@ -135,7 +136,7 @@ export const SAZBY = {
     level: 3,
     build: 'close',
     drop: 2,
-    extras: ['6'],
+    extras: ['7', '6'],
     tones: {
       '*': [['1', '3', '5', '7|6|1']],
       6: [['1', '3', '5', '6']],

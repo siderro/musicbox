@@ -8,6 +8,8 @@ import { RHYTHMS } from '../data/rhythms.js';
 import { applicableSazby, voiceProgression, styleOf, fretString } from './voicing-engine.js';
 import { rhythmsFor, rhythmEvents } from './strum.js';
 import { analyzeSong } from '../theory/function.js';
+import { TUNING } from '../fretboard/neck.js';
+import { mod } from '../theory/notes.js';
 
 export const COMP_MODES = ['demo', 'self', 'alt'];
 
@@ -73,8 +75,41 @@ export function segmentTiming(rhythmId, { meterBeats, chordsInBar = 1, bar = 0, 
   return { beats, startBeat };
 }
 
-export function segmentEvents(rhythmId, shape, where) {
-  return rhythmEvents(rhythmId, shape, segmentTiming(rhythmId, where));
+export function segmentEvents(rhythmId, shape, where, { walkTo = null } = {}) {
+  return rhythmEvents(rhythmId, shape, { ...segmentTiming(rhythmId, where), walkTo });
+}
+
+// Basový přechod k dalšímu akordu (sazba bas + akord): tón o krok od dalšího kořene ze strany,
+// odkud basa přichází – nejdřív o půltón (když patří do tóniny nebo do hraného akordu, např. G♯ z E7
+// do Am), jinak o celý tón; kdyby to byl kořen hraného akordu, chromaticky (F → F♯ → G).
+// Vrací { s, f, midi } na basových strunách blízko ruky, nebo null (stejný kořen, bez basu).
+export function bassApproach(shape, next, keyPcs) {
+  const from = shape?.bass;
+  const to = next?.bass;
+  if (!from || !to || mod(from.midi - to.midi, 12) === 0) return null;
+  const ok = new Set([...keyPcs, ...shape.notes.map((n) => n.midi % 12)]);
+  const dir = from.midi < to.midi ? -1 : 1;
+  let midi = [1, 2].map((d) => to.midi + dir * d).find((m) => ok.has(mod(m, 12)));
+  if (midi == null || mod(midi - from.midi, 12) === 0) midi = to.midi + dir;
+  let best = null;
+  for (const s of [to.s, to.s + 1, to.s - 1, from.s]) {
+    if (s < 4 || s > 6) continue;
+    const f = midi - TUNING[s];
+    if (f < 0 || f > 12) continue;
+    const cost = (f === 0 ? 0 : Math.abs(f - from.f)) + (s === to.s ? 0 : 0.5);
+    if (!best || cost < best.cost) best = { s, f, midi, cost };
+  }
+  return best && { s: best.s, f: best.f, midi: best.midi };
+}
+
+// Přechod jen v sazbě bas + akord a jen před změnou hmatu.
+export function walkFor(voiced, analysis, segIdx) {
+  if (voiced.sazba.build !== 'bassChord') return null;
+  const n = voiced.shapes.length;
+  const sh = voiced.shapes[segIdx];
+  const next = voiced.shapes[(segIdx + 1) % n];
+  if (fretString(sh) === fretString(next)) return null;
+  return bassApproach(sh, next, analysis.ctx.keyPcs);
 }
 
 // Události, jejichž čas padne do [t0, t1). segStart = čas začátku segmentu v s.
@@ -86,6 +121,13 @@ export function dueEvents(events, segStart, secPerBeat, t0, t1) {
     if (time >= t0 - EPS && time < t1 - EPS) out.push({ ev, time });
   }
   return out;
+}
+
+// Události, jejichž doba v segmentu padne do [b0, b1) – okno jednoho kroku grooveboxu v dobách.
+// Okna kroků segment rozdělí beze zbytku, takže každá událost zazní právě jednou, i když se
+// uprostřed segmentu změní tempo (čas se počítá od začátku kroku, ne od začátku segmentu).
+export function eventsInBeats(events, b0, b1) {
+  return events.filter((ev) => ev.beat >= b0 - EPS && ev.beat < b1 - EPS);
 }
 
 // Hraje v tomto taktu kytara? barCount = kolikátý takt od startu (0, 1, 2 …).

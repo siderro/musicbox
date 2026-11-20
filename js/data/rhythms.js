@@ -10,6 +10,8 @@
 //             'hold': událost trvá 1 krok + počet '-' za ní, '.' = utlumeno (staccato)
 //   palm – true = celé se hraje s dlaní na kobylce (krátké, tmavé)
 //   groove – doporučený groove z grooves.js (bicí a basa, které k rytmu ladí)
+//   walkBass – true = v sazbě bas + akord zazní před změnou akordu na poslední osminu basový přechod
+//              (tón o krok od dalšího kořene); jen když je tam v rytmu pauza
 //
 // Tokeny (jeden znak = jeden krok):
 //   D  úhoz dolů přes celý hmat (struny 6 → 1)
@@ -88,6 +90,7 @@ export const RHYTHMS = {
     bars: 1,
     pattern: 'B. C. A. C.',
     groove: 'folk44',
+    walkBass: true,
     tip: 'Na 1 kořen v basu, na 2 krátce horní struny, na 3 střídavý bas (kvinta), na 4 zase horní struny. Bas palcem nebo trsátkem, úhoz jen přes spodní tři struny akordu.',
   },
   trampCU: {
@@ -112,6 +115,7 @@ export const RHYTHMS = {
     bars: 1,
     pattern: '^B. C. C.',
     groove: 'waltz',
+    walkBass: true,
     tip: 'Bum – čk – čk. Na 1 bas, na 2 a 3 kratší úhozy přes horní struny. Druhou a třetí dobu hraj lehčeji, ať je slyšet, kde je jednička.',
   },
   waltzAlt: {
@@ -124,6 +128,7 @@ export const RHYTHMS = {
     bars: 2,
     pattern: '^B. C. C. | ^A. C. C.',
     groove: 'waltz',
+    walkBass: true,
     tip: 'V prvním taktu kořen, ve druhém kvinta. Když akord trvá jen takt, hraj vždy kořen a střídání nech na dvoutaktové akordy.',
   },
   polka: {
@@ -136,6 +141,7 @@ export const RHYTHMS = {
     bars: 2,
     pattern: '^B. C. | ^A. C.',
     groove: 'polka',
+    walkBass: true,
     tip: 'Bas – úhoz, střídavý bas – úhoz. Rychle a lehce, úhoz krátký a odtlumený levou rukou, ať to poskakuje.',
   },
   travis: {

@@ -95,8 +95,8 @@ export const LICKS = {
   },
   tpCascade: {
     name: 'Kaskáda do tóniky', short: 'kaskáda', level: 2, change: true,
-    line: "3':.5 2:.5 1:.5 6:.5 5:.5 4:.5 >:.5 1:.5 | L:2~ r:2",
-    tip: 'Oba kvintakordy napětí shora dolů (v C: C–A–F, D–H–G), krok nahoru a septima dominanty sjede o půltón na tercii tóniky.',
+    line: '6:.5 5:.5 4:.5 3:.5 2:.5 1:.5 >:.5 1:.5 | L:2~ r:2',
+    tip: 'Oba kvintakordy napětí shora dolů, nejdřív ten vyšší (v C: D–H–G, C–A–F), krok nahoru a septima dominanty sjede o půltón na tercii tóniky. Kvarta C nad G7 tak padne jen na lehkou osminu jako průchod – na „jedna“ by drhla.',
   },
   tpSpanish: {
     name: 'Španělský sestup', short: 'španělsky', level: 2, change: true, when: ['minor'],

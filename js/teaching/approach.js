@@ -130,7 +130,9 @@ export function followSource(follow, chord, scale) {
   }
   if (follow === 'martino') {
     // Martinovo zmollovatění: 4 tóny stupnice od sexty (C → Am: A H C D), pak arpeggio od tercie (Em7: E G H D)
-    const tones = [6, 7, 1, 9, 3, 5, 7].map((n) => degreeTone(chord, n, scale));
+    // nad mollovou tónikou velká (dórská) sexta: malá sexta na „jedna“ přes Cm drhne, Cm6 je Martinův zvuk
+    const six = fam === 'min' && scale[0].pc === chord.rootPc ? { colorSix: 'major' } : {};
+    const tones = [6, 7, 1, 9, 3, 5, 7].map((n) => degreeTone(chord, n, scale, n === 6 ? six : {}));
     const arp = nameTones(tones.slice(4)) ?? tones.slice(4).map((t) => t.name).join(' ');
     return toneSource('follow', tones, `${tones[0].name}–${tones[3].name} + ${arp}${over}`, 'martino');
   }

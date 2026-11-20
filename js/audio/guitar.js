@@ -48,7 +48,10 @@ export function warmUpGuitar(shapesOrMidis) {
   const midis = new Set();
   for (const x of shapesOrMidis) {
     if (typeof x === 'number') midis.add(x);
-    else x?.notes?.forEach((n) => midis.add(n.midi));
+    else {
+      x?.notes?.forEach((n) => midis.add(n.midi));
+      x?.walk?.forEach((n) => midis.add(n.midi));
+    }
   }
   warmUp([...midis]);
 }

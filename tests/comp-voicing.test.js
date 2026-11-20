@@ -252,3 +252,38 @@ test('každý druh akordu v každé sazbě (i mimo kolečka)', () => {
     }
   }
 });
+
+test('audit: otevřená sazba drží polohu u nultého pražce i bez otevřených tvarů', () => {
+  const g = byName(voiceProgression('open', song('gypsyMinor', 0)));
+  assert.equal(g.Cm, 'x35543');
+  assert.equal(g.Fm, '133111');
+  assert.equal(g['G7♭9'], '3231xx');
+  const bb = byName(voiceProgression('open', song('trampMinor', 10)));
+  assert.equal(bb.F7, '131211');
+});
+
+test('audit: shell a drop 2 dají mollovému kvintakordu septimu, mollové iv sextu', () => {
+  const names = (id, prog, key) => distinct(voiceProgression(id, song(prog, key))).map((s) => s.name);
+  assert.ok(names('shell', 'folk1645', 0).some((n) => n.startsWith('Am7 (shell')), 'Am7 v C');
+  assert.ok(names('drop2', 'folk1645', 0).some((n) => n.startsWith('Am7 (drop 2')), 'Am7 drop 2 v C');
+  const am = names('shell', 'trampMinor', 9);
+  assert.ok(am.some((n) => n.startsWith('Am7 ')), am.join(', '));
+  assert.ok(am.some((n) => n.startsWith('Dm6 ')), am.join(', '));
+});
+
+test('audit: barvy – 13 jen na dominantě V, ne na ♭VII', () => {
+  for (const [prog, key] of [['romanticMinor', 9], ['romanticMinor', 0], ['andalusian', 9]]) {
+    const sh = distinct(voiceProgression('colors', song(prog, key))).find((s) => s.chord.degree === 'bVII');
+    assert.ok(!sh.notes.some((n) => n.interval === 'b7'), `${prog} ${key}: ${sh.name} ${fretString(sh)}`);
+  }
+  // V7 v lidovce dál G13
+  assert.equal(distinct(voiceProgression('colors', song('folk1645', 0)))[3].name, 'G13');
+});
+
+test('audit: trojzvuky nad 7♭9 bez kořene (zmenšený trojzvuk s malou nonou)', () => {
+  for (const key of [0, 4, 9]) {
+    const sh = distinct(voiceProgression('triads', song('gypsyMinor', key))).find((s) => s.chord.degree === 'V7b9');
+    assert.ok(!sh.notes.some((n) => n.interval === '1'), `${sh.name} ${fretString(sh)}`);
+    assert.ok(sh.notes.some((n) => n.interval === 'b9'), `${sh.name} ${fretString(sh)}`);
+  }
+});
