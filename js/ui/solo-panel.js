@@ -10,7 +10,6 @@ import { PROGRESSION_WIKI } from '../data/wiki.js';
 import { LICKS } from '../data/licks.js';
 import { buildSong } from '../programs/song.js';
 import { analyzeSong } from '../theory/function.js';
-import { keyLabel } from '../theory/notes.js';
 import { intervalLabel, spellIntervals } from '../theory/intervals.js';
 import { SCALES } from '../data/scales.js';
 import { notesOnNeck, MAX_FRET } from '../fretboard/neck.js';
@@ -28,7 +27,6 @@ const MAX_BUTTONS = 5;
 const pretty = (iv) => iv.replace(/b/g, '♭').replace(/#/g, '♯');
 
 export function createSoloPanel(root, { groove }) {
-  const subtitle = h('span', { class: 'solo-sub' });
   const wikiBtn = h('button', { type: 'button', class: 'wiki-toggle', onclick: () => store.set({ wikiOpen: !store.get().wikiOpen }) });
   const approachBar = h('div', { class: 'approach-bar', role: 'radiogroup', 'aria-label': T.approach });
   const mapStrip = h('div', { class: 'map-strip' });
@@ -60,8 +58,8 @@ export function createSoloPanel(root, { groove }) {
     h('div', { class: 'lick-head' }, lickBtn, lickTitle, lickWhere, lickShifts, lickClose), lickTip, tabBox);
 
   const main = h('div', { class: 'solo-main' },
-    h('header', { class: 'solo-header' },
-      h('div', {}, h('h1', {}, T.soloTitle), subtitle),
+    h('div', { class: 'approach-row' },
+      h('span', { class: 'approach-label' }, T.approach), approachBar,
       h('div', { class: 'solo-tools' },
         h('div', { class: 'ctl-group' },
           h('button', { type: 'button', class: 'ctl', title: T.prevPos, onclick: () => stepPosition(-1) }, '←'),
@@ -70,7 +68,6 @@ export function createSoloPanel(root, { groove }) {
         compSwitch,
         h('div', { class: 'ctl-group' }, labelBtn),
         wikiBtn)),
-    h('div', { class: 'approach-row' }, h('span', { class: 'approach-label' }, T.approach), approachBar),
     mapStrip,
     lanesBox,
     hint,
@@ -113,7 +110,6 @@ export function createSoloPanel(root, { groove }) {
       ahead = null;
     }
     cur = Math.min(cur, analysis.segments.length - 1);
-    subtitle.textContent = `${song.progression.name} · ${keyLabel(st().key, song.progression.mode)}`;
     drawApproachBar();
     buildLanes();
     drawMap();
@@ -171,7 +167,9 @@ export function createSoloPanel(root, { groove }) {
       h('span', {}, src.label.split(' ')[0]),
       h('small', {}, T.fn[sg.fn.fn]));
     }));
-    mapStrip.style.setProperty('--cols', analysis.segments.length > 8 ? 6 : analysis.segments.length);
+    // do 12 taktů jedna řada, jinak dvě
+    const n = analysis.segments.length;
+    mapStrip.style.setProperty('--cols', n > 12 ? Math.ceil(n / 2) : n);
   }
 
   function markMap() {
@@ -236,7 +234,6 @@ export function createSoloPanel(root, { groove }) {
       dots.push({ s: n.s, f: n.f, cls: n.pc === src.rootPc ? 'src-root' : 'src', dim: n.f < win.lo || n.f > win.hi, chord: chordPcs.has(n.pc), label });
     }
     view.fb.render(dots, [win.lo, win.hi]);
-    view.fb.setView(st().wikiOpen ? [win.lo - 3, win.hi + 3] : null);
     view.src.textContent = src.label;
     const over = [...chordView(src, chord).values()].map(pretty).join(' ');
     view.caption.textContent = `${laneState(i) === 'active' ? T.laneNow(chord.symbol) : T.laneOver(chord.symbol)} = ${over}`;
@@ -258,7 +255,7 @@ export function createSoloPanel(root, { groove }) {
     const win = handWindow(st().posCenter ?? 6.5);
     winLabel.textContent = `${T.window} ${win.lo}.–${win.hi}.`;
     labelBtn.textContent = T.labelModes[st().labelMode] ?? T.labelModes.chord;
-    wikiBtn.textContent = `${st().wikiOpen ? '▸' : '◂'} ${T.wiki}`;
+    wikiBtn.textContent = `${st().wikiOpen ? T.wikiHide : T.wikiShow} (W)`;
     wikiBtn.setAttribute('aria-pressed', st().wikiOpen ? 'true' : 'false');
   }
 

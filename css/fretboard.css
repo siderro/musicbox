@@ -59,13 +59,13 @@
 
 .fb-dot text {
   fill: #fff;
-  font: 800 13.5px var(--font-ui);
+  font: 800 15px var(--font-ui);
   text-anchor: middle;
   pointer-events: none;
 }
 
 .fb.is-compact .fb-dot text {
-  font-size: 12.5px;
+  font-size: 14px;
 }
 
 /* kořen zdroje: čtvereček s černým obrysem */

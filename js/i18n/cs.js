@@ -28,7 +28,6 @@ export const T = {
   keyFreeze: 'Držet akord',
 
   // sólování
-  soloTitle: 'V čem sólovat',
   groupScale: 'Stupnice',
   groupArp: 'Arpeggia',
   groupLick: 'Licky',
@@ -85,6 +84,8 @@ export const T = {
   approach: 'Přístup',
   moreApproaches: 'další přístupy…',
   wiki: 'Wiki',
+  wikiShow: 'ukázat wiki',
+  wikiHide: 'skrýt wiki',
   wikiTitle: 'Wiki ke kolečku',
   laneNow: (chord) => `teď nad ${chord}`,
   laneOver: (chord) => `nad ${chord}`,
@@ -118,7 +119,6 @@ export const T = {
   legendWindow: 'okno ruky (←/→)',
 
   // doprovod
-  compTitle: 'Jak doprovázet',
   sazba: 'Sazba',
   rhythm: 'Rytmus',
   moreSazby: 'další sazby…',

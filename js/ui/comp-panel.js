@@ -13,7 +13,6 @@ import { GROOVES } from '../data/grooves.js';
 import { COMP_WIKI } from '../data/comp-wiki.js';
 import { buildSong } from '../programs/song.js';
 import { analyzeSong } from '../theory/function.js';
-import { keyLabel } from '../theory/notes.js';
 import { fillTokens } from '../teaching/approach.js';
 import { fretString } from '../comp/voicing-engine.js';
 import { rhythmEvents, rhythmGrid, cycleBeats } from '../comp/strum.js';
@@ -32,7 +31,6 @@ const TAB_LEFT = 48;
 const SUB = { 2: ['', '&'], 3: ['', 't', 'l'], 4: ['', 'e', '&', 'a'] };
 
 export function createCompPanel(root, { groove }) {
-  const subtitle = h('span', { class: 'solo-sub' });
   const wikiBtn = h('button', { type: 'button', class: 'wiki-toggle', onclick: () => store.set({ wikiOpen: !store.get().wikiOpen }) });
   const labelBtn = h('button', { type: 'button', class: 'ctl', onclick: () => cycleLabels() });
 
@@ -46,8 +44,11 @@ export function createCompPanel(root, { groove }) {
   }, T.compModes[m]));
   // kdo teď hraje: ukázka / ty (při střídání se mění po taktech)
   const modeState = h('span', { class: 'cc-state' });
+  const tools = h('div', { class: 'solo-tools' },
+    h('div', { class: 'cc-modes', role: 'group', 'aria-label': T.compModeLabel }, h('span', { class: 'ctl-label' }, T.compModeLabel), modeKeys, modeState),
+    h('div', { class: 'ctl-group' }, labelBtn), wikiBtn);
   const deck = h('section', { class: 'cc-console' },
-    h('div', { class: 'cc-row' }, h('span', { class: 'cc-legend' }, T.sazba, ' ', h('kbd', {}, 'A')), sazbaBar),
+    h('div', { class: 'cc-row' }, h('span', { class: 'cc-legend' }, T.sazba, ' ', h('kbd', {}, 'A')), sazbaBar, tools),
     h('div', { class: 'cc-row' }, h('span', { class: 'cc-legend' }, T.rhythm, ' ', h('kbd', {}, 'R')), rhythmBar, grooveBtn));
 
   const mapStrip = h('div', { class: 'cmap' });
@@ -73,11 +74,6 @@ export function createCompPanel(root, { groove }) {
   const rhythmDock = h('section', { class: 'crh' }, h('header', { class: 'crh-head' }, rhythmName, rhythmTip), tabScroll);
 
   const main = h('div', { class: 'solo-main comp-main' },
-    h('header', { class: 'solo-header' },
-      h('div', {}, h('h1', {}, T.compTitle), subtitle),
-      h('div', { class: 'solo-tools' },
-        h('div', { class: 'cc-modes', role: 'group', 'aria-label': T.compModeLabel }, h('span', { class: 'ctl-label' }, T.compModeLabel), modeKeys, modeState),
-        h('div', { class: 'ctl-group' }, labelBtn), wikiBtn)),
     deck,
     mapStrip,
     stage,
@@ -115,7 +111,6 @@ export function createCompPanel(root, { groove }) {
       ahead = null;
     }
     cur = Math.min(cur, analysis.segments.length - 1);
-    subtitle.textContent = `${song.progression.name} · ${keyLabel(st().key, song.progression.mode)}`;
     drawKeys();
     drawMap();
     drawShape();
@@ -189,8 +184,8 @@ export function createCompPanel(root, { groove }) {
 
   function drawMap() {
     const n = analysis.segments.length;
-    mapStrip.style.setProperty('--cols', n > 8 ? 6 : n);
-    mapStrip.classList.toggle('is-two-rows', n > 8);
+    mapStrip.style.setProperty('--cols', n > 12 ? Math.ceil(n / 2) : n);
+    mapStrip.classList.toggle('is-two-rows', n > 12);
     keepCell = -1;
     mapStrip.replaceChildren(...analysis.segments.map((sg, i) => {
       const sh = shapes()[i];
@@ -295,7 +290,7 @@ export function createCompPanel(root, { groove }) {
     modeState.textContent = !running ? '' : you ? T.compYou : T.compDemo;
     main.classList.toggle('is-you', running && you);
     labelBtn.textContent = st().labelMode === 'names' ? T.labelModes.names : T.labelModes.chord;
-    wikiBtn.textContent = `${st().wikiOpen ? '▸' : '◂'} ${T.wiki}`;
+    wikiBtn.textContent = `${st().wikiOpen ? T.wikiHide : T.wikiShow} (W)`;
     wikiBtn.setAttribute('aria-pressed', st().wikiOpen ? 'true' : 'false');
   }
 

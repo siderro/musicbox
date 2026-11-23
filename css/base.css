@@ -178,14 +178,14 @@ kbd {
 }
 
 .view {
-  padding: 16px 24px 48px;
+  padding: 10px 24px 48px;
 }
 
 /* stránka se sloupcem wiki vpravo */
 .view.has-wiki {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
-  gap: 28px;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 340px);
+  gap: 24px;
   align-items: start;
 }
 

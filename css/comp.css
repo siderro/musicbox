@@ -23,8 +23,8 @@
 /* ---------- sazba a rytmus ---------- */
 .cc-console {
   display: grid;
-  gap: 6px;
-  margin-bottom: 12px;
+  gap: 4px;
+  margin-bottom: 8px;
 }
 
 .cc-row {
@@ -63,7 +63,7 @@
 .cmap {
   display: grid;
   grid-template-columns: repeat(var(--cols, 8), minmax(0, 1fr));
-  margin-bottom: 14px;
+  margin-bottom: 10px;
   border-left: 1px solid var(--line);
 }
 
@@ -71,7 +71,7 @@
   display: grid;
   justify-items: center;
   gap: 2px;
-  padding: 5px 4px 6px;
+  padding: 3px 2px 4px;
   border: 0;
   border-top: 1px solid var(--line);
   border-right: 1px solid var(--line);
@@ -79,7 +79,7 @@
   background: var(--bg);
 }
 
-.cmap.is-two-rows .cmap-cell:nth-child(n + 7) {
+.cmap.is-two-rows .cmap-cell:nth-child(n + 13) {
   border-top: 0;
 }
 
@@ -108,7 +108,8 @@
 }
 
 .cmap-box .cb {
-  width: 72px;
+  width: 100%;
+  max-width: 66px;
   height: auto;
 }
 
@@ -135,10 +136,10 @@
 /* ---------- velký diagram a hmatník ---------- */
 .cbig {
   display: grid;
-  grid-template-columns: minmax(200px, 250px) minmax(0, 1fr);
+  grid-template-columns: minmax(140px, 160px) minmax(0, 1fr);
   gap: 20px;
   align-items: start;
-  margin-bottom: 14px;
+  margin-bottom: 10px;
 }
 
 .cbig-card header {
@@ -149,7 +150,7 @@
 }
 
 .cbig-name {
-  font-size: 22px;
+  font-size: 19px;
 }
 
 .cbig-badge:not(:empty) {
@@ -161,8 +162,15 @@
 
 .cbig-box .cb {
   width: 100%;
-  max-width: 230px;
+  max-width: 150px;
   height: auto;
+}
+
+/* hmatník aktuálního hmatu: výřez pár pražců, výška omezená, ať se vejde i rytmus */
+.cbig-fb .fb {
+  width: auto;
+  max-width: 100%;
+  max-height: 180px;
 }
 
 .cbig-meta {
