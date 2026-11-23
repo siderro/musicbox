@@ -1,507 +1,144 @@
-/* Doprovod: konzole ve stylu decku (černý eloxovaný panel, zlatý lem, gravírované popisky,
-   soft-touch klávesy s LED, VFD), mapa kolečka s diagramy, velký hmat, mřížka rytmu nad tabulaturou.
-   Obsahová plocha zůstává tmavá jako Sólování. */
+/* Doprovod: sazba × rytmus, mapa hmatů, velký diagram s hmatníkem, mřížka rytmu a tabulatura. */
 
-.view-comp {
-  --cc-legend: #e6e2d8;
-  --cc-legend-dim: #8d8a83;
-  --cc-gold-hi: #f4e6bd;
-  --cc-gold: #c9ad72;
-  --cc-gold-lo: #7c6538;
-  --cc-amber: #ffb648;
-  --cc-amber-glow: 0 0 3px rgba(255, 190, 90, 0.95), 0 0 10px rgba(255, 150, 40, 0.45);
-  --cc-cyan: #79fbef;
-  --cc-cyan-glow: 0 0 3px rgba(120, 255, 240, 0.95), 0 0 10px rgba(50, 235, 215, 0.5);
-  --cc-font: 'Barlow Condensed', 'Archivo Narrow', 'Arial Narrow', sans-serif;
-  --cc-dots: 'Doto', 'Share Tech Mono', ui-monospace, monospace;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 22px;
-  align-items: start;
+.cc-modes {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
 }
 
-.view.view-comp {
-  padding-top: 14px;
-  padding-bottom: 16px;
-}
-
-.view-comp.has-wiki {
-  grid-template-columns: minmax(0, 1fr) 360px;
-}
-
-.comp-main {
-  gap: 9px;
-}
-
-/* ---------- přepínač doprovodu v Sólování ---------- */
-.ctl-switch .ctl-label {
-  padding: 0 8px 0 10px;
-  font-size: 11px;
+.cc-state {
+  padding: 0 6px;
   font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--muted);
-  border-right: 1px solid var(--line);
 }
 
-.ctl[aria-pressed='true'] {
-  color: var(--accent);
-  background: rgba(255, 179, 71, 0.12);
+.cc-state:empty {
+  display: none;
 }
 
-/* ---------- konzole ---------- */
+.comp-main.is-you .cc-state {
+  background: var(--invert-bg);
+  color: var(--invert-text);
+}
+
+/* ---------- sazba a rytmus ---------- */
 .cc-console {
-  position: relative;
   display: grid;
-  grid-template-columns: 136px minmax(0, 1fr);
-  gap: 12px;
-  padding: 9px 10px 8px;
-  border-radius: 6px;
-  color: var(--cc-legend);
-  font-family: var(--cc-font);
-  background:
-    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.022) 0 1px, transparent 1px 2px, rgba(0, 0, 0, 0.2) 2px 3px, transparent 3px 4px),
-    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.03) 28%, transparent 55%, rgba(255, 255, 255, 0.018) 80%, transparent),
-    linear-gradient(180deg, #1e1e21, #161618 45%, #111113);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 0 0 1px #050505,
-    2px 4px 10px rgba(0, 0, 0, 0.5);
-}
-
-.cc-console::before {
-  content: '';
-  position: absolute;
-  inset: 0 0 auto;
-  height: 2px;
-  border-radius: 6px 6px 0 0;
-  background: linear-gradient(90deg, var(--cc-gold-lo), var(--cc-gold-hi) 22%, var(--cc-gold) 50%, var(--cc-gold-hi) 78%, var(--cc-gold-lo));
-}
-
-.cc-rows {
-  display: grid;
-  gap: 7px;
-  min-width: 0;
+  gap: 6px;
+  margin-bottom: 12px;
 }
 
 .cc-row {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  min-width: 0;
-}
-
-.cc-row .cc-keys {
-  flex: 1 1 auto;
+  align-items: baseline;
+  gap: 12px;
 }
 
 .cc-legend {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  width: 66px;
-  flex-shrink: 0;
-  font: 600 10px/1 var(--cc-font);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--cc-legend);
-  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.6);
-}
-
-.cc-legend kbd {
-  padding: 1px 4px;
-  border: 1px solid #3a3a3e;
-  border-radius: 3px;
-  font: 600 10px var(--font-vfd);
-  letter-spacing: 0;
-  color: var(--cc-gold);
+  flex: none;
+  min-width: 64px;
+  color: var(--muted);
+  font-size: var(--small);
 }
 
 .cc-keys {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  gap: 5px;
-  min-width: 0;
-}
-
-/* soft-touch klávesa s LED (jako transport decku) */
-.cc-key,
-.cc-mode,
-.cc-groove {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  height: 27px;
-  padding: 0 10px 0 9px;
-  border: 0;
-  border-radius: 3px;
-  color: #ebe7dd;
-  font: 600 12.5px/1 var(--cc-font);
-  letter-spacing: 0.04em;
-  white-space: nowrap;
-  background:
-    radial-gradient(90% 70% at 50% 20%, rgba(255, 255, 255, 0.06), transparent 70%),
-    linear-gradient(180deg, #3b3b3f, #2b2b2e 10%, #222225 62%, #1a1a1c);
-  box-shadow:
-    inset 1px 1px 0 rgba(255, 255, 255, 0.15),
-    inset -1px -2px 0 rgba(0, 0, 0, 0.45),
-    0 0 0 1px #050505,
-    1px 2px 0 #060607,
-    2px 4px 6px rgba(0, 0, 0, 0.5);
-  transition: transform 70ms ease-out, box-shadow 70ms ease-out;
-}
-
-.cc-key:hover,
-.cc-mode:hover,
-.cc-groove:hover:not(:disabled) {
-  background:
-    radial-gradient(90% 70% at 50% 20%, rgba(255, 255, 255, 0.09), transparent 70%),
-    linear-gradient(180deg, #424246, #303034 10%, #252528 62%, #1c1c1e);
-}
-
-.cc-key[aria-checked='true'],
-.cc-mode[aria-pressed='true'],
-.cc-key:active,
-.cc-mode:active {
-  transform: translateY(2px);
-  color: var(--cc-gold-hi);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    inset 1px 2px 4px rgba(0, 0, 0, 0.35),
-    0 0 0 1px #050505,
-    0 1px 0 #060607;
-}
-
-.cc-led {
-  width: 7px;
-  height: 3px;
-  border-radius: 1px;
-  background: #3a2a0e;
-  box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.6);
-  flex-shrink: 0;
-}
-
-.cc-key[aria-checked='true'] .cc-led,
-.cc-mode[aria-pressed='true'] .cc-led {
-  background: #ffb13a;
-  box-shadow: 0 0 4px #ffaa30, 0 0 9px rgba(255, 170, 40, 0.55);
-}
-
-.cc-key span {
-  max-width: 132px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.cc-key .lvl::before {
-  background: radial-gradient(circle, var(--cc-legend-dim) 2px, transparent 2.2px) 0 0 / 6px 4px repeat-x;
-}
-
-.cc-more {
-  height: 27px;
-  padding: 0 8px;
-  border: 0;
-  border-radius: 3px;
-  background: #0c0c0d;
-  color: var(--cc-legend-dim);
-  font: 600 12px var(--cc-font);
-  letter-spacing: 0.06em;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.9), 0 1px 0 rgba(255, 255, 255, 0.06);
+  align-items: baseline;
+  gap: 4px 16px;
 }
 
 .cc-groove {
+  flex: none;
   margin-left: auto;
-  color: var(--cc-cyan);
-  font-size: 11.5px;
+  font-size: var(--small);
 }
 
 .cc-groove.is-match {
-  color: var(--cc-legend-dim);
-  background: transparent;
-  box-shadow: none;
-}
-
-.cc-groove:disabled {
+  color: var(--muted);
+  text-decoration: none;
   opacity: 1;
 }
 
-
-/* VFD okénko */
-.cc-vfd {
-  display: grid;
-  align-content: center;
-  gap: 2px;
-  min-width: 0;
-  padding: 5px 9px 6px;
-  border-radius: 3px;
-  background: radial-gradient(120% 120% at 50% 0%, #10161a, #06090b 70%);
-  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.95), 0 0 0 1px #000, 0 1px 0 rgba(255, 255, 255, 0.07);
-  font-family: var(--font-vfd);
-}
-
-.cc-vfd-top {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-  font-size: 11px;
-  letter-spacing: 0.12em;
-}
-
-.cc-vfd-state {
-  color: var(--cc-cyan);
-  text-shadow: var(--cc-cyan-glow);
-}
-
-.comp-main.is-you .cc-vfd-state {
-  color: #ff6a55;
-  text-shadow: 0 0 3px rgba(255, 110, 90, 0.95), 0 0 10px rgba(255, 50, 30, 0.5);
-}
-
-.cc-vfd-next {
-  color: var(--cc-amber);
-  text-shadow: var(--cc-amber-glow);
-}
-
-.cc-vfd-main {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 8px;
-  color: var(--cc-amber);
-  text-shadow: var(--cc-amber-glow);
-}
-
-.cc-vfd-chord {
-  font: 900 22px/1.05 var(--cc-dots);
-}
-
-.cc-vfd-frets {
-  font-size: 15px;
-  letter-spacing: 0.08em;
-}
-
-.cc-modes {
-  display: flex;
-  gap: 5px;
-  padding: 4px 5px;
-  border-radius: 5px;
-  background: linear-gradient(180deg, #0a0a0b, #141416);
-  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.95), 0 1px 0 rgba(255, 255, 255, 0.07);
-}
-
-.cc-mode {
-  justify-content: center;
-  height: 25px;
-  padding: 0 6px;
-  font-size: 11.5px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.cc-mode[data-mode='self'][aria-pressed='true'] .cc-led {
-  background: #ff4734;
-  box-shadow: 0 0 4px #ff4734, 0 0 9px rgba(255, 70, 50, 0.6);
-}
-
-/* ---------- mapa kolečka s diagramy ---------- */
+/* ---------- mapa: diagram hmatu pro každý akord ---------- */
 .cmap {
   display: grid;
-  grid-template-columns: repeat(var(--cols, 4), minmax(0, 1fr));
-  gap: 4px;
+  grid-template-columns: repeat(var(--cols, 8), minmax(0, 1fr));
+  margin-bottom: 14px;
+  border-left: 1px solid var(--line);
 }
 
 .cmap-cell {
   display: grid;
   justify-items: center;
-  gap: 1px;
-  padding: 3px 4px 3px;
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  background: var(--surface);
-  color: var(--text);
-  min-width: 0;
-  transition: opacity 150ms, border-color 150ms, box-shadow 150ms;
+  gap: 2px;
+  padding: 5px 4px 6px;
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: var(--bg);
+}
+
+.cmap.is-two-rows .cmap-cell:nth-child(n + 7) {
+  border-top: 0;
 }
 
 .cmap-head {
   display: flex;
-  align-items: baseline;
   justify-content: space-between;
-  gap: 4px;
+  align-items: baseline;
   width: 100%;
-  min-width: 0;
+  padding: 0 2px;
 }
 
 .cmap-head b {
-  font-size: 13.5px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-size: 17px;
 }
 
 .cmap-badge {
+  font-size: 11.5px;
   font-style: normal;
-  font-size: 12px;
-  font-weight: 800;
-  color: var(--accent);
-  white-space: nowrap;
+  font-weight: 700;
 }
 
-.cmap-box {
-  width: 100%;
+.cmap-badge:not(:empty) {
+  padding: 0 4px;
+  background: var(--invert-bg);
+  color: var(--invert-text);
 }
 
-.cmap-box svg {
-  display: block;
-  width: 100%;
-  height: 62px;
-}
-
-.cmap.is-two-rows .cmap-box svg {
-  height: 42px;
+.cmap-box .cb {
+  width: 72px;
+  height: auto;
 }
 
 .cmap-cell small {
-  font: 11px var(--font-vfd);
+  font: 12px var(--font-mono);
   color: var(--muted);
 }
 
 .cmap-cell.is-current {
-  border-color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 14%, var(--surface));
-  box-shadow: 0 0 0 1px var(--accent);
+  box-shadow: inset 0 0 0 3px var(--text);
+}
+
+.cmap-cell.is-current .cmap-head b {
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 3px;
 }
 
 .cmap-cell.is-next {
-  border-color: var(--chord);
-  animation: cmap-next 0.9s ease-in-out infinite alternate;
+  box-shadow: inset 0 0 0 2px var(--text);
+  background-image: repeating-linear-gradient(-45deg, transparent 0 6px, rgba(0, 0, 0, 0.035) 6px 12px);
 }
 
-@keyframes cmap-next {
-  from {
-    box-shadow: 0 0 0 0 transparent;
-  }
-
-  to {
-    box-shadow: 0 0 0 2px var(--chord);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .cmap-cell.is-next {
-    animation: none;
-    box-shadow: 0 0 0 2px var(--chord);
-  }
-}
-
-/* ---------- diagram akordu ---------- */
-.cb .cb-fret {
-  stroke: #8c9298;
-  stroke-width: 1.4;
-}
-
-.cb .cb-fret.is-nut {
-  stroke: #e9e2cf;
-  stroke-width: 5;
-  stroke-linecap: round;
-}
-
-.cb .cb-string {
-  stroke: #cfc8b8;
-  stroke-width: 1.2;
-}
-
-.cb .cb-fretno {
-  fill: var(--muted);
-  font: 700 15px var(--font-ui);
-  text-anchor: middle;
-}
-
-.cb .cb-fretno.is-mini {
-  font-size: 8px;
-  text-anchor: start;
-}
-
-.cb .cb-mute {
-  stroke: #9aa1a8;
-  stroke-width: 1.8;
-  stroke-linecap: round;
-}
-
-.cb .cb-open {
-  fill: none;
-  stroke: #e9e4da;
-  stroke-width: 1.8;
-}
-
-.cb .cb-open.is-root {
-  stroke: var(--accent);
-}
-
-.cb .cb-open.is-keep {
-  stroke: var(--chord);
-  stroke-width: 2.6;
-}
-
-.cb .cb-barre {
-  fill: rgba(233, 228, 218, 0.28);
-  stroke: rgba(233, 228, 218, 0.55);
-}
-
-.cb .cb-dot circle {
-  fill: #e9e4da;
-}
-
-.cb .cb-dot.is-root circle {
-  fill: var(--accent);
-}
-
-.cb .cb-dot .cb-ring {
-  fill: none;
-  stroke: var(--chord);
-  stroke-width: 2.6;
-}
-
-.cb.is-mini .cb-dot .cb-ring {
-  stroke-width: 1.4;
-}
-
-.cb .cb-dot text {
-  fill: #15181b;
-  font: 700 12px var(--font-ui);
-  text-anchor: middle;
-}
-
-.cb .cb-under {
-  fill: #e9e4da;
-  font: 700 12px var(--font-ui);
-  text-anchor: middle;
-}
-
-.cb .cb-under.is-root {
-  fill: var(--accent);
-}
-
-/* ---------- velký hmat + hmatník ---------- */
+/* ---------- velký diagram a hmatník ---------- */
 .cbig {
   display: grid;
-  grid-template-columns: 228px minmax(0, 1fr);
-  gap: 10px;
-  min-width: 0;
-}
-
-.cbig-card {
-  display: grid;
-  align-content: start;
-  justify-items: center;
-  gap: 2px;
-  padding: 6px 10px 6px;
-  border: 1px solid var(--accent);
-  border-radius: 8px;
-  background: linear-gradient(180deg, #181b1f, #14171a);
-  box-shadow: 0 0 18px rgba(255, 179, 71, 0.12);
+  grid-template-columns: minmax(200px, 250px) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+  margin-bottom: 14px;
 }
 
 .cbig-card header {
@@ -509,130 +146,128 @@
   align-items: baseline;
   justify-content: space-between;
   gap: 8px;
-  width: 100%;
 }
 
 .cbig-name {
-  font-size: 14px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-size: 22px;
 }
 
-.cbig-badge {
-  font-size: 12.5px;
-  font-weight: 800;
-  color: var(--chord);
-  white-space: nowrap;
+.cbig-badge:not(:empty) {
+  padding: 0 6px;
+  background: var(--invert-bg);
+  color: var(--invert-text);
+  font-weight: 700;
 }
 
-.cbig-box svg {
-  display: block;
-  height: 176px;
-  width: auto;
+.cbig-box .cb {
+  width: 100%;
+  max-width: 230px;
+  height: auto;
 }
 
 .cbig-meta {
-  font: 12.5px var(--font-vfd);
+  display: block;
+  font: 13px var(--font-mono);
   color: var(--muted);
-  text-align: center;
 }
 
-.cbig-right {
-  display: grid;
-  align-content: center;
-  gap: 6px;
-  min-width: 0;
-  padding: 6px 10px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: linear-gradient(180deg, #181b1f, #14171a);
+.cbig-right .legend {
+  margin-top: 6px;
 }
 
-.cbig-fb .fb {
-  max-height: 190px;
+/* kořen má v Doprovodu jednu barvu: diagram, hmatník, legenda */
+.cbig-fb .fb-dot.is-src-root rect {
+  fill: var(--lane-2);
 }
 
-.legend-item.is-ghost i {
-  background: rgba(17, 19, 21, 0.85);
-  box-shadow: inset 0 0 0 2px #fff;
+.view-comp .legend-item.is-src-root i {
+  background: var(--lane-2);
+  box-shadow: none;
 }
 
-/* ---------- mřížka rytmu nad tabulaturou ---------- */
-.crh {
-  display: grid;
-  gap: 4px;
-  min-width: 0;
+.view-comp .legend-item.is-src i {
+  background: #111;
 }
 
+.view-comp .legend-item.is-chord i {
+  background: #111;
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--lane-1);
+}
+
+.cbig-fb .fb-ring {
+  stroke: var(--lane-1) !important;
+}
+
+@media (max-width: 700px) {
+  .cbig {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---------- rytmus: mřížka nad tabulaturou ---------- */
 .crh-head {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
-  gap: 10px;
-  min-width: 0;
+  gap: 4px 12px;
+  margin-bottom: 4px;
 }
 
 .crh-name {
-  font-size: 14px;
-  white-space: nowrap;
+  font-size: 17px;
 }
 
 .crh-tip {
   color: var(--muted);
-  font-size: 12.5px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  min-width: 0;
 }
 
 .crh-scroll {
-  padding: 4px 4px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
 }
 
 .crh-grid {
   display: flex;
-  width: max-content;
+  padding-top: 4px;
 }
 
-/* krok mřížky má šířku kroku tabulatury (92 px na dobu), ať ↓↑ stojí nad čísly */
 .crh-step {
   display: grid;
-  justify-items: center;
+  flex: none;
   width: var(--step);
-  padding: 1px 0 2px;
-  border-left: 1px solid rgba(60, 40, 20, 0.12);
-  color: #3b2a16;
-  transform: translateX(calc(14px - var(--step) / 2));
-}
-
-.crh-step.is-beat {
-  border-left-color: rgba(60, 40, 20, 0.4);
+  justify-items: center;
+  font-family: var(--font-mono);
+  line-height: 1.2;
 }
 
 .crh-step small {
-  font: 700 10px var(--font-ui);
-  color: #8a6a3c;
-  line-height: 1.1;
+  color: var(--faint);
+  font-size: 11px;
+}
+
+.crh-step.is-beat small {
+  color: var(--text);
+  font-weight: 700;
 }
 
 .crh-step b {
-  font: 700 17px/1.1 var(--font-ui);
+  font-size: 17px;
 }
 
 .crh-step.is-accent b {
-  color: #b5371f;
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
 }
 
 .crh-step.is-hold b {
-  color: #a99677;
+  color: var(--muted);
 }
 
 .crh-step.is-now {
-  background: rgba(255, 160, 40, 0.38);
-  border-radius: 4px;
+  background: var(--invert-bg);
+  color: var(--invert-text);
 }
 
-.crh-tab .tab {
-  display: block;
+.crh-step.is-now small {
+  color: var(--invert-text);
 }

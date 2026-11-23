@@ -417,7 +417,7 @@ export function createSoloPanel(root) {
       : []));
     lickArea.hidden = false;
     lickArea.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-    lickArea.style.setProperty('--lane', lane === 'cycle' ? 'var(--accent)' : res.lanes[lane].color);
+    lickArea.style.setProperty('--lane', lane === 'cycle' ? 'var(--text)' : res.lanes[lane].color);
     toggleLick();
   }
 

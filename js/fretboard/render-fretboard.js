@@ -10,9 +10,9 @@ let instances = 0;
 
 export function geometry(compact = false) {
   const g = compact
-    ? { W: 1200, TOP: 20, GAP: 23, R: 10.5, NUT_X: 74, END_X: 1186 }
-    : { W: 1200, TOP: 30, GAP: 31, R: 12, NUT_X: 74, END_X: 1186 };
-  g.H = g.TOP + 5 * g.GAP + (compact ? 34 : 47);
+    ? { W: 1200, TOP: 22, GAP: 28, R: 13, NUT_X: 74, END_X: 1186 }
+    : { W: 1200, TOP: 26, GAP: 34, R: 15, NUT_X: 74, END_X: 1186 };
+  g.H = g.TOP + 5 * g.GAP + (compact ? 38 : 44);
   // polovina realistické rozteče, polovina rovnoměrné – čitelné i ve vysokých polohách
   g.fretX = (n) => g.NUT_X + (g.END_X - g.NUT_X) * (0.5 * (real(n) / real(MAX_FRET)) + 0.5 * (n / MAX_FRET));
   g.noteX = (f) => (f === 0 ? g.NUT_X - 30 : (g.fretX(f - 1) + g.fretX(f)) / 2);
@@ -67,7 +67,7 @@ function dotMarkup(g, d) {
     : `<circle cx="${x}" cy="${y}" r="${r}"/>`;
   const ring = d.chord || d.nextChord ? `<circle class="fb-ring" cx="${x}" cy="${y}" r="${r + 3.5}"/>` : '';
   const tag = d.tag ? `<text class="fb-tag" x="${x}" y="${y - r - 5}">${d.tag}</text>` : '';
-  return `<g class="${cls}" data-key="${d.s}:${d.f}">${ring}${shape}<text x="${x}" y="${y + r * 0.34}">${d.label ?? ''}</text>${tag}</g>`;
+  return `<g class="${cls}" data-key="${d.s}:${d.f}">${ring}${shape}<text x="${x}" y="${y + r * 0.36}">${d.label ?? ''}</text>${tag}</g>`;
 }
 
 // Šipka mezi dvěma tóny (rozvod vodicího tónu): from/to = { s, f }

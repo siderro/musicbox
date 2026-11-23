@@ -13,7 +13,7 @@ Stará podoba zůstává na památku:
 2. **Maximální informační hustota.** Žádné karty, stíny, zaoblené dlaždice ani velké mezery. Tabulky, seznamy a odstavce. Co se vejde na jednu obrazovku, má být na jedné obrazovce.
 3. **Žádné fejky.** Pryč jsou VU-metry, LED diody, kazeta, displeje, šroubky, „PULSE LOCK“, falešné značky a výrobní štítky. Ukazuje se jen to, co nese informaci.
 4. **Stav se ukazuje typografií.** Vybraná položka je tučně (případně černé pozadí, bílý text). Právě hraný takt nebo akord je podtržený nebo invertovaný. Nic nebliká kvůli efektu.
-5. **Barvy:** jen černá, bílá a šedé, plus modrá a fialová pro odkazy. Ovládací volby (přístup, sazba, rytmus, kolečko) jsou odkazy, ne tlačítka.
+5. **Barvy:** černá, bílá a šedé, modrá pro odkazy, plus barvy pruhů (viz níže). Ovládací volby (přístup, sazba, rytmus, kolečko) jsou odkazy, ne tlačítka.
 6. **Písmo:** systémové (`system-ui`, Helvetica) a monospace na tabulaturu, hmaty a čísla. Žádné Google Fonts (dnes se jich načítá 9 rodin).
 
 ## Rozvržení
@@ -67,11 +67,18 @@ Tabulatura …                                                     │
 
 - Velké číslo BPM a řada dob (přízvuk tučně, hraná doba invertovaná).
 - Takt, dělení, zvuk a přízvuk jsou malé odkazy. Tap, start a stop.
-- Tempo je společné s grooveboxem (dnes jsou dvě).
+- Tempo metronomu zatím zůstává samostatné (jiný rozsah 30–260); sloučení s grooveboxem je samostatná změna chování.
 
 ## Barvy funkcí
 
-Dnes rozlišuje pruhy a funkce akordů (tónika, subdominanta, dominanta) tyrkysová, oranžová a fialová. Nově to ponesou **text a značka**: T / S / D u akordu, název pruhu u hmatníku a v mapě. Pokud se ukáže, že bez barvy se pruhy v hmatníku čtou hůř, nabízí se varianta s odstíny šedé nebo tvarem tečky (plná, prázdná, čtvereček).
+Barvy pruhů zůstávají, je to jediná barva na stránce mimo odkazy, a proto má být výrazná a názorná. Na bílém pozadí půjde o sytou zelenou, oranžovou a červenou, ne fialovou (ta patří odkazům). Funkci akordu navíc nese značka T / S / D.
+
+**Hmatníky a značky musí být dobře vidět** (dřív byly málo vidět):
+
+- větší tečky a tučnější popisky;
+- tečky aktivního pruhu plné v barvě pruhu, kořen jako čtvereček, tón hraného akordu se silným černým kroužkem;
+- neaktivní pruhy a tečky mimo okno ruky ztlumené jen mírně, aby zůstaly čitelné;
+- světlý krk, tmavé struny a pražce, čísla pražců čitelná.
 
 ## Technický postup
 

@@ -1,5 +1,5 @@
 // Doprovod: sazba (jakými hmaty) × rytmus (co dělá pravá ruka) ke zvolenému kolečku.
-// Kostra jako Sólování: konzole s lištou sazeb (A) a rytmů (R) a režimy, mapa kolečka s diagramy hmatů
+// Kostra jako Sólování: řádek sazeb (A) a rytmů (R) a režimy, mapa kolečka s diagramy hmatů
 // (další hmat se rozbliká a odpočítá „za 2 → za 1“), velký diagram + hmatník, mřížka rytmu nad
 // tabulaturou a wiki vpravo (W). Kytaru hraje groovebox (js/programs/groove-program.js);
 // panel jen zobrazuje a mění volbu ve store.
@@ -36,26 +36,19 @@ export function createCompPanel(root) {
   const wikiBtn = h('button', { type: 'button', class: 'wiki-toggle', onclick: () => store.set({ wikiOpen: !store.get().wikiOpen }) });
   const labelBtn = h('button', { type: 'button', class: 'ctl', onclick: () => cycleLabels() });
 
-  // ---------- konzole (deck) ----------
+  // ---------- volba sazby a rytmu ----------
   const sazbaBar = h('div', { class: 'cc-keys', role: 'radiogroup', 'aria-label': T.sazba });
   const rhythmBar = h('div', { class: 'cc-keys', role: 'radiogroup', 'aria-label': T.rhythm });
   const grooveBtn = h('button', { type: 'button', class: 'cc-groove', onclick: () => applyGroove() });
   const modeKeys = COMP_MODES.map((m) => h('button', {
     type: 'button', class: 'cc-mode', title: T.compModeTips[m], 'aria-pressed': 'false', dataset: { mode: m },
     onclick: () => store.set({ compMode: m }),
-  }, h('i', { class: 'cc-led', 'aria-hidden': 'true' }), h('span', {}, T.compModes[m])));
-  const vfdState = h('span', { class: 'cc-vfd-state' });
-  const vfdChord = h('b', { class: 'cc-vfd-chord' });
-  const vfdFrets = h('span', { class: 'cc-vfd-frets' });
-  const vfdNext = h('span', { class: 'cc-vfd-next' });
-  const vfd = h('div', { class: 'cc-vfd', 'aria-live': 'off' },
-    h('div', { class: 'cc-vfd-top' }, vfdState, vfdNext),
-    h('div', { class: 'cc-vfd-main' }, vfdChord, vfdFrets));
+  }, T.compModes[m]));
+  // kdo teď hraje: ukázka / ty (při střídání se mění po taktech)
+  const modeState = h('span', { class: 'cc-state' });
   const deck = h('section', { class: 'cc-console' },
-    vfd,
-    h('div', { class: 'cc-rows' },
-      h('div', { class: 'cc-row' }, h('span', { class: 'cc-legend' }, T.sazba, h('kbd', {}, 'A')), sazbaBar),
-      h('div', { class: 'cc-row' }, h('span', { class: 'cc-legend' }, T.rhythm, h('kbd', {}, 'R')), rhythmBar, grooveBtn)));
+    h('div', { class: 'cc-row' }, h('span', { class: 'cc-legend' }, T.sazba, ' ', h('kbd', {}, 'A')), sazbaBar),
+    h('div', { class: 'cc-row' }, h('span', { class: 'cc-legend' }, T.rhythm, ' ', h('kbd', {}, 'R')), rhythmBar, grooveBtn));
 
   const mapStrip = h('div', { class: 'cmap' });
   const bigBox = h('div', { class: 'cbig-box' });
@@ -83,7 +76,7 @@ export function createCompPanel(root) {
     h('header', { class: 'solo-header' },
       h('div', {}, h('h1', {}, T.compTitle), subtitle),
       h('div', { class: 'solo-tools' },
-        h('div', { class: 'cc-modes', role: 'group', 'aria-label': T.compModeLabel }, modeKeys),
+        h('div', { class: 'cc-modes', role: 'group', 'aria-label': T.compModeLabel }, h('span', { class: 'ctl-label' }, T.compModeLabel), modeKeys, modeState),
         h('div', { class: 'ctl-group' }, labelBtn), wikiBtn)),
     deck,
     mapStrip,
@@ -140,7 +133,7 @@ export function createCompPanel(root) {
       ...shown.map((id) => h('button', {
         type: 'button', role: 'radio', class: 'cc-key', 'aria-checked': id === active ? 'true' : 'false',
         title: names[id], onclick: () => onPick(id),
-      }, h('i', { class: 'cc-led', 'aria-hidden': 'true' }), h('span', {}, names[id]), h('i', { class: `lvl lvl-${levels[id]}` }))),
+      }, names[id], h('i', { class: `lvl lvl-${levels[id]}` }))),
       ...(rest.length ? [selectBox([['', moreLabel], ...rest.map((id) => [id, names[id]])], '', (v) => v && onPick(v), { class: 'cc-more', 'aria-label': moreLabel })] : []));
   }
 
@@ -254,9 +247,6 @@ export function createCompPanel(root) {
     const hi = Math.min(17, Math.max(lo + 7, Math.max(...all) + 1));
     fb.render(dots);
     fb.setView([lo, hi]);
-    vfdChord.textContent = shortName(sh);
-    vfdFrets.textContent = fretString(sh);
-    vfdNext.textContent = ahead ? `${T.laneIn(ahead.left)} ▸ ${shortName(next)}` : '';
   }
 
   // ---------- mřížka rytmu a tabulatura ----------
@@ -302,7 +292,7 @@ export function createCompPanel(root) {
     modeKeys.forEach((b) => b.setAttribute('aria-pressed', b.dataset.mode === mode ? 'true' : 'false'));
     const running = isRunning('groove');
     const you = mode === 'self' || (mode === 'alt' && !playing);
-    vfdState.textContent = !running ? T.compIdle : you ? T.compYou : T.compDemo;
+    modeState.textContent = !running ? '' : you ? T.compYou : T.compDemo;
     main.classList.toggle('is-you', running && you);
     labelBtn.textContent = st().labelMode === 'names' ? T.labelModes.names : T.labelModes.chord;
     wikiBtn.textContent = `${st().wikiOpen ? '▸' : '◂'} ${T.wiki}`;

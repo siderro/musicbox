@@ -2,22 +2,16 @@
 
 export const T = {
   appName: 'Musicbox',
-  model: 'GB 90 S',
-  stereo: 'stereo',
 
   tabSolo: 'Sólování',
   tabComp: 'Doprovod',
   tabTuner: 'Ladička',
   tabMetro: 'Metronom',
 
-  // deck
-  nowPlaying: 'Teď hraje',
+  // horní lišta
   bar: 'Takt',
-  next: 'Další',
   countIn: 'Odpočet',
   frozen: 'Drží akord',
-  loopWindow: 'Kolečko',
-  loopWindowSub: 'harmonic loop',
   key: 'Tónina',
   progression: 'Kolečko',
   groove: 'Groove',
@@ -135,8 +129,8 @@ export const T = {
     self: 'Kytara mlčí – hraješ ty, bicí a basa jedou dál',
     alt: 'Takt hraje ukázka, takt ty',
   },
-  compYou: 'TY',
-  compDemo: 'UKÁZKA',
+  compYou: 'teď hraješ ty',
+  compDemo: 'teď hraje ukázka',
   compIdle: 'STOP',
   grooveForRhythm: 'groove k rytmu',
   compModeLabel: 'Režim',

@@ -1,0 +1,261 @@
+/* Horní lišta: servisní ovládání malé, v jednom řádku; pod ním kolečko a co hraje. */
+
+.bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+  font-size: var(--small);
+}
+
+.bar-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 18px;
+  padding: 6px 24px;
+}
+
+.bar-song {
+  padding-top: 0;
+  padding-bottom: 7px;
+}
+
+.bar-logo {
+  font-size: 14px;
+  letter-spacing: -0.01em;
+}
+
+.bar-right {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 16px;
+  margin-left: auto;
+}
+
+.bar-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.bar-small {
+  color: var(--muted);
+}
+
+/* ladička a metronom groovebox nepotřebují */
+.app[data-tab='tuner'] .bar-groove,
+.app[data-tab='metro'] .bar-groove {
+  display: none;
+}
+
+/* ---------- záložky ---------- */
+.tabs {
+  display: flex;
+  gap: 14px;
+}
+
+.nav-tab {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--link);
+  font-size: 14px;
+  text-decoration: underline;
+  text-decoration-color: rgba(6, 69, 173, 0.35);
+  text-underline-offset: 3px;
+}
+
+.nav-tab kbd {
+  margin-right: 4px;
+  font-size: 10px;
+}
+
+.nav-tab[aria-selected='true'] {
+  color: var(--text);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* ---------- tlačítka a pole ---------- */
+.bar-btn {
+  padding: 1px 7px;
+  border: 1px solid var(--line-strong);
+  border-radius: 3px;
+  background: var(--bg);
+  line-height: 1.4;
+}
+
+.bar-btn:hover {
+  border-color: var(--text);
+}
+
+.bar-play {
+  min-width: 74px;
+  font-weight: 600;
+}
+
+.bar-play[aria-pressed='true'] {
+  background: var(--invert-bg);
+  border-color: var(--invert-bg);
+  color: var(--invert-text);
+}
+
+.bar-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: var(--muted);
+}
+
+.bar-check input {
+  margin: 0;
+}
+
+.bar-tempo-num {
+  min-width: 2.2em;
+  font: 700 14px var(--font-mono);
+  text-align: right;
+}
+
+.bar-unit {
+  color: var(--muted);
+}
+
+.bar-range {
+  width: 90px;
+  accent-color: var(--text);
+}
+
+.bar-label {
+  color: var(--muted);
+  margin-right: 2px;
+}
+
+.bar-pick {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.bar-step {
+  padding: 0 4px;
+  border: 0;
+  background: none;
+  color: var(--link);
+  font-size: 15px;
+  line-height: 1;
+}
+
+.bar-select {
+  max-width: 260px;
+  padding: 1px 2px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: var(--bg);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* ---------- co hraje ---------- */
+.bar-status {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-left: auto;
+  font-size: 14px;
+}
+
+.bar-status-bar {
+  color: var(--muted);
+  font: var(--small) var(--font-mono);
+}
+
+.bar-status-chord {
+  font-size: 16px;
+}
+
+.bar-status-next {
+  color: var(--muted);
+}
+
+.bar-status-next.is-soon {
+  color: var(--text);
+  font-weight: 700;
+}
+
+/* ---------- rozbalovací okénka ---------- */
+.bar-pop {
+  position: relative;
+}
+
+.bar-pop summary {
+  list-style: none;
+  cursor: pointer;
+  color: var(--link);
+  text-decoration: underline;
+  text-decoration-color: rgba(6, 69, 173, 0.35);
+}
+
+.bar-pop summary::-webkit-details-marker {
+  display: none;
+}
+
+.bar-pop[open] summary {
+  color: var(--text);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.bar-pop-body {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  z-index: 20;
+  margin: 0;
+  padding: 10px 12px;
+  background: var(--bg);
+  border: 1px solid var(--line-strong);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.bar-mix {
+  display: grid;
+  gap: 6px;
+}
+
+.bar-mix label {
+  display: grid;
+  grid-template-columns: 56px 140px;
+  align-items: center;
+}
+
+.bar-mix .bar-range {
+  width: 140px;
+}
+
+.bar-keys {
+  width: 290px;
+  list-style: none;
+  display: grid;
+  gap: 3px;
+}
+
+@media (max-width: 640px) {
+  /* na telefonu by lepivá lišta zabrala půl obrazovky */
+  .bar {
+    position: static;
+  }
+
+  .bar-row {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .bar-right,
+  .bar-status {
+    margin-left: 0;
+  }
+}

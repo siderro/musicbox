@@ -10,7 +10,7 @@ import { start, stop, isRunning } from './audio/transport.js';
 import { silenceAll } from './audio/engine.js';
 import { createGrooveProgram } from './programs/groove-program.js';
 import { createMetronomeProgram } from './programs/metronome-program.js';
-import { createDeck } from './ui/deck.js';
+import { createBar } from './ui/bar.js';
 import { createSoloPanel } from './ui/solo-panel.js';
 import { createCompPanel } from './ui/comp-panel.js';
 import { createTunerView } from './ui/tuner-view.js';
@@ -39,20 +39,15 @@ if (problems.length) {
 const groove = createGrooveProgram();
 const metronomeProgram = createMetronomeProgram();
 
-const deckEl = h('aside', { class: 'deck' });
+const barEl = h('header', { class: 'bar' });
 const tabButtons = TABS.map(([id, label], i) => h('button', {
-  class: 'tab', type: 'button', role: 'tab', dataset: { tab: id },
+  class: 'nav-tab', type: 'button', role: 'tab', dataset: { tab: id },
   onclick: () => store.set({ tab: id }),
 }, h('kbd', {}, i + 1), label));
 const views = Object.fromEntries(TABS.map(([id]) => [id, h('section', { class: `view view-${id}`, role: 'tabpanel' })]));
 
-document.getElementById('app').replaceChildren(
-  deckEl,
-  h('main', { class: 'stage' },
-    h('header', { class: 'stage-head' },
-      h('nav', { class: 'tabs', role: 'tablist' }, tabButtons),
-      h('p', { class: 'shortcuts' }, T.shortcuts)),
-    Object.values(views)));
+const appEl = document.getElementById('app');
+appEl.replaceChildren(barEl, h('main', { class: 'stage' }, Object.values(views)));
 
 let solo;
 let tuner;
@@ -83,7 +78,7 @@ const actions = {
   },
 };
 
-createDeck(deckEl, { groove, actions });
+createBar(barEl, { nav: h('nav', { class: 'tabs', role: 'tablist' }, tabButtons), groove, actions });
 solo = createSoloPanel(views.solo);
 solo.setSilence(silenceAll);
 const comp = createCompPanel(views.comp);
@@ -93,6 +88,7 @@ installShortcuts({ actions, solo, comp, metronome });
 
 function showTab() {
   const { tab } = store.get();
+  appEl.dataset.tab = tab;
   tabButtons.forEach((b) => b.setAttribute('aria-selected', b.dataset.tab === tab ? 'true' : 'false'));
   Object.entries(views).forEach(([id, el]) => { el.hidden = id !== tab; });
   if (tab !== 'tuner') tuner.stop();
@@ -100,6 +96,6 @@ function showTab() {
 store.subscribe((st, changed) => {
   if (!changed.includes('tab')) return;
   showTab();
-  document.querySelector('.stage').scrollTop = 0;
+  window.scrollTo(0, 0);
 });
 showTab();

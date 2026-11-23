@@ -1,9 +1,5 @@
-.fretboard {
-  padding: 12px 14px 6px;
-  border-radius: var(--radius);
-  background: linear-gradient(180deg, #181b1f, #14171a);
-  border: 1px solid var(--line);
-}
+/* Hmatník, diagramy akordů a tabulatura – na bílém papíře, výrazné tečky.
+   Barva teček = barva pruhu (--lane), bez pruhu černá. */
 
 .fb {
   display: block;
@@ -12,138 +8,275 @@
 }
 
 .fb-neck {
-  fill: #2c1f17;
-  stroke: #120c08;
+  fill: #fbfaf7;
+  stroke: #444;
+  stroke-width: 1.2;
 }
 
 .fb-inlay {
-  fill: #e8e0cc;
-  opacity: 0.28;
+  fill: #d9d6cf;
 }
 
 .fb-fret {
-  stroke: #a9adb1;
-  stroke-width: 2.6;
+  stroke: #8d8d8d;
+  stroke-width: 2.4;
 }
 
 .fb-nut {
-  fill: #e9e2cf;
+  fill: #111;
 }
 
 .fb-string {
-  stroke: #cfc8b8;
-  opacity: 0.85;
+  stroke: #333;
 }
 
 .fb-fretnum {
-  fill: #5c636b;
-  font: 600 12px var(--font-ui);
+  fill: #777;
+  font: 600 14px var(--font-ui);
   text-anchor: middle;
 }
 
 .fb-fretnum.is-marked {
-  fill: #a3aab1;
+  fill: #111;
+  font-weight: 800;
 }
 
+/* okno ruky (←/→) */
 .fb-window {
-  fill: rgba(255, 179, 71, 0.07);
-  stroke: rgba(255, 179, 71, 0.55);
-  stroke-width: 1.5;
-  stroke-dasharray: 6 4;
+  fill: rgba(0, 0, 0, 0.035);
+  stroke: #111;
+  stroke-width: 1.6;
+  stroke-dasharray: 7 5;
 }
 
-.fb-dot {
-  transition: opacity 120ms;
-}
-
+/* ---------- tečky ---------- */
 .fb-dot circle,
 .fb-dot rect {
-  fill: #e9e4da;
-  stroke: #0d0f11;
+  fill: var(--lane, #111);
+  stroke: #fff;
   stroke-width: 1.5;
 }
 
 .fb-dot text {
-  fill: #15181b;
-  font: 700 11px var(--font-ui);
+  fill: #fff;
+  font: 800 13.5px var(--font-ui);
   text-anchor: middle;
   pointer-events: none;
 }
 
-.fb-dot.is-root rect {
-  fill: var(--accent);
+.fb.is-compact .fb-dot text {
+  font-size: 12.5px;
 }
 
-.fb-dot.is-blue circle {
-  fill: var(--blue-note);
+/* kořen zdroje: čtvereček s černým obrysem */
+.fb-dot.is-src-root rect {
+  stroke: #111;
+  stroke-width: 2.5;
 }
 
-.fb-dot.is-lick circle,
-.fb-dot.is-lick rect {
+/* tón hraného akordu: silný černý kroužek */
+.fb-ring {
+  fill: none !important;
+  stroke: #111 !important;
+  stroke-width: 3.5 !important;
+}
+
+/* stupnice v pozadí (tóny, které zdroj nemá) */
+.fb-dot.is-scale circle {
   fill: #fff;
-  stroke: var(--accent);
-  stroke-width: 3;
+  stroke: #9a9a9a;
+  stroke-width: 1.5;
 }
 
-.fb-dot.is-outside circle {
-  fill: rgba(17, 19, 21, 0.85);
-  stroke: var(--chord);
+/* mimo okno ruky – ztlumené, ale čitelné */
+.fb-dot.is-dim {
+  opacity: 0.4;
+}
+
+.fb-dot.is-scale.is-dim {
+  opacity: 0.5;
+}
+
+/* další hmat (Doprovod): prázdný kroužek */
+.fb-dot.is-ghost circle {
+  fill: #fff;
+  stroke: #111;
   stroke-width: 2.2;
   stroke-dasharray: 4 3;
 }
 
-.fb-dot.is-outside text {
-  fill: var(--chord);
+.fb-dot.is-ghost text {
+  fill: #111;
 }
 
-.fb-ring {
+/* tón licku, který právě zní */
+.fb-dot.is-hit circle,
+.fb-dot.is-hit rect {
+  stroke: #111;
+  stroke-width: 5;
+}
+
+.fb-dot.is-hit {
+  opacity: 1;
+}
+
+.fb-link,
+.fb-link-hold {
+  stroke: #111;
+  stroke-width: 3;
+  fill: none;
+}
+
+.fb-arrow-head {
+  fill: #111;
+}
+
+.fb-tag {
+  fill: #111;
+  font: 800 10px var(--font-ui);
+  text-anchor: middle;
+}
+
+/* ---------- diagram akordu ---------- */
+.cb {
+  display: block;
+}
+
+.cb-fret {
+  stroke: #777;
+  stroke-width: 1.5;
+}
+
+.cb-fret.is-nut {
+  stroke: #111;
+  stroke-width: 6;
+}
+
+.cb.is-mini .cb-fret.is-nut {
+  stroke-width: 3;
+}
+
+.cb-string {
+  stroke: #333;
+  stroke-width: 1.3;
+}
+
+.cb-fretno {
+  fill: #111;
+  font: 700 15px var(--font-ui);
+  text-anchor: end;
+}
+
+.cb-fretno.is-mini {
+  font-size: 9px;
+}
+
+.cb-mute {
+  stroke: #111;
+  stroke-width: 2;
+}
+
+.cb.is-mini .cb-mute {
+  stroke-width: 1.3;
+}
+
+.cb-open {
+  fill: #fff;
+  stroke: #111;
+  stroke-width: 2;
+}
+
+.cb.is-mini .cb-open {
+  stroke-width: 1.3;
+}
+
+.cb-open.is-root {
+  fill: var(--lane-2);
+  stroke: var(--lane-2);
+}
+
+.cb-open.is-keep {
+  stroke: var(--lane-1);
+  stroke-width: 3;
+}
+
+.cb-barre {
+  fill: #111;
+}
+
+.cb-dot circle {
+  fill: #111;
+}
+
+.cb-dot text {
+  fill: #fff;
+  font: 800 13px var(--font-ui);
+  text-anchor: middle;
+}
+
+/* kořen hmatu: v Doprovodu má kořen jednu barvu (diagramy, hmatník i legenda) */
+.cb-dot.is-root circle {
+  fill: var(--lane-2);
+}
+
+.cb-dot .cb-ring {
   fill: none !important;
-  stroke: var(--chord) !important;
-  stroke-width: 3.2 !important;
+  stroke: var(--lane-1) !important;
+  stroke-width: 3.5;
 }
 
-.fb-dot.is-dim {
-  opacity: 0.22;
+.cb.is-mini .cb-dot .cb-ring {
+  stroke-width: 2;
 }
 
-/* ---------- tabulatura (na papíře) ---------- */
+.cb-under {
+  fill: #111;
+  font: 700 13px var(--font-ui);
+  text-anchor: middle;
+}
+
+.cb-under.is-root {
+  fill: var(--lane-2);
+}
+
+/* ---------- tabulatura ---------- */
 .tab {
   display: block;
 }
 
 .tab-line {
-  stroke: #8b8478;
+  stroke: #888;
   stroke-width: 1;
 }
 
 .tab-beat {
-  stroke: #d6cfc0;
+  stroke: #e2e2e2;
   stroke-width: 1;
 }
 
 .tab-bar {
-  stroke: #6f685d;
+  stroke: #333;
   stroke-width: 1.6;
 }
 
 .tab-clef {
-  fill: #6f685d;
+  fill: #555;
   font: 700 12px var(--font-ui);
   text-anchor: middle;
 }
 
 .tab-num-bg {
-  fill: #f4efe4;
+  fill: #fff;
 }
 
 .tab-num {
-  fill: #1d1a16;
-  font: 700 14px var(--font-ui);
+  fill: #111;
+  font: 700 14px var(--font-mono);
   text-anchor: middle;
 }
 
 .tab-tech {
-  fill: #a04a12;
+  fill: #555;
   font: 700 11px var(--font-ui);
   text-anchor: middle;
 }
@@ -153,14 +286,14 @@
 .tab-vib,
 .tab-slide {
   fill: none;
-  stroke: #a04a12;
+  stroke: #555;
   stroke-width: 1.6;
 }
 
 .tab-stem,
 .tab-beam,
 .tab-flag {
-  stroke: #2a2620;
+  stroke: #111;
   stroke-width: 1.6;
   fill: none;
 }
@@ -171,190 +304,26 @@
 
 .tab-half {
   fill: none;
-  stroke: #2a2620;
+  stroke: #111;
   stroke-width: 1.4;
 }
 
 .tab-tuplet {
-  fill: #2a2620;
+  fill: #111;
   font: 700 12px var(--font-ui);
   text-anchor: middle;
 }
 
 .tab-rest {
-  fill: #2a2620;
-}
-
-.tab-playhead {
-  stroke: var(--key-red);
-  stroke-width: 2.5;
-}
-
-/* ---------- výuka: nápad, barvy, cíle, šipky ---------- */
-.fb-dot.is-idea circle,
-.fb-dot.is-idea-root rect {
-  fill: var(--chord);
-}
-
-.fb-dot.is-idea-root rect {
-  stroke: #e9fffb;
-  stroke-width: 2;
-}
-
-.fb-dot.is-color circle {
-  fill: rgba(17, 19, 21, 0.9);
-  stroke: var(--blue-note);
-  stroke-width: 3;
-}
-
-.fb-dot.is-color text {
-  fill: var(--blue-note);
-}
-
-.fb-dot.is-target circle {
-  fill: var(--accent);
-  stroke: #fff3df;
-  stroke-width: 2.5;
-}
-
-.fb-dot.is-hold circle {
-  fill: var(--accent);
-  stroke: var(--chord);
-  stroke-width: 3;
-}
-
-.fb-dot.is-approach circle {
-  fill: rgba(17, 19, 21, 0.9);
-  stroke: var(--accent);
-  stroke-width: 2.2;
-  stroke-dasharray: 4 3;
-}
-
-.fb-dot.is-faded {
-  opacity: 0.35;
-}
-
-.fb-dot.is-hit circle,
-.fb-dot.is-hit rect {
-  stroke: #fff;
-  stroke-width: 4;
-  filter: drop-shadow(0 0 6px rgba(79, 216, 200, 0.9));
-}
-
-.fb-link {
-  stroke: var(--accent);
-  stroke-width: 3.5;
-  stroke-linecap: round;
-}
-
-.fb-arrow-head {
-  fill: var(--accent);
-}
-
-.fb-link-hold {
-  fill: none;
-  stroke: var(--accent);
-  stroke-width: 2.5;
-  stroke-dasharray: 3 3;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .fb-dot {
-    transition: none;
-  }
-}
-
-/* otázka–odpověď: tóny k zopakování jako očíslované obrysy */
-.fb-dot.is-ghost circle {
-  fill: rgba(17, 19, 21, 0.85);
-  stroke: #fff;
-  stroke-width: 2.5;
-}
-
-.fb-dot.is-ghost text {
-  fill: #fff;
-}
-
-/* ---------- fráze: START, cesta, CÍL, domov ---------- */
-.fb-dot.is-path circle {
-  fill: var(--chord);
-}
-
-.fb-dot.is-start circle {
-  fill: #7ee787;
-  stroke: #e8ffe9;
-  stroke-width: 2.5;
-}
-
-.fb-dot.is-land rect,
-.fb-dot.is-land circle {
-  fill: var(--accent);
-  stroke: #fff3df;
-  stroke-width: 2.5;
-}
-
-.fb-dot.is-home circle {
-  fill: rgba(17, 19, 21, 0.85);
-  stroke: #e9e4da;
-  stroke-width: 1.8;
-  stroke-dasharray: 3 2.5;
-}
-
-.fb-dot.is-home text {
-  fill: #e9e4da;
-}
-
-.fb-tag {
-  fill: #ffffff;
-  font: 800 9.5px var(--font-ui);
-  letter-spacing: 0.06em;
-  text-anchor: middle;
-  paint-order: stroke;
-  stroke: #111315;
-  stroke-width: 3px;
-}
-
-.fb-dot.is-start .fb-tag {
-  fill: #7ee787;
-}
-
-.fb-dot.is-land .fb-tag {
-  fill: var(--accent);
-}
-
-.fb-dot.is-home .fb-tag {
-  fill: #e9e4da;
-}
-
-.fb-link.is-path {
-  stroke: rgba(79, 216, 200, 0.75);
-  stroke-width: 2;
-  stroke-dasharray: 5 4;
-}
-
-.fb-link.is-land {
-  stroke: var(--accent);
-  stroke-width: 4;
-}
-
-/* ---------- pruhy přístupů: zdroj a jeho kořen ---------- */
-.fb-dot.is-src circle {
-  fill: #e9e4da;
-}
-
-.fb-dot.is-src-root rect {
-  fill: var(--accent);
-}
-
-.fb.is-compact .fb-dot text {
-  font-size: 10px;
-}
-
-.fb.is-compact .fb-fretnum {
-  font-size: 11px;
+  fill: #111;
 }
 
 .tab-chord {
-  font: 700 13px var(--font-ui, sans-serif);
-  fill: #6b4a1c;
+  fill: #111;
+  font: 800 14px var(--font-ui);
+}
+
+.tab-playhead {
+  stroke: var(--link);
+  stroke-width: 2.5;
 }

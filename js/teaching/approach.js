@@ -10,7 +10,8 @@ import { noteName, mod } from '../theory/notes.js';
 import { intervalBetween, keyScale, nameTones, degreeTone, chordFamily } from '../theory/harmony.js';
 import { analyzeSong } from '../theory/function.js';
 
-const LANE_COLORS = ['#4fd8c8', '#ffb347', '#b896ff'];
+// barvy pruhů jsou v css/base.css (--lane-1 … --lane-3)
+const LANE_COLORS = ['var(--lane-1)', 'var(--lane-2)', 'var(--lane-3)'];
 
 // Krátký název zdroje: „Em pentatonika“, „C dur“, „G♯°7“.
 function labelOf(kind, id, root) {

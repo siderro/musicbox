@@ -1,1199 +1,171 @@
-/* Ladička – HAYASE GT-770, stříbrný hi-fi přístroj konce 70. let.
-   Vlastní třídy s prefixem tn-, nezávislé na deck.css. */
+/* Ladička: velký tón, centy, stupnice, struny. */
 
-
-.view-tuner {
-  display: flex;
-  justify-content: center;
-  --tn-font: 'Barlow Condensed', 'Archivo Narrow', 'Arial Narrow', sans-serif;
-  --tn-logo: 'Michroma', 'Eurostile', 'Arial Black', sans-serif;
-  --tn-ink: #24272a;
-  --tn-ink-soft: #4b4f53;
-  --tn-amber: #ffb54a;
-  --tn-brushed: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='260'%3E%3Cfilter id='n' x='0' y='0'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.0025 0.75' numOctaves='2' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0 0.16'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  --tn-walnut: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='600'%3E%3Cfilter id='w' x='0' y='0'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.16 0.006' numOctaves='5' seed='11' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0.95 0 0 0 -0.17 0.52 0 0 0 -0.1 0.3 0 0 0 -0.06 0 0 0 0 1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23w)'/%3E%3C/svg%3E");
+.tn {
+  max-width: 760px;
+  margin: 12px auto 0;
 }
 
-.tn-stage {
-  width: min(100%, 944px);
-  font-family: var(--tn-font);
-}
-
-/* ---------- skříň: ořechové boky + hliníkový panel ---------- */
-.tn-device {
-  position: relative;
-  display: grid;
-  grid-template-columns: 30px 1fr 30px;
-  border-radius: 7px;
-  box-shadow:
-    0 2px 0 rgba(255, 255, 255, 0.04),
-    /* klíčové světlo zleva shora → stín doprava dolů */
-    14px 26px 48px -6px rgba(0, 0, 0, 0.72),
-    6px 10px 18px rgba(0, 0, 0, 0.5);
-}
-
-.tn-device::after {
-  /* stín pod přístrojem na stole */
-  content: '';
-  position: absolute;
-  left: 7%;
-  right: 1%;
-  bottom: -20px;
-  height: 22px;
-  background: radial-gradient(50% 50% at 50% 50%, rgba(0, 0, 0, 0.55), transparent);
-  filter: blur(6px);
-  z-index: -1;
-}
-
-.tn-wood {
-  background:
-    linear-gradient(90deg, rgba(0, 0, 0, 0.45), rgba(255, 220, 170, 0.12) 22%, rgba(255, 230, 190, 0.18) 38%, rgba(0, 0, 0, 0.05) 70%, rgba(0, 0, 0, 0.55)),
-    linear-gradient(180deg, rgba(20, 8, 2, 0.85), rgba(40, 18, 6, 0.35) 1.6%, rgba(255, 240, 210, 0.14) 3%, transparent 14%, transparent 84%, rgba(0, 0, 0, 0.35) 97%, rgba(20, 8, 2, 0.9)),
-    linear-gradient(90deg, transparent 30%, rgba(255, 235, 205, 0.16) 44%, rgba(255, 240, 215, 0.24) 50%, rgba(255, 235, 205, 0.1) 58%, transparent 70%),
-    var(--tn-walnut),
-    #4a2a14;
-  background-size: 100% 100%, 100% 100%, 100% 100%, 120px 600px, auto;
-  box-shadow: inset 0 1px 0 rgba(255, 220, 180, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.5);
-}
-
-.tn-wood-l {
-  border-radius: 7px 0 0 7px;
-}
-
-.tn-wood-r {
-  border-radius: 0 7px 7px 0;
-  background-position: 0 0, 0 0, 0 0, 47px 130px, 0 0;
-}
-
-.tn-face {
-  position: relative;
-  padding: 12px 26px 14px;
-  background:
-    /* světlo zleva shora, ve tmavé místnosti rychle ubývá */
-    radial-gradient(120% 150% at 8% -10%, rgba(255, 248, 232, 0.28), rgba(255, 248, 232, 0.06) 45%, rgba(0, 0, 0, 0) 62%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.32), rgba(255, 255, 255, 0) 6%, rgba(0, 0, 0, 0) 55%, rgba(20, 14, 6, 0.2)),
-    linear-gradient(100deg, rgba(255, 255, 255, 0) 18%, rgba(255, 250, 238, 0.18) 38%, rgba(255, 255, 255, 0) 56%),
-    var(--tn-brushed),
-    linear-gradient(180deg, #c4beb2, #b3ada2 55%, #a29c91);
-  background-size: 100% 100%, 100% 100%, 100% 100%, 700px 260px, 100% 100%;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 252, 244, 0.9),
-    inset 0 2px 0 rgba(255, 255, 255, 0.35),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.35),
-    inset 0 -3px 0 rgba(255, 255, 255, 0.25),
-    inset 1px 0 0 rgba(255, 255, 255, 0.5),
-    inset -1px 0 0 rgba(0, 0, 0, 0.25),
-    -2px 0 3px rgba(0, 0, 0, 0.45),
-    2px 0 3px rgba(0, 0, 0, 0.45);
-}
-
-.tn-face::before {
-  /* frézovaná hrana panelu */
-  content: '';
-  position: absolute;
-  inset: 5px;
-  border-radius: 2px;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.55);
-  pointer-events: none;
-}
-
-/* šroubky */
-.tn-screw {
-  position: absolute;
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background:
-    linear-gradient(45deg, transparent 44%, rgba(30, 30, 30, 0.75) 45%, rgba(30, 30, 30, 0.75) 55%, transparent 56%),
-    linear-gradient(-45deg, transparent 44%, rgba(30, 30, 30, 0.75) 45%, rgba(30, 30, 30, 0.75) 55%, transparent 56%),
-    radial-gradient(circle at 35% 30%, #fafafa, #a9acae 60%, #6c6f72);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8), inset 0 -1px 1px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(0, 0, 0, 0.18);
-}
-
-.tn-screw-tl { top: 11px; left: 11px; }
-.tn-screw-tr { top: 11px; right: 11px; transform: rotate(23deg); }
-.tn-screw-bl { bottom: 11px; left: 11px; transform: rotate(61deg); }
-.tn-screw-br { bottom: 11px; right: 11px; transform: rotate(-12deg); }
-
-/* ---------- značka ---------- */
-.tn-head {
+.tn-reading {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  padding: 0 14px 8px;
+  gap: 20px;
 }
 
-.tn-logo {
-  display: flex;
-  align-items: baseline;
-  gap: 14px;
+.tn-big {
+  font-size: 120px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
 }
 
-.tn-brand {
-  font: 400 19px var(--tn-logo);
-  letter-spacing: 0.32em;
-  color: #1b1d1f;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.75), 0 -1px 0 rgba(0, 0, 0, 0.15);
+.tn-oct {
+  font-size: 36px;
+  font-weight: 600;
+  color: var(--muted);
+  vertical-align: baseline;
 }
 
-.tn-model {
-  font: 600 15px var(--tn-font);
-  letter-spacing: 0.14em;
-  color: #2b2e31;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
-}
-
-.tn-sub {
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-  font: 600 12px var(--tn-font);
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  color: var(--tn-ink);
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
-}
-
-.tn-sub-small {
-  font-weight: 500;
-  font-size: 10px;
-  letter-spacing: 0.2em;
-  color: var(--tn-ink-soft);
-  padding-left: 12px;
-  border-left: 1px solid rgba(0, 0, 0, 0.25);
-}
-
-/* gravírované popisky */
-.tn-legend {
-  font: 600 10.5px/1 var(--tn-font);
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--tn-ink);
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
-  white-space: nowrap;
-}
-
-.tn-legend-head {
-  display: block;
-  padding-bottom: 6px;
-  margin-bottom: 8px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
-  font-size: 10px;
-  color: var(--tn-ink-soft);
-}
-
-/* ---------- okénka (černý rám s chromovou lištou) ---------- */
-.tn-bezel {
-  position: relative;
-  padding: 5px;
-  border-radius: 5px;
-  background: linear-gradient(180deg, #2a2b2c, #0f1010);
-  box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.35),
-    0 -1px 0 1px rgba(0, 0, 0, 0.12),
-    0 1px 0 1.5px rgba(255, 255, 255, 0.75),
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    inset 0 0 0 1px rgba(0, 0, 0, 0.6);
-}
-
-.tn-top {
+.tn-nums {
   display: grid;
-  grid-template-columns: 352px 1fr;
-  gap: 22px;
+  justify-items: end;
+  font-family: var(--font-mono);
 }
 
-/* ---------- ručkový měřák ---------- */
-.tn-meter {
-  position: relative;
-  overflow: hidden;
-  border-radius: 2px;
-  background:
-    radial-gradient(70% 90% at 50% 115%, rgba(255, 196, 92, 0.65), rgba(255, 170, 60, 0.15) 60%, transparent 85%),
-    linear-gradient(180deg, #f2e6c2, #ead9a9);
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.6);
-  filter: brightness(0.8) saturate(0.82);
-  transition: filter 600ms ease;
-}
-
-.tn-device.is-on .tn-meter {
-  filter: brightness(1.04) saturate(1.08);
-}
-
-.tn-meter::before {
-  /* vinětace a teplé podsvícení od žárovek po stranách */
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  background:
-    radial-gradient(30% 50% at 0% 70%, rgba(255, 150, 40, 0.35), transparent),
-    radial-gradient(30% 50% at 100% 70%, rgba(255, 150, 40, 0.35), transparent);
-  box-shadow: inset 0 0 26px 6px rgba(70, 40, 5, 0.55), inset 0 6px 12px rgba(0, 0, 0, 0.45);
-  mix-blend-mode: multiply;
-}
-
-.tn-meter::after {
-  /* odlesk na krycím skle */
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  pointer-events: none;
-  background:
-    linear-gradient(162deg, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0.12) 26%, rgba(255, 255, 255, 0) 27%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.18), transparent 30%);
-}
-
-.tn-meter-svg {
-  position: relative;
-  z-index: 1;
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-.tn-m-arc {
-  fill: none;
-  stroke: #2a2116;
-  stroke-width: 1.3;
-}
-
-.tn-m-tick {
-  stroke: #2a2116;
-  stroke-width: 1;
-}
-
-.tn-m-tick.is-major {
-  stroke-width: 1.8;
-}
-
-.tn-m-tick.is-ok {
-  stroke: #1d7a3c;
-}
-
-.tn-m-tick.is-warn {
-  stroke: #a3251a;
-}
-
-.tn-m-band {
-  fill: none;
-  stroke-width: 7;
-}
-
-.tn-m-band.is-ok {
-  stroke: #2d8a4a;
-  stroke-width: 9;
-  opacity: 0.8;
-}
-
-.tn-m-band.is-warn {
-  stroke: #b8352a;
-  stroke-width: 3;
-  opacity: 0.75;
-}
-
-.tn-m-num {
-  fill: #2a2116;
-  font: 600 13px var(--tn-font);
-  text-anchor: middle;
-  dominant-baseline: central;
-}
-
-.tn-m-sym {
-  fill: #3a2e1d;
-  font: 400 26px Georgia, 'Times New Roman', serif;
-  text-anchor: middle;
-}
-
-.tn-m-title {
-  fill: #2a2116;
-  font: 600 15px var(--tn-font);
-  letter-spacing: 0.32em;
-  text-anchor: middle;
-  text-transform: uppercase;
-}
-
-.tn-m-unit {
-  fill: #6d5833;
-  font: italic 500 12px var(--tn-font);
-  letter-spacing: 0.2em;
-  text-anchor: middle;
-}
-
-.tn-m-brand {
-  fill: #7a6440;
-  font: 400 8px var(--tn-logo);
-  letter-spacing: 0.4em;
-  text-anchor: middle;
-}
-
-.tn-needle-shape path {
-  fill: #c0261b;
-}
-
-.tn-needle-shape rect {
-  fill: #1c1a18;
-}
-
-.tn-needle .tn-needle-shape path {
-  fill: #b81f15;
-}
-
-.tn-needle-shadow {
-  opacity: 0.5;
-}
-
-.tn-needle-shadow path,
-.tn-needle-shadow rect {
-  fill: #2a1600;
-}
-
-.tn-m-shroud {
-  fill: #141312;
-}
-
-.tn-m-shroud-edge {
-  fill: none;
-  stroke: rgba(255, 255, 255, 0.22);
-  stroke-width: 1;
-}
-
-/* ---------- kontrolky pod měřákem (velké „drahokamové“ žárovky) ---------- */
-.tn-meter-col {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.tn-lamps {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: 2px 4px 0;
-}
-
-.tn-lamp {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-}
-
-.tn-lamp .tn-legend {
-  font-size: 11px;
+.tn-cents {
+  font-size: 34px;
   font-weight: 700;
 }
 
-.tn-jewel {
-  --lamp: #ffb24a;
-  --lamp-off: #4a3420;
-  position: relative;
-  display: block;
-  flex: none;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  /* broušené sklíčko – fazety přes conic-gradient */
-  background:
-    radial-gradient(circle at 38% 32%, rgba(255, 255, 255, 0.55) 0 10%, transparent 26%),
-    conic-gradient(from 22deg, color-mix(in srgb, var(--lamp-off) 70%, #fff), var(--lamp-off), color-mix(in srgb, var(--lamp-off) 55%, #000), var(--lamp-off), color-mix(in srgb, var(--lamp-off) 75%, #fff), var(--lamp-off), color-mix(in srgb, var(--lamp-off) 55%, #000), var(--lamp-off), color-mix(in srgb, var(--lamp-off) 70%, #fff));
-  box-shadow:
-    0 0 0 2px #8d9093,
-    0 0 0 3.5px #ecebe8,
-    0 0 0 4.5px rgba(0, 0, 0, 0.35),
-    2px 3px 4px 4px rgba(0, 0, 0, 0.18),
-    inset 0 -2px 3px rgba(0, 0, 0, 0.55);
-  transition: background 120ms, box-shadow 160ms;
+.tn-hz {
+  color: var(--muted);
 }
 
-.tn-lamp-red .tn-jewel { --lamp: #ff4f2e; --lamp-off: #4f1c15; }
-.tn-lamp-green .tn-jewel { --lamp: #5dff7a; --lamp-off: #1b3d22; }
-
-.tn-device.is-low .tn-lamp-low .tn-jewel,
-.tn-device.is-ok .tn-lamp-ok .tn-jewel,
-.tn-device.is-high .tn-lamp-high .tn-jewel {
-  background:
-    radial-gradient(circle at 40% 34%, #fffdf0 0 12%, transparent 34%),
-    conic-gradient(from 22deg, color-mix(in srgb, var(--lamp) 55%, #fff), var(--lamp), color-mix(in srgb, var(--lamp) 70%, #000), var(--lamp), color-mix(in srgb, var(--lamp) 55%, #fff), var(--lamp), color-mix(in srgb, var(--lamp) 70%, #000), var(--lamp), color-mix(in srgb, var(--lamp) 55%, #fff));
-  box-shadow:
-    0 0 0 2px #8d9093,
-    0 0 0 3.5px #ecebe8,
-    0 0 0 4.5px rgba(0, 0, 0, 0.35),
-    0 0 12px 4px color-mix(in srgb, var(--lamp) 70%, transparent),
-    0 0 26px 8px color-mix(in srgb, var(--lamp) 30%, transparent);
+.view-tuner:not(.has-signal) .tn-big {
+  color: var(--line);
 }
 
-.tn-device.is-ok .tn-lamp-ok .tn-jewel {
-  box-shadow:
-    0 0 0 2px #8d9093,
-    0 0 0 3.5px #ecebe8,
-    0 0 0 4.5px rgba(0, 0, 0, 0.35),
-    0 0 14px 6px rgba(93, 255, 122, 0.75),
-    0 0 40px 16px rgba(60, 230, 100, 0.35);
+.tn-scale-box {
+  margin: 10px 0 4px;
 }
 
-.tn-device.is-ok .tn-lamp-ok .tn-legend {
-  color: #0f3d1a;
-}
-
-/* ---------- displej: oranžová neonová sedmisegmentovka ---------- */
-.tn-bezel-readout {
-  display: flex;
-}
-
-.tn-readout {
-  position: relative;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  overflow: hidden;
-  padding: 10px 14px 12px;
-  border-radius: 2px;
-  background:
-    radial-gradient(60% 70% at 50% 45%, #1e0f08, #0c0605 70%, #050303);
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 22px rgba(0, 0, 0, 0.9);
-}
-
-.tn-readout::after {
-  /* kouřové sklo s odleskem */
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background:
-    linear-gradient(160deg, rgba(255, 255, 255, 0.13) 0%, rgba(255, 255, 255, 0.035) 32%, transparent 33%),
-    radial-gradient(120% 90% at 50% 50%, transparent 60%, rgba(0, 0, 0, 0.45));
-}
-
-.tn-readout-top {
-  align-self: stretch;
-  display: flex;
-  justify-content: space-between;
-  font: 600 10.5px var(--tn-font);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(232, 214, 186, 0.55);
-}
-
-.tn-device[data-mode='guitar'] .tn-readout-mode::before { content: 'Kytara'; }
-.tn-device[data-mode='chromatic'] .tn-readout-mode::before { content: 'Chromat.'; }
-
-.tn-readout-note {
-  display: flex;
-  align-items: flex-end;
-  gap: 8px;
-}
-
-.tn-seg-display svg {
-  display: block;
-  height: 100%;
-  width: auto;
-  overflow: visible;
-}
-
-.tn-seg-note { height: 92px; }
-.tn-seg-oct { height: 50px; }
-.tn-seg-small { height: 24px; }
-
-.tn-seg {
-  fill: rgba(255, 106, 40, 0.05);
-  transition: fill 90ms;
-}
-
-.tn-device.is-on .tn-seg {
-  fill: rgba(255, 106, 40, 0.085);
-}
-
-.tn-seg.is-on,
-.tn-device.is-on .tn-seg.is-on {
-  fill: #ff8a3c;
-}
-
-.tn-seg-display:has(.is-on) svg {
-  filter: drop-shadow(0 0 3px rgba(255, 110, 40, 0.9)) drop-shadow(0 0 10px rgba(255, 80, 20, 0.45));
-}
-
-.tn-accs {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  align-self: stretch;
-  justify-content: flex-start;
-  gap: 4px;
-  padding: 2px 0 56px;
-}
-
-.tn-acc {
-  font: 400 24px/1 Georgia, 'Times New Roman', serif;
-  color: rgba(255, 106, 40, 0.1);
-  transition: color 90ms, text-shadow 90ms;
-}
-
-.tn-acc.is-on {
-  color: #ff8a3c;
-  text-shadow: 0 0 4px rgba(255, 110, 40, 0.9), 0 0 12px rgba(255, 80, 20, 0.5);
-}
-
-.tn-readout-nums {
-  display: flex;
-  gap: 30px;
-  align-items: flex-end;
-}
-
-.tn-num {
-  display: flex;
-  align-items: flex-end;
-  gap: 6px;
-}
-
-.tn-num i {
-  font: normal 600 11px/1 var(--tn-font);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(232, 214, 186, 0.55);
-}
-
-.tn-msg {
-  min-height: 15px;
-  font: 600 12px/15px var(--tn-font);
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: rgba(255, 150, 80, 0.55);
-}
-
-.tn-device.is-on .tn-msg {
-  color: #ff9a55;
-  text-shadow: 0 0 6px rgba(255, 110, 40, 0.6);
-}
-
-.tn-readout-a4 {
-  font-variant-numeric: tabular-nums;
-}
-
-.tn-sr {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
-
-/* ---------- skleněná stupnice ---------- */
-.tn-bezel-dial {
-  margin-top: 13px;
-}
-
-.tn-dial-glass {
-  position: relative;
-  overflow: hidden;
-  border-radius: 2px;
-  padding: 3px 0 2px;
-  background:
-    radial-gradient(55% 140% at 50% 50%, #12261f, #07110d 70%, #030605);
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 18px rgba(0, 0, 0, 0.9);
-}
-
-.tn-dial-glass::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.03) 45%, transparent 46%),
-    linear-gradient(90deg, rgba(0, 0, 0, 0.55), transparent 9%, transparent 91%, rgba(0, 0, 0, 0.55));
-}
-
-.tn-dial-svg {
+.tn-scale {
   display: block;
   width: 100%;
   height: auto;
-  filter: brightness(0.62);
-  transition: filter 600ms ease;
 }
 
-.tn-device.is-on .tn-dial-svg {
-  filter: brightness(1) drop-shadow(0 0 2px rgba(150, 255, 200, 0.45));
+.tn-ok-zone {
+  fill: #e6f4ea;
 }
 
-.tn-d-rule,
-.tn-d-tick {
-  stroke: #bfe8cf;
-  stroke-width: 0.8;
+.tn-tick {
+  stroke: #999;
+  stroke-width: 2;
 }
 
-.tn-d-tick.is-major {
-  stroke-width: 1.4;
+.tn-tick.is-major {
+  stroke: #111;
 }
 
-.tn-d-note {
-  fill: #d8f3e2;
-  font: 600 14px var(--tn-font);
+.tn-num {
+  fill: #555;
+  font: 600 15px var(--font-ui);
   text-anchor: middle;
 }
 
-.tn-d-note.is-sharp {
-  fill: #8dbba0;
-  font-size: 10.5px;
+.tn-mark {
+  stroke: #111;
+  stroke-width: 6;
 }
 
-.tn-d-legend {
-  fill: #7fa792;
-  font: 600 8.5px var(--tn-font);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.tn-d-string {
-  fill: none;
-  stroke: #ffb54a;
-  stroke-width: 1;
-}
-
-.tn-d-snum {
-  fill: #ffc56e;
-  font: 600 10px var(--tn-font);
-  text-anchor: middle;
-}
-
-.tn-d-sname {
-  fill: #ffc56e;
-  font: 600 12px var(--tn-font);
-}
-
-.tn-device[data-mode='chromatic'] .tn-d-string,
-.tn-device[data-mode='chromatic'] .tn-d-snum,
-.tn-device[data-mode='chromatic'] .tn-d-sname {
-  opacity: 0.45;
-}
-
-.tn-dial-pointer {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 3px;
-  margin-left: -1.5px;
-  background: linear-gradient(90deg, #7a1208, #ff4d2a 45%, #ffb199 55%, #a5180b);
-  box-shadow: 0 0 6px rgba(255, 70, 30, 0.6), 2px 0 3px rgba(0, 0, 0, 0.6);
-  opacity: 0.75;
-  transition: opacity 400ms, box-shadow 400ms;
-}
-
-.tn-device.is-on .tn-dial-pointer {
-  opacity: 1;
-  box-shadow: 0 0 8px 1px rgba(255, 80, 30, 0.85), 0 0 18px rgba(255, 60, 20, 0.4), 2px 0 3px rgba(0, 0, 0, 0.6);
-}
-
-/* ---------- ovládací řada ---------- */
-.tn-controls {
-  display: grid;
-  grid-template-columns: 100px 132px 140px 1fr;
-  gap: 26px;
-  margin-top: 12px;
-  padding: 0 4px;
-}
-
-.tn-ctl {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.tn-ctl .tn-legend-head {
-  align-self: stretch;
+.tn-verdict {
+  min-height: 1.5em;
+  font-size: 20px;
+  font-weight: 700;
   text-align: center;
 }
 
-/* vypínač mikrofonu – hlavní ovladač na chromovaném štítku */
-.tn-mic-row {
+.tn-verdict.is-ok {
+  color: var(--lane-1);
+}
+
+.tn-strings {
   display: flex;
-  align-items: center;
-  gap: 12px;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 22px;
+  margin: 22px 0 14px;
+  padding: 10px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
 }
 
-.tn-plate {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  width: 62px;
-  height: 120px;
-  padding: 7px 0 6px;
-  border-radius: 6px;
-  background:
-    linear-gradient(115deg, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0.55) 45%, rgba(255, 255, 255, 0) 58%),
-    linear-gradient(180deg, #f3f1ec, #b9b6b0 18%, #e6e3dd 40%, #8f8c87 62%, #d9d6d0 82%, #a29f99);
-  box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.3),
-    inset 0 0 0 2px rgba(255, 255, 255, 0.18),
-    3px 5px 7px rgba(0, 0, 0, 0.35);
-}
-
-.tn-plate-screw {
-  position: absolute;
-  left: 50%;
-  top: 4px;
-  width: 6px;
-  height: 6px;
-  margin-left: -3px;
-  border-radius: 50%;
-  background:
-    linear-gradient(60deg, transparent 42%, rgba(20, 20, 20, 0.7) 43%, rgba(20, 20, 20, 0.7) 57%, transparent 58%),
-    radial-gradient(circle at 35% 30%, #fff, #9a9894 70%);
-  box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.5);
-  display: none;
-}
-
-.tn-plate-legend {
-  font: 700 10px/1 var(--tn-font);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: #1c1c1c;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
-}
-
-.tn-lever {
-  position: relative;
-  width: 58px;
-  height: 78px;
-  padding: 0;
-  border: 0;
-  background: none;
-  cursor: pointer;
-  perspective: 320px;
-}
-
-.tn-lever-nut {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 40px;
-  height: 40px;
-  margin: -20px 0 0 -20px;
-  border-radius: 50%;
-  background:
-    radial-gradient(circle at 50% 50%, #1e1e1e 0 7px, transparent 7.5px),
-    radial-gradient(circle at 50% 50%, #e4e4e4 0 11px, #84878a 12px, transparent 12.5px),
-    conic-gradient(from 20deg, #f7f7f7, #8c8f91 12%, #ececec 25%, #7e8183 38%, #f2f2f2 50%, #8c8f91 62%, #ececec 75%, #7e8183 88%, #f7f7f7);
-  box-shadow: 2px 3px 4px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.6);
-}
-
-.tn-lever-bat {
-  position: absolute;
-  left: 50%;
-  bottom: 50%;
-  width: 14px;
-  height: 46px;
-  margin-left: -7px;
-  border-radius: 6px 6px 3px 3px;
-  transform-origin: 50% 100%;
-  background: linear-gradient(90deg, #5f6264, #fbfbfb 32%, #cfd1d2 55%, #686b6d);
-  box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.55);
-  transform: rotateX(155deg);
-  transition: transform 110ms cubic-bezier(0.5, 1.6, 0.6, 1);
-}
-
-.tn-lever-bat::after {
-  /* kulička na konci páčky */
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: -8px;
-  width: 20px;
-  height: 20px;
-  margin-left: -10px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 38% 32%, #fff, #d2d4d5 35%, #6a6d6f 85%);
-  box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.55);
-}
-
-.tn-lever::after {
-  /* stín páčky na štítku (světlo zleva shora) */
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 14px;
-  height: 36px;
-  margin-left: -4px;
-  border-radius: 7px;
-  background: rgba(0, 0, 0, 0.32);
-  filter: blur(3px);
-  transform-origin: 50% 0;
-  transform: translate(5px, 6px);
-  z-index: -1;
-  transition: transform 110ms;
-}
-
-.tn-lever[aria-pressed='true'] .tn-lever-bat {
-  transform: rotateX(32deg);
-}
-
-.tn-lever[aria-pressed='true']::after {
-  transform: translate(7px, 4px) scaleY(0.55);
-}
-
-.tn-mic-lamp {
-  --lamp: #ffb24a;
-  --lamp-off: #5a3a18;
-  width: 18px;
-  height: 18px;
-}
-
-.tn-device.is-on .tn-mic-lamp {
-  background:
-    radial-gradient(circle at 40% 34%, #fffdf0 0 12%, transparent 30%),
-    conic-gradient(from 30deg, color-mix(in srgb, var(--lamp) 60%, #fff), var(--lamp), color-mix(in srgb, var(--lamp) 70%, #000), var(--lamp), color-mix(in srgb, var(--lamp) 60%, #fff), var(--lamp), color-mix(in srgb, var(--lamp) 70%, #000), var(--lamp));
-  box-shadow:
-    0 0 0 2px #8d9093,
-    0 0 0 3.5px #ecebe8,
-    0 0 0 4.5px rgba(0, 0, 0, 0.35),
-    0 0 12px 4px color-mix(in srgb, var(--lamp) 70%, transparent),
-    0 0 26px 8px color-mix(in srgb, var(--lamp) 30%, transparent);
-}
-
-.tn-lever:focus-visible,
-.tn-knob:focus-visible,
-.tn-key:focus-visible,
-.tn-nudge:focus-visible {
-  outline: 2px solid var(--tn-amber);
-  outline-offset: 3px;
-  border-radius: 8px;
-}
-
-
-/* otočné knoflíky */
-.tn-knob-well {
-  position: relative;
-  width: 104px;
-  height: 92px;
-  display: grid;
-  place-items: center;
-}
-
-.tn-knob-scale {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 116px;
-  height: 116px;
-  margin: -58px 0 0 -58px;
-  overflow: visible;
-}
-
-.tn-k-tick {
-  stroke: var(--tn-ink);
-  stroke-width: 1;
-}
-
-.tn-k-tick.is-major {
-  stroke-width: 1.6;
-}
-
-.tn-k-num {
-  fill: var(--tn-ink);
-  font: 600 11px var(--tn-font);
-  text-anchor: middle;
-}
-
-.tn-knob {
-  position: relative;
-  width: 72px;
-  height: 72px;
-  padding: 0;
-  border: 0;
-  border-radius: 50%;
-  cursor: pointer;
-  /* vroubkovaný plášť */
-  background:
-    radial-gradient(circle, transparent 58%, rgba(0, 0, 0, 0.35) 70%, transparent 72%),
-    repeating-conic-gradient(from 0deg, #f4f4f4 0deg 2.2deg, #6f7274 3deg 4.6deg, #c3c5c6 5deg 6deg),
-    #a5a8aa;
-  box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.45),
-    2px 3px 2px rgba(0, 0, 0, 0.35),
-    6px 10px 14px rgba(0, 0, 0, 0.35),
-    inset 0 2px 2px rgba(255, 255, 255, 0.6),
-    inset 0 -3px 4px rgba(0, 0, 0, 0.5);
-}
-
-.tn-knob::before {
-  /* světlo na plášti shora, stín dole – nezávisle na otočení */
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.45), transparent 40%, rgba(0, 0, 0, 0.45));
-  pointer-events: none;
-}
-
-.tn-knob-cap {
-  position: absolute;
-  inset: 9px;
-  border-radius: 50%;
-  /* soustružený hliník */
-  background:
-    repeating-radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.06) 0 1px, rgba(0, 0, 0, 0.05) 1px 2px),
-    conic-gradient(from 15deg, #f6f6f6, #9a9d9f 10%, #e9eaeb 22%, #8a8d90 35%, #f0f0f0 50%, #9a9d9f 60%, #e9eaeb 72%, #8a8d90 85%, #f6f6f6);
-  box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.35),
-    0 1px 0 1px rgba(255, 255, 255, 0.4),
-    inset 0 1px 1px rgba(255, 255, 255, 0.9),
-    inset 0 -1px 2px rgba(0, 0, 0, 0.35);
-}
-
-.tn-knob-mark {
-  position: absolute;
-  inset: 0;
-  transform: rotate(var(--rot, 0deg));
-  transition: transform 180ms cubic-bezier(0.3, 1.5, 0.5, 1);
-}
-
-.tn-knob-mark::before {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: 3px;
-  width: 3px;
-  height: 15px;
-  margin-left: -1.5px;
-  border-radius: 1px;
-  background: #1a1a1a;
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 0 0 0.5px #000;
-}
-
-.tn-knob-mode .tn-knob-mark::before {
-  background: #c22a1c;
-}
-
-.tn-knob:active .tn-knob-cap {
-  box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.35),
-    inset 0 1px 3px rgba(0, 0, 0, 0.35);
-}
-
-/* polohy voliče režimu – gravírované aretace */
-.tn-k-dot {
-  fill: var(--tn-ink-soft);
-}
-
-.tn-k-dot.is-detent {
-  fill: var(--tn-ink);
-  stroke: rgba(255, 255, 255, 0.55);
-  stroke-width: 0.8;
-}
-
-.tn-pos {
-  position: absolute;
-  top: -1px;
-  font-size: 10px;
-  color: var(--tn-ink-soft);
-}
-
-.tn-pos-l { right: 66%; }
-.tn-pos-r { left: 66%; }
-
-.tn-ctl-mode .tn-knob-well {
-  padding-top: 12px;
-  height: 104px;
-}
-
-.tn-ctl-mode .tn-knob-scale {
-  margin-top: -52px;
-}
-
-.tn-device[data-mode='guitar'] .tn-pos-l,
-.tn-device[data-mode='chromatic'] .tn-pos-r {
-  color: #000;
-}
-
-/* jemné ladění A4 */
-.tn-ctl-a4 .tn-knob-well {
-  height: 92px;
-}
-
-.tn-nudges {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 2px;
-}
-
-.tn-nudge {
-  width: 24px;
-  height: 18px;
-  padding: 0;
-  border: 0;
-  border-radius: 3px;
-  cursor: pointer;
-  font: 700 13px/1 var(--tn-font);
-  color: #2b2e31;
-  background: linear-gradient(180deg, #fbfbfb, #c9cbcc 60%, #a8abad);
-  box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.45),
-    0 2px 0 #6f7274,
-    0 3px 3px rgba(0, 0, 0, 0.35),
-    inset 0 1px 0 #fff;
-  transition: transform 50ms, box-shadow 50ms;
-}
-
-.tn-nudge:active {
-  transform: translateY(2px);
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.45), 0 0 0 #6f7274, 0 1px 1px rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(0, 0, 0, 0.2);
-}
-
-/* tlačítka strun */
-.tn-ctl-strings {
-  align-items: stretch;
-}
-
-.tn-keys {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 10px;
-  padding: 2px 4px 0;
-}
-
-.tn-key {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 7px;
-  padding: 0;
-  border: 0;
-  background: none;
-  cursor: pointer;
-}
-
-.tn-key-lamp {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 40% 35%, #8a6a40, #3e2a15 60%, #140c05);
-  box-shadow: 0 0 0 1.5px #8d9093, 0 0 0 2.5px #eceeef, inset 0 -1px 1px rgba(0, 0, 0, 0.6);
-  transition: background 100ms, box-shadow 100ms;
-}
-
-.tn-key.is-lit .tn-key-lamp {
-  background: radial-gradient(circle at 42% 38%, #fffbe8, #ffb54a 50%, #b86b10);
-  box-shadow:
-    0 0 0 1.5px #8d9093,
-    0 0 0 2.5px #eceeef,
-    0 0 9px 3px rgba(255, 170, 60, 0.75),
-    0 0 20px 6px rgba(255, 150, 40, 0.3);
-}
-
-.tn-key-cap {
-  position: relative;
-  width: 100%;
-  max-width: 54px;
-  height: 36px;
-  border-radius: 3px;
-  background:
-    var(--tn-brushed),
-    linear-gradient(180deg, #f7f8f8, #d4d6d7 45%, #b6b9bb);
-  background-size: 300px 120px, 100% 100%;
-  box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.55),
-    0 4px 0 #6d7073,
-    0 5px 0 rgba(0, 0, 0, 0.5),
-    3px 8px 8px rgba(0, 0, 0, 0.35),
-    inset 0 1px 0 #fff,
-    inset 0 -2px 2px rgba(0, 0, 0, 0.15);
-  transition: transform 60ms, box-shadow 60ms;
-}
-
-.tn-key-cap::after {
-  /* mírně prohnutá hmatová plocha */
-  content: '';
-  position: absolute;
-  inset: 4px 5px 6px;
-  border-radius: 2px;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.25) 60%, rgba(255, 255, 255, 0));
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.12), 0 1px 0 rgba(255, 255, 255, 0.5);
-}
-
-.tn-key.is-down .tn-key-lamp {
-  background: radial-gradient(circle at 42% 38%, #fffbe8, #ffb54a 50%, #b86b10);
-  box-shadow:
-    0 0 0 1.5px #8d9093,
-    0 0 0 2.5px #eceeef,
-    0 0 9px 3px rgba(255, 170, 60, 0.75),
-    0 0 20px 6px rgba(255, 150, 40, 0.3);
-}
-
-.tn-key.is-down .tn-key-cap,
-.tn-key:active .tn-key-cap {
-  transform: translateY(2px);
-  box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.55),
-    0 1px 0 #6d7073,
-    0 2px 0 rgba(0, 0, 0, 0.5),
-    0 3px 4px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.7),
-    inset 0 2px 4px rgba(0, 0, 0, 0.15);
-}
-
-.tn-key-label {
-  margin-top: 3px;
-  font: 600 13px/1 var(--tn-font);
-  letter-spacing: 0.08em;
-  color: var(--tn-ink);
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
-}
-
-.tn-key-label b {
-  margin-right: 4px;
-  font-size: 10px;
-  font-weight: 600;
-  color: var(--tn-ink-soft);
-}
-
-/* ---------- texty pod přístrojem ---------- */
-.tn-note-text {
-  margin: 20px auto 0;
-  max-width: 900px;
+.tn-label {
   color: var(--muted);
-  font: 12.5px/1.5 var(--font-ui);
-  text-align: center;
+  font-size: var(--small);
+}
+
+.tn-string {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--link);
+  font-size: 26px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: rgba(6, 69, 173, 0.35);
+  text-underline-offset: 4px;
+}
+
+.tn-string small {
+  margin-right: 3px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.tn-string.is-heard {
+  color: var(--text);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.tn-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 24px;
+  font-size: var(--small);
+}
+
+.tn-mic {
+  padding: 2px 10px;
+  border: 1px solid var(--text);
+  border-radius: 3px;
+  background: var(--bg);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.tn-mic[aria-pressed='true'] {
+  background: var(--invert-bg);
+  color: var(--invert-text);
+}
+
+.tn-help {
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: var(--small);
 }
 
 .tn-error {
-  margin: 12px auto 0;
-  max-width: 720px;
-  padding: 10px 14px;
-  border-radius: 4px;
-  border: 1px solid #6e2219;
-  background: linear-gradient(180deg, #3a120d, #2a0c08);
-  color: #ffd3cc;
-  font: 13px/1.45 var(--font-ui);
-  text-align: center;
+  margin-top: 10px;
+  font-weight: 700;
 }
 
-.tn-error[hidden] {
-  display: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .tn-knob-mark,
-  .tn-lever-bat,
-  .tn-lever::after,
-  .tn-jewel,
-  .tn-key-lamp,
-  .tn-key-cap,
-  .tn-meter,
-  .tn-dial-svg,
-  .tn-dial-pointer,
-  .tn-seg,
-  .tn-acc,
-  .tn-nudge {
-    transition: none !important;
+@media (max-width: 640px) {
+  .tn-big {
+    font-size: 84px;
   }
 }

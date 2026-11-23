@@ -8,7 +8,7 @@ Webová stránka na cvičení kytary:
 - **Ladička**: přes mikrofon.
 - **Metronom**: klik, woodblock nebo bicí.
 
-Celé je to čistý HTML/CSS/JS bez buildu a bez závislostí. Zvuk se syntetizuje přímo v prohlížeči (Web Audio API).
+Celé je to čistý HTML/CSS/JS bez buildu a bez závislostí. Vzhled je prostá stránka: bílé pozadí, černý text, barvu mají jen pruhy zdrojů tónů. Původní skeuomorfní podoba (kazetový deck, ladička a metronom jako přístroje) je v tagu `v1-skeuo` a na screenshotech v `docs/legacy-ui/`. Zvuk se syntetizuje přímo v prohlížeči (Web Audio API).
 
 ## Spuštění
 
@@ -49,15 +49,15 @@ Mikrofon (ladička) funguje jen na `localhost` nebo přes HTTPS.
 
 ## Doprovod: sazby, rytmy a režimy
 
-- **Sazba** = jakými hmaty kolečko zahraješ: otevřené akordy, barré E/A, shell chords, trojzvuky nahoře, barvy 6 a 9, bas + akord, dvojhmaty a shuffle, drop 2. Vybírá se na konzoli nahoře nebo klávesou **A** (Shift+A zpět).
+- **Sazba** = jakými hmaty kolečko zahraješ: otevřené akordy, barré E/A, shell chords, trojzvuky nahoře, barvy 6 a 9, bas + akord, dvojhmaty a shuffle, drop 2. Vybírá se v řádku Sazba nebo klávesou **A** (Shift+A zpět).
 - **Rytmus** = co dělá pravá ruka: úhozy (↓ ↑ ×), boom-chick, valčík, polka, Travis, arpeggio p-i-m-a, Freddie Green, charleston, bossa, reggae, funk, shuffle. Nabízí se jen rytmy, které sedí do taktu kolečka. Klávesa **R** (Shift+R zpět).
 - Obě volby si aplikace pamatuje pro každé kolečko. Tlačítko **groove k rytmu** nabídne bicí a basu, které k rytmu patří (nic se nepřepne samo).
-- **Mapa kolečka**: diagram hmatu pro každý akord. Aktuální svítí, další se před změnou rozbliká a odpočítá „za 2 → za 1“. U dalšího hmatu jsou tyrkysově označené tóny, které zůstávají.
-- **Velký diagram a hmatník**: aktuální hmat s intervaly (klávesou **L** názvy tónů), při odpočtu i tóny dalšího hmatu (bílý kroužek).
-- **Mřížka rytmu** nad tabulaturou: doby, ↓ ↑ × B A p i m a, přízvuky červeně; během hraní ukazatel kroku.
+- **Mapa kolečka**: diagram hmatu pro každý akord. Aktuální je orámovaný, další se před změnou označí a odpočítá „za 2 → za 1“. U dalšího hmatu jsou zeleným kroužkem označené tóny, které zůstávají.
+- **Velký diagram a hmatník**: aktuální hmat s intervaly (klávesou **L** názvy tónů), při odpočtu i tóny dalšího hmatu (prázdný čárkovaný kroužek).
+- **Mřížka rytmu** nad tabulaturou: doby, ↓ ↑ × B A p i m a, přízvuky podtržené; během hraní je hraný krok invertovaný.
 - **Režimy**: Ukázka (kytara hraje), Hraju sám (kytara ztlumená, bicí a basa hrají), Střídání (takt ukázka, takt ty – na displeji UKÁZKA / TY).
 - **Wiki** (W): hmaty v kolečku, u každé sazby proč funguje a cvičení, u rytmů rada a doporučený groove. U shell chords odkaz do Sólování na „Linku vodicích tónů“ – horní hlasy shellů jsou tytéž tóny 3 a 7.
-- **Doprovod kytarou v Sólování**: v hlavičce Sólování přepínač *Doprovod: klávesy / kytara*. Kytara pak hraje sazbu a rytmus vybrané pro kolečko v Doprovodu. Hlasitost kytary řídí knoflík *Akordy*.
+- **Doprovod kytarou v Sólování**: v hlavičce Sólování přepínač *Doprovod: klávesy / kytara*. Kytara pak hraje sazbu a rytmus vybrané pro kolečko v Doprovodu. Hlasitost kytary řídí posuvník *Akordy* v nabídce *mix* nahoře.
 
 ## Ovládání
 

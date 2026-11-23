@@ -1,389 +1,375 @@
-/* Sólování: lišta přístupů, mapa kolečka, pruhy (hmatníky pod sebou) a wiki vpravo. */
-
-.view-solo {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 22px;
-  align-items: start;
-  padding-top: 18px;
-}
-
-.view-solo.has-wiki {
-  grid-template-columns: minmax(0, 1fr) 360px;
-}
+/* Sólování (a společné kusy pro Doprovod): hlavička, přístupy, mapa kolečka, pruhy, lick, wiki. */
 
 .solo-main {
-  display: grid;
-  gap: 12px;
   min-width: 0;
 }
 
 /* ---------- hlavička ---------- */
 .solo-header {
   display: flex;
-  align-items: flex-end;
+  flex-wrap: wrap;
+  align-items: baseline;
   justify-content: space-between;
-  gap: 16px;
+  gap: 6px 20px;
+  margin-bottom: 10px;
+}
+
+.solo-header > div:first-child {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
 }
 
 .solo-header h1 {
-  margin: 0;
   font-size: 22px;
-  font-weight: 700;
+  letter-spacing: -0.01em;
 }
 
 .solo-sub {
   color: var(--muted);
-  font-size: 14px;
 }
 
 .solo-tools {
   display: flex;
-  align-items: center;
-  gap: 8px;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 18px;
+  font-size: var(--small);
 }
 
 .ctl-group {
-  display: flex;
-  align-items: center;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: var(--surface);
-  overflow: hidden;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
 }
 
-.ctl {
-  padding: 6px 11px;
-  border: 0;
-  border-right: 1px solid var(--line);
-  background: transparent;
+.ctl-label {
   color: var(--muted);
-  font-size: 13px;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.ctl:last-child {
-  border-right: 0;
 }
 
 .win-label {
-  padding: 0 10px;
-  font-size: 13px;
-  font-variant-numeric: tabular-nums;
-  border-right: 1px solid var(--line);
-  white-space: nowrap;
+  color: var(--muted);
 }
 
 .wiki-toggle {
-  padding: 6px 12px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: var(--surface);
-  color: var(--muted);
-  font-size: 13px;
-  font-weight: 700;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--link);
+  font-size: var(--small);
+  text-decoration: underline;
+  text-decoration-color: rgba(6, 69, 173, 0.35);
 }
 
-.wiki-toggle[aria-pressed='true'] {
-  color: var(--accent);
-  border-color: rgba(255, 179, 71, 0.45);
-}
-
-/* ---------- lišta přístupů ---------- */
-.approach-row {
+/* ---------- přístupy ---------- */
+.approach-row,
+.cycle-licks {
   display: flex;
-  align-items: center;
-  gap: 10px;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 10px;
 }
 
 .approach-label {
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  flex: none;
+  min-width: 64px;
   color: var(--muted);
+  font-size: var(--small);
 }
 
 .approach-bar {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  gap: 6px;
+  align-items: baseline;
+  gap: 4px 16px;
+  font-size: 15px;
 }
 
-.approach-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 13px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: var(--surface);
-  color: var(--text);
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.approach-btn[aria-checked='true'] {
-  border-color: var(--accent);
-  background: rgba(255, 179, 71, 0.14);
-  color: #ffe2b8;
-}
-
-.approach-more {
-  padding: 6px 10px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: var(--surface);
-  color: var(--muted);
-  font-size: 13px;
-}
-
-.lvl {
-  display: inline-flex;
-}
-
-.lvl::before {
-  content: '';
-  width: calc(var(--n) * 6px - 2px);
-  height: 4px;
-  background: radial-gradient(circle, var(--muted) 2px, transparent 2.2px) 0 0 / 6px 4px repeat-x;
-}
-
-.lvl-1 {
-  --n: 1;
-}
-
-.lvl-2 {
-  --n: 2;
-}
-
-.lvl-3 {
-  --n: 3;
-}
-
-/* ---------- mapa kolečka ---------- */
+/* ---------- mapa kolečka: takty v řadě, barva pruhu nahoře, hraný takt invertovaný ---------- */
 .map-strip {
   display: grid;
-  grid-template-columns: repeat(var(--cols, 4), minmax(0, 1fr));
-  gap: 4px;
+  grid-template-columns: repeat(var(--cols, 8), minmax(0, 1fr));
+  margin-bottom: 14px;
+  border-left: 1px solid var(--line);
 }
 
 .map-cell {
   display: grid;
   gap: 1px;
-  padding: 6px 8px 5px;
-  border: 1px solid var(--line);
-  border-bottom: 4px solid var(--lane);
-  border-radius: 6px;
-  background: var(--surface);
-  color: var(--text);
+  padding: 5px 8px 6px;
+  border: 0;
+  border-top: 5px solid var(--lane);
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: var(--bg);
   text-align: left;
-  min-width: 0;
+  line-height: 1.2;
 }
 
 .map-cell b {
-  font-size: 16px;
+  font-size: 18px;
 }
 
 .map-cell span {
-  font-size: 12px;
   color: var(--lane);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-weight: 700;
 }
 
 .map-cell small {
-  font-size: 10.5px;
   color: var(--muted);
+  font-size: 11.5px;
 }
 
 .map-cell.is-current {
-  background: color-mix(in srgb, var(--lane) 20%, var(--surface));
-  border-color: var(--lane);
+  background: var(--invert-bg);
+  color: var(--invert-text);
+}
+
+.map-cell.is-current small {
+  color: #ccc;
+}
+
+.map-cell.is-current span {
+  color: var(--invert-text);
+  text-decoration: underline;
+  text-decoration-color: var(--lane);
+  text-decoration-thickness: 3px;
+  text-underline-offset: 3px;
 }
 
 /* ---------- pruhy ---------- */
 .lanes {
   display: grid;
-  gap: 8px;
+  gap: 10px;
 }
 
 .lane {
-  border: 1px solid var(--line);
+  padding-left: 10px;
   border-left: 5px solid var(--lane);
-  border-radius: 8px;
-  background: linear-gradient(180deg, #181b1f, #14171a);
-  padding: 4px 10px 2px;
-  transition: opacity 150ms, border-color 150ms, box-shadow 150ms;
-}
-
-.lane.is-idle {
-  opacity: 0.42;
-}
-
-.lane.is-active {
-  border-color: var(--lane);
-  box-shadow: 0 0 0 1px var(--lane), 0 0 18px color-mix(in srgb, var(--lane) 22%, transparent);
-}
-
-.lane.is-next {
-  opacity: 0.85;
-  border-color: var(--lane);
-  animation: lane-next 0.9s ease-in-out infinite alternate;
-}
-
-@keyframes lane-next {
-  from {
-    box-shadow: 0 0 0 0 transparent;
-  }
-
-  to {
-    box-shadow: 0 0 0 2px var(--lane);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .lane.is-next {
-    animation: none;
-    box-shadow: 0 0 0 2px var(--lane);
-  }
 }
 
 .lane-head {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
-  gap: 10px;
-  min-height: 24px;
+  gap: 2px 12px;
+  margin-bottom: 2px;
 }
 
 .lane-name {
-  font-size: 12px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
   color: var(--lane);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .lane-src {
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 700;
 }
 
 .lane-caption {
-  font-size: 13px;
   color: var(--muted);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
-.lane.is-active .lane-caption {
-  color: var(--text);
+.lane-badge:not(:empty) {
+  padding: 0 6px;
+  background: var(--invert-bg);
+  color: var(--invert-text);
+  font-weight: 700;
 }
 
-.lane-badge {
+.lane-licks {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 2px 12px;
   margin-left: auto;
-  font-size: 15px;
-  font-weight: 800;
-  color: var(--lane);
+  font-size: var(--small);
 }
 
-.lane-fb .fb {
-  max-height: 210px;
+/* neaktivní pruh: šedý, ale tečky dál čitelné */
+.lane.is-idle {
+  border-left-color: var(--line);
 }
 
-.lanes[data-count='2'] .lane-fb .fb,
-.lanes[data-count='3'] .lane-fb .fb,
-.lanes[data-count='4'] .lane-fb .fb {
-  max-height: 132px;
+.lane.is-idle .fb-dot circle,
+.lane.is-idle .fb-dot rect {
+  fill: #8a8a8a;
 }
 
-/* ---------- pod pruhy ---------- */
+.lane.is-idle .lane-src,
+.lane.is-idle .lane-name {
+  color: var(--muted);
+}
+
+.lane.is-next {
+  border-left-style: dashed;
+}
+
+.lane.is-active .lane-src::before {
+  content: '▶ ';
+  font-size: 12px;
+  vertical-align: 2px;
+}
+
+/* ---------- spojka a legenda ---------- */
 .lane-hint {
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;
   justify-content: space-between;
-  gap: 16px;
-  min-height: 24px;
+  gap: 6px 20px;
+  margin: 8px 0 12px;
+  font-size: var(--small);
 }
 
 .lane-bridge {
-  font-size: 15px;
   font-weight: 700;
-  color: var(--accent);
 }
 
 .legend {
   display: flex;
   flex-wrap: wrap;
-  gap: 14px;
-  font-size: 12.5px;
+  gap: 4px 14px;
   color: var(--muted);
+  font-size: var(--small);
 }
 
 .legend-item {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
 }
 
 .legend-item i {
+  display: inline-block;
   width: 12px;
   height: 12px;
   border-radius: 50%;
-}
-
-.legend-item.is-src i {
-  background: #e9e4da;
+  background: #111;
 }
 
 .legend-item.is-src-root i {
   border-radius: 3px;
-  background: var(--accent);
+  box-shadow: inset 0 0 0 2px #111;
+  background: var(--lane-1);
+}
+
+.legend-item.is-src i {
+  background: var(--lane-1);
 }
 
 .legend-item.is-chord i {
-  background: #e9e4da;
-  box-shadow: 0 0 0 2.5px var(--chord);
+  background: var(--lane-1);
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px #111;
 }
 
 .legend-item.is-window i {
-  border-radius: 3px;
-  border: 1.5px dashed var(--accent);
+  border-radius: 2px;
+  background: transparent;
+  border: 1.5px dashed #111;
 }
 
-/* ---------- wiki ---------- */
+.legend-item.is-ghost i {
+  background: #fff;
+  border: 1.5px dashed #111;
+}
+
+/* ---------- lick ---------- */
+.lick-dock {
+  margin-top: 6px;
+  padding: 10px 0 0 10px;
+  border-left: 5px solid var(--lane);
+  border-top: 1px solid var(--line);
+}
+
+.lick-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 14px;
+}
+
+.play-lick {
+  padding: 1px 8px;
+  border: 1px solid var(--text);
+  border-radius: 3px;
+  background: var(--bg);
+  font-weight: 700;
+}
+
+.lick-title {
+  font-size: 17px;
+}
+
+.lick-where {
+  color: var(--muted);
+}
+
+.lick-shifts {
+  display: inline-flex;
+  gap: 8px;
+  font-size: var(--small);
+}
+
+.lick-close {
+  margin-left: auto;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1;
+}
+
+.lick-tip {
+  margin: 4px 0 6px;
+  max-width: 70ch;
+  color: var(--muted);
+}
+
+.tab-scroll {
+  overflow-x: auto;
+}
+
+/* ---------- wiki: obyčejný text ve sloupci ---------- */
 .wiki {
   position: sticky;
-  top: 76px;
-  max-height: calc(100vh - 96px);
-  overflow: auto;
-  padding: 14px 16px 24px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--surface);
+  top: 74px;
+  max-height: calc(100vh - 90px);
+  overflow-y: auto;
+  padding-left: 20px;
+  border-left: 1px solid var(--line);
   font-size: 14px;
   line-height: 1.5;
 }
 
+@media (max-width: 1000px) {
+  .wiki {
+    position: static;
+    max-height: none;
+    overflow: visible;
+    padding: 16px 0 0;
+    border-left: 0;
+    border-top: 1px solid var(--line);
+  }
+}
+
 .wiki h2 {
-  margin: 0 0 10px;
-  font-size: 17px;
+  margin-bottom: 8px;
+  font-size: 18px;
 }
 
 .wiki h3 {
-  margin: 16px 0 6px;
-  font-size: 15px;
+  margin: 18px 0 4px;
+  font-size: 15.5px;
 }
 
 .wiki h4 {
   margin: 10px 0 2px;
-  font-size: 11.5px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
   color: var(--muted);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 .wiki p {
@@ -395,336 +381,121 @@
   padding-left: 18px;
 }
 
+.wiki-intro h3 {
+  margin-top: 0;
+}
+
 .wiki-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 13px;
+  font-size: 13.5px;
 }
 
 .wiki-table th {
-  text-align: left;
-  font-weight: 600;
+  padding: 3px 6px 3px 0;
+  border-bottom: 1px solid var(--text);
   color: var(--muted);
-  border-bottom: 1px solid var(--line);
-  padding: 3px 4px;
+  font-size: 11.5px;
+  font-weight: 600;
+  text-align: left;
 }
 
 .wiki-table td {
-  padding: 4px;
-  border-bottom: 1px solid #262a30;
+  padding: 3px 6px 3px 0;
+  border-bottom: 1px solid var(--line);
   vertical-align: top;
 }
 
 .wiki-lane {
   display: inline-block;
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   margin-right: 5px;
-  border-radius: 2px;
   background: var(--lane);
 }
 
 .wiki-card {
-  margin-top: 10px;
-  padding: 10px 12px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: var(--surface-2);
+  margin-top: 6px;
+  padding: 8px 0 8px 10px;
+  border-left: 3px solid var(--line);
 }
 
 .wiki-card.is-active {
-  border-color: var(--accent);
+  border-left-color: var(--text);
 }
 
 .wiki-card header {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
-  gap: 8px;
+  gap: 10px;
 }
 
 .wiki-card h3 {
-  display: flex;
-  align-items: center;
-  gap: 8px;
   margin: 0;
-}
-
-.wiki-try {
-  padding: 4px 10px;
-  border: 1px solid rgba(255, 179, 71, 0.5);
-  border-radius: 999px;
-  background: transparent;
-  color: var(--accent);
-  font-size: 12.5px;
-  font-weight: 700;
 }
 
 .wiki-active {
   font-size: 12px;
-  color: var(--accent);
   font-weight: 700;
+}
+
+.wiki-try {
+  font-size: var(--small);
+  white-space: nowrap;
 }
 
 .wiki-lanes {
   display: flex;
   flex-wrap: wrap;
-  gap: 5px;
-  margin-top: 6px;
+  gap: 2px 10px;
+  margin-top: 2px;
+  font-size: 13px;
 }
 
 .wiki-chip {
-  padding: 1px 8px;
-  border-left: 3px solid var(--lane);
-  border-radius: 4px;
-  background: #1b1f24;
-  font-size: 12px;
+  color: var(--lane);
+  font-weight: 700;
 }
 
 .wiki-licks {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.wiki-lick {
-  padding: 4px 10px;
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  background: var(--surface);
-  color: var(--text);
-  font-size: 13px;
-}
-
-.wiki-lick-area {
-  margin-top: 12px;
-}
-
-.lick-head {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 6px;
-}
-
-.play-lick {
-  padding: 6px 12px;
-  border: 0;
-  border-radius: 8px;
-  background: var(--accent);
-  color: #1b1208;
-  font-weight: 700;
-}
-
-.tab-scroll {
-  overflow-x: auto;
-  padding: 8px 4px;
-  border-radius: var(--radius);
-  background: #f4efe4;
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2);
-}
-
-/* ---------- zhutnění, aby se 3 pruhy vešly bez rolování ---------- */
-.view.view-solo {
-  padding-top: 14px;
-  padding-bottom: 16px;
-}
-
-.solo-header > div:first-child {
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 4px 10px;
-  min-width: 0;
-}
-
-.solo-header h1 {
-  font-size: 18px;
-  white-space: nowrap;
-}
-
-.solo-main {
-  gap: 9px;
-}
-
-.approach-btn {
-  padding: 5px 11px;
-  font-size: 13px;
-}
-
-.map-cell {
-  padding: 4px 7px 3px;
-}
-
-.map-cell b {
-  font-size: 15px;
-}
-
-.lanes[data-count='3'] .lane-fb .fb,
-.lanes[data-count='4'] .lane-fb .fb {
-  max-height: 108px;
-}
-
-.lane {
-  padding: 2px 10px 0;
-}
-
-.lane-head {
-  min-height: 22px;
-}
-
-.lick-shifts {
-  display: inline-flex;
-  gap: 4px;
-  margin-left: auto;
-}
-
-.lick-shift {
-  padding: 3px 8px;
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  background: var(--surface);
-  color: var(--muted);
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.lick-shift.is-on {
-  color: var(--accent);
-  border-color: var(--accent);
-}
-
-.lick-tip {
-  color: var(--muted);
-  font-size: 13px;
-}
-
-/* ---------- licky u pruhů, celé kolo, dok s tabulaturou ---------- */
-.lane-licks {
-  display: inline-flex;
-  gap: 4px;
-  margin-left: 6px;
-  flex-shrink: 0;
-}
-
-.lane-badge:empty + .lane-licks {
-  margin-left: auto;
-}
-
-.lick-chip {
-  padding: 1px 8px;
-  border: 1px solid color-mix(in srgb, var(--lane, var(--accent)) 55%, transparent);
-  border-radius: 999px;
-  background: transparent;
-  color: var(--lane, var(--accent));
-  font-size: 11.5px;
-  font-weight: 700;
-  white-space: nowrap;
-}
-
-.lick-chip:hover,
-.lick-chip.is-on {
-  background: color-mix(in srgb, var(--lane, var(--accent)) 18%, transparent);
-}
-
-.lick-chip.is-playing {
-  background: var(--lane, var(--accent));
-  color: #111;
-}
-
-.cycle-licks {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px;
-}
-
-.lick-dock {
-  padding: 8px 10px 10px;
-  border-left: 3px solid var(--lane, var(--accent));
-  border-radius: var(--radius);
-  background: var(--surface);
-}
-
-.lick-head {
-  flex-wrap: wrap;
-}
-
-.lick-where {
-  color: var(--muted);
-  font-size: 13px;
-}
-
-.lick-close {
-  margin-left: 4px;
-  padding: 0 8px;
-  border: 0;
-  background: transparent;
-  color: var(--muted);
-  font-size: 20px;
-  line-height: 1;
-}
-
-.lick-shifts:empty {
-  display: none;
-}
-
-.lick-where + .lick-shifts:empty + .lick-close,
-.lick-where + .lick-shifts + .lick-close {
-  margin-left: auto;
-}
-
-.lick-dock .lick-tip {
-  margin: 0 0 6px;
-}
-
-.lick-dock .tab-scroll {
-  scroll-behavior: smooth;
-}
-
-.wiki-licks {
-  display: grid;
-  gap: 8px;
-  margin: 0;
-  padding: 0;
   list-style: none;
+  padding-left: 0 !important;
 }
 
 .wiki-lick-row {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 2px 8px;
-  align-items: baseline;
-}
-
-.wiki-lick-row small {
-  grid-column: 1 / -1;
-  color: var(--muted);
-  font-size: 12.5px;
-  line-height: 1.4;
-}
-
-.wiki-lick {
-  border-left: 3px solid var(--lane, var(--accent));
+  margin-bottom: 4px;
 }
 
 .wiki-lick-lane {
+  margin-left: 6px;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 12.5px;
+}
+
+.wiki-lick-row small {
+  display: block;
+  color: var(--muted);
+}
+
+.wiki-sub {
+  color: var(--muted);
 }
 
 .wiki-catalog dl {
-  display: grid;
-  gap: 4px;
-  margin: 0;
+  margin: 6px 0;
 }
 
 .wiki-catalog dt {
   display: flex;
   flex-wrap: wrap;
-  gap: 2px 8px;
-  align-items: baseline;
-  margin-top: 6px;
+  gap: 0 8px;
+  margin-top: 8px;
+}
+
+.wiki-catalog dt span {
+  font-family: var(--font-mono);
+  font-size: 13px;
 }
 
 .wiki-catalog dt small {
@@ -734,46 +505,8 @@
 .wiki-catalog dd {
   margin: 0;
   color: var(--muted);
-  font-size: 12.5px;
 }
 
-.wiki-sub {
-  margin-top: -4px;
-  color: var(--muted);
-  font-size: 12.5px;
-}
-
-/* hlavička pruhu se nesmí roztáhnout přes šířku sloupce (čipy licků) */
-.lanes,
-.lane {
-  min-width: 0;
-}
-
-.lane-head {
-  min-width: 0;
-}
-
-.lane-src {
-  white-space: nowrap;
-}
-
-.lane-caption {
-  flex: 1 1 0;
-  min-width: 0;
-}
-
-.lane-licks {
-  flex-shrink: 1;
-  min-width: 0;
-  overflow: hidden;
-}
-
-/* tabulatura licku roluje uvnitř doku, sloupec neroztahuje */
-.solo-main {
-  grid-template-columns: minmax(0, 1fr);
-}
-
-.lick-dock,
-.cycle-licks {
-  min-width: 0;
+.wiki-pattern {
+  font-size: 13px;
 }

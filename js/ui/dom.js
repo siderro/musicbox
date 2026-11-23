@@ -28,20 +28,3 @@ export function setOptions(el, options, value) {
   el.replaceChildren(...options.map(([v, label]) => h('option', { value: v }, label)));
   el.value = String(value);
 }
-
-// Klávesa ve stylu magnetofonu. latch = zůstává zamáčknutá (aria-pressed).
-export function deckKey({ label, symbol, red = false, latch = false, title, onclick, wide = false }) {
-  return h('div', { class: 'deck-key-wrap' },
-    h('span', { class: 'deck-key-symbol', 'aria-hidden': 'true' }, symbol ?? ''),
-    h('button', {
-      class: `deck-key${red ? ' is-red' : ''}${wide ? ' is-wide' : ''}`,
-      type: 'button',
-      title: title ?? label,
-      'aria-label': label,
-      'aria-pressed': latch ? 'false' : null,
-      onclick,
-    }),
-    h('span', { class: 'deck-key-label' }, label));
-}
-
-export const setPressed = (wrap, on) => wrap.querySelector('.deck-key').setAttribute('aria-pressed', on ? 'true' : 'false');
