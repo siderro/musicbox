@@ -31,7 +31,7 @@ const TAB_LEFT = 48;
 // popisky dob v mřížce: 1 & 2 & / 1 e & a / 1 t l
 const SUB = { 2: ['', '&'], 3: ['', 't', 'l'], 4: ['', 'e', '&', 'a'] };
 
-export function createCompPanel(root) {
+export function createCompPanel(root, { groove }) {
   const subtitle = h('span', { class: 'solo-sub' });
   const wikiBtn = h('button', { type: 'button', class: 'wiki-toggle', onclick: () => store.set({ wikiOpen: !store.get().wikiOpen }) });
   const labelBtn = h('button', { type: 'button', class: 'ctl', onclick: () => cycleLabels() });
@@ -196,7 +196,7 @@ export function createCompPanel(root) {
       const sh = shapes()[i];
       return h('button', {
         type: 'button', class: 'cmap-cell', dataset: { i: String(i) },
-        onclick: () => (isRunning('groove') ? null : store.set({ viewBar: sg.bar })),
+        onclick: () => (isRunning('groove') ? groove.jumpTo(sg.bar) : store.set({ viewBar: sg.bar })),
       },
       h('span', { class: 'cmap-head' }, h('b', {}, shortName(sh)), h('em', { class: 'cmap-badge' })),
       h('span', { class: 'cmap-box', html: chordBoxSvg(sh, { mini: true }) }),

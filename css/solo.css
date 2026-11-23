@@ -197,6 +197,10 @@
   fill: #8a8a8a;
 }
 
+.lane.is-idle .fb-dot.is-scale circle {
+  fill: #fff;
+}
+
 .lane.is-idle .lane-src,
 .lane.is-idle .lane-name {
   color: var(--muted);

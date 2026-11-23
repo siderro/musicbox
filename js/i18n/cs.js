@@ -131,7 +131,6 @@ export const T = {
   },
   compYou: 'teď hraješ ty',
   compDemo: 'teď hraje ukázka',
-  compIdle: 'STOP',
   grooveForRhythm: 'groove k rytmu',
   compModeLabel: 'Režim',
   grooveMatches: 'groove sedí k rytmu',

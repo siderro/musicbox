@@ -78,10 +78,10 @@ const actions = {
   },
 };
 
-createBar(barEl, { nav: h('nav', { class: 'tabs', role: 'tablist' }, tabButtons), groove, actions });
-solo = createSoloPanel(views.solo);
+createBar(barEl, { nav: h('nav', { class: 'tabs', role: 'tablist' }, tabButtons), actions });
+solo = createSoloPanel(views.solo, { groove });
 solo.setSilence(silenceAll);
-const comp = createCompPanel(views.comp);
+const comp = createCompPanel(views.comp, { groove });
 tuner = createTunerView(views.tuner, { beforeStart: () => actions.stopAll() });
 const metronome = createMetronomeView(views.metro, { actions });
 installShortcuts({ actions, solo, comp, metronome });

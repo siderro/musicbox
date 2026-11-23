@@ -27,7 +27,7 @@ import { getCtx } from '../audio/engine.js';
 const MAX_BUTTONS = 5;
 const pretty = (iv) => iv.replace(/b/g, '♭').replace(/#/g, '♯');
 
-export function createSoloPanel(root) {
+export function createSoloPanel(root, { groove }) {
   const subtitle = h('span', { class: 'solo-sub' });
   const wikiBtn = h('button', { type: 'button', class: 'wiki-toggle', onclick: () => store.set({ wikiOpen: !store.get().wikiOpen }) });
   const approachBar = h('div', { class: 'approach-bar', role: 'radiogroup', 'aria-label': T.approach });
@@ -164,7 +164,8 @@ export function createSoloPanel(root) {
       const src = res.sourceAt(res.laneOf[i], i);
       return h('button', {
         type: 'button', class: `map-cell${i === cur ? ' is-current' : ''}`, style: `--lane:${lane.color}`,
-        onclick: () => (isRunning('groove') ? null : store.set({ viewBar: sg.bar })),
+        // za běhu skočí groove na takt, jinak se jen ukáže
+        onclick: () => (isRunning('groove') ? groove.jumpTo(sg.bar) : store.set({ viewBar: sg.bar })),
       },
       h('b', {}, sg.chord.symbol),
       h('span', {}, src.label.split(' ')[0]),

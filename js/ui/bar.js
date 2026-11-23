@@ -15,7 +15,7 @@ import { setBusLevel } from '../audio/engine.js';
 const FADERS = ['drums', 'chords', 'bass', 'lead'];
 const faderGain = (v) => v * v * 1.25;
 
-export function createBar(root, { nav, groove, actions }) {
+export function createBar(root, { nav, actions }) {
   // ---------- přehrávání ----------
   const playBtn = h('button', { type: 'button', class: 'bar-btn bar-play', onclick: () => actions.toggle() });
   const check = (label, key) => {
@@ -55,9 +55,9 @@ export function createBar(root, { nav, groove, actions }) {
   const keys = h('details', { class: 'bar-pop' },
     h('summary', { title: 'Klávesové zkratky' }, '?'),
     h('ul', { class: 'bar-pop-body bar-keys' }, T.shortcuts.split(' · ').map((s) => {
-      const [k, ...rest] = s.split(' ');
-      // „←→ okno ruky“, „1–4 záložky“: první slovo je klávesa
-      return h('li', {}, h('kbd', {}, k), ' ', rest.join(' '));
+      // klávesa je první slovo („←→ okno ruky“), jen „[ ] tónina“ má klávesy dvě
+      const m = /^(\[ \]|\S+)\s(.*)$/.exec(s);
+      return h('li', {}, h('kbd', {}, m[1]), ' ', m[2]);
     })));
   // rozbalené okénko zavře klik mimo
   document.addEventListener('click', (e) => {
